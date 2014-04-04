@@ -1,0 +1,4563 @@
+\documentclass{jarticle}
+\usepackage{ascmac}
+\usepackage[dvips]{graphicx}
+\usepackage[dvipdfm]{color}
+\usepackage[dvipdfm,bookmarks=true,bookmarksnumbered=true,bookmarkstype=toc]{hyperref}
+
+\setlength{\topmargin}{-1.2cm}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\textheight}{23.8cm}
+\setlength{\textwidth}{16cm}
+\setlength{\arrayrulewidth}{0.1mm}
+\def\syoshiki{\medskip {\small \fbox{書　式}}}
+\def\rei{\medskip 　{\small \fbox{例} 　}}
+\def\kino{\medskip {\small \fbox{機　能}}}
+\def\shiyorei{\medskip {\small \fbox{使用例}}}
+\def\shiyoho{\medskip {\small \fbox{使用法}}}
+\def\jikkorei{\medskip {\small \fbox{実行例}}}
+\def\kanren{\medskip {\small \fbox{関　連}}}
+\def\bunrei{\medskip {\small \fbox{文　例}}}
+\def\gokansei{\medskip {\small \fbox{互換性}}}
+\newcommand{\footnt}[1]{\footnote{$^)$~#1}$^{)}$}
+\newenvironment{indention}[1]{\par
+\addtolength{\leftskip}{#1}
+\begingroup}{\endgroup\par}
+
+\begin{document}
+%\title{\vspace*{-5mm}{\large Easy and Gratifying Graphics library for X11}\\EGGX / ProCALL version 0.93}
+%\author{Chisato Yamauchi{\tiny ~}%
+%\footnote{$^)$~http://www.ir.isas.jaxa.jp/$^\sim$cyamauch/}%
+%}
+%\date{Jan.31,2010}
+%\maketitle
+
+\thispagestyle{empty}
+
+\vspace*{0.2cm}
+%\vspace*{-0.2cm}
+
+\begin{center}
+{\it \Large Easy and Gratifying Graphics library for X11 }
+\end{center}
+
+\vspace*{-0.3cm}
+
+\begin{center}
+{\bf \huge EGGX / ProCALL version 0.93}
+\end{center}
+
+\begin{center}
+{\bf \LARGE 日本語版ユーザーズガイド}
+\end{center}
+
+
+\vspace*{0.1cm}
+
+\begin{center}
+{\Large Chisato Yamauchi~~Mar. 5, 2010}
+\end{center}
+
+\vspace*{3mm}
+%\vspace*{-0.1cm}
+
+%\begin{center}
+%\begin{tabular}{|ll|}
+%\hline
+% 教育・研究での主な採用実績:
+% &
+% 愛知教育大学，茨城県立産業技術短期大学校，大阪市立大学，\\
+% ~ &
+% 大阪大学，京都産業大学，京都大学大学院，筑波大学，東北学院大学，\\
+% ~ &
+% 名古屋大学，名古屋大学大学院，南山大学，新潟県央工業高等学校，\\
+% ~ &
+% 福岡大学，明治大学，早稲田大学\\
+%\hline
+%\end{tabular}
+%\end{center}
+%
+%\vspace*{0.2mm}
+
+\begin{center}
+%\includegraphics[scale=0.25]{sshot_coaster.eps3}
+%\includegraphics[scale=0.25]{sshot_ship.eps3}
+%\includegraphics[scale=0.50]{sshot_ex1.eps3}
+\includegraphics[scale=0.55]{sshot_ex1.eps3}
+\end{center}
+
+\vspace*{0mm}
+
+\begin{center}
+%\begin{tabular}{|l|}
+%\hline
+%表紙のスクリーンショットは，京都産業大学コンピュータ理工学部の安田様が担当\\
+%された「基礎プログラミング」演習の学生さんによる最終課題優秀作品です．\\
+%\hline
+%\end{tabular}
+\begin{tabular}{|l|}
+\hline
+表紙のスクリーンショットは，東京電機大学の松田様と
+京都産業大学の安田様のコードによるものです\\
+\hline
+\end{tabular}
+\end{center}
+
+\clearpage
+
+\section*{ギャラリー}
+
+EGGXを使ったソフトウェアのスクリーンショットの紹介．
+
+\begin{center}
+\includegraphics[scale=0.270]{remosen.eps3}\\
+リモートセンシングデータのビュアー(名古屋大学の佐々井様)\\
+~\\
+\includegraphics[scale=0.535]{sshot_loupe.eps3}\\
+サンプルプログラム「loupe.c」
+\end{center}
+
+\clearpage
+
+\vspace*{-2mm}
+
+\begin{center}
+\includegraphics[scale=0.65]{sshot_demomesh.eps3}
+\includegraphics[scale=0.65]{sshot_sphere.eps3}\\
+\includegraphics[scale=0.38]{sshot_wave.eps3}
+\includegraphics[scale=0.65]{sshot_snowfalls.eps3}\\
+\includegraphics[scale=0.39]{sshot_3body.eps3}
+\includegraphics[scale=0.65]{sshot_particles.eps3}\\
+EGGX付属のサンプルプログラム(東京電機大学の松田様)
+\end{center}
+
+
+\clearpage
+
+%
+\section{はじめに}
+
+\subsection{EGGX / ProCALLとは}
+
+%これを未だに愛用されている方はどのくらいいらっしゃ
+%るのかはわかりませんが，
+%今や IBM PC/AT互換機の勢力で NECのPC-9801シリーズのマシンは次第に使わ
+%れなくなり，廃棄される一方で将来は使えなくなっていくかもしれません．
+%そんな中，どうしても Pro-FORTRANのグラフィックス機能を使いたいという強い要
+%望になんとか答えようと作られたのがこのPROCALLです．
+EGGX / ProCALL (えっぐえっくす/ぷろこーる) は
+「{\bf 究極の簡単さ}」を目指して作り上げた
+簡素なグラフィックスライブラリです．
+C言語かFORTRANから各種関数(サブルーチン)を利用する事ができ，
+ファミコンを贅沢にしたようなグラフィックス機能を，
+N88-BASICのような感覚で操作する事ができます．
+%EGGX / ProCALL は1つのライブラリですが，
+Cの関数群を``EGGX''(\S\ref{eggx})，
+FORTRANのルーチン群を``ProCALL''(\S\ref{procall})
+と呼んでいます．
+とにかく「簡単」に使えて，「8ビットマシンのBASICのような楽しさ」を
+これからプログラミングを始める方々に伝えることができれば，
+と考えて作成したもので，特に初等プログラミング教育には
+最適なライブラリの1つとなるでしょう．
+
+EGGX / ProCALL は単純なライブラリですから，
+専用のランタイムファイルの導入は一切不要です．
+もちろん，ユーザが作成した実行ファイルは，
+立派なアプリケーション・ソフトウェアになります．
+また，X11関連のライブラリはXlibしか使っていませんから，
+インストールも容易です．
+
+\subsection{EGGX / ProCALLの特徴}
+
+ユーザ関数の簡単さは常識破りです．
+ウィンドゥサイズだけを引数とする
+「たった1つの関数」を呼ぶだけで，
+X Window上でウィンドゥを開いて，即
+グラフィックス関数が扱えます．
+ウィンドゥが隠れた場合の再描画はライブラリ側がやってくれますから，
+ユーザは扱いが面倒なイベントを気にする必要がないので，
+描画関数を並べるだけで簡単に絵を描くことができます．
+例えば，数値計算のコードに若干の描画関数を挟み込んで，
+デバッグ時などに必要な時だけ計算させながらその様子
+をモニターする，といった事も容易です．
+
+任意のサイズで複数のグラフィックス用ウィンドゥをオープンし，
+24ビットでのカラー指定が可能な線,点,多角形,円などの描画，
+フォントセットの描画(半角・全角混在の文字列もそのまま描画可能)，
+数値計算の可視化に必要な種々の矢印の描画，
+カラーバーの生成(約50種類)，
+背景透過処理が可能な24ビット画像の転送機能・
+画面スクロール機能(ファミコン等のスプライトとハードウェアスクロールに相当)，
+レイヤ機能(PC-9801のV-RAMの2プレーンに相当)によるスムーズな
+アニメーション，
+ggetch()関数(\S \ref{ggetch})を使った
+キー入力読み込み(N88-BASICのINKEY\$に相当)，
+ggetevent()関数(\S \ref{ggetevent})を使ったマウス・キー入力読み込み
+が可能です．
+
+もうおわかりかと思いますが，
+24ビットカラーが使えて，アニメーションができるとなれば，
+現代の2Dグラフィックスに必要な基本要素は十分に整っているというわけ
+です．あとは，ユーザのプログラミング次第で，
+いくらでも派手な数値計算の可視化やゲーム等を作る事が可能です．
+
+また，netpbm%
+\footnt{http://sourceforge.net/projects/netpbm/}
+の各種コマンド，
+ImageMagick%
+\footnt{http://www.imagemagick.org/}
+のconvertコマンドを通して様々なフォーマットの画像を
+読み書きするめの関数が用意されており，
+これらを活用すれば画像閲覧ツールや動画作成ツールなどが簡単に作れます．
+
+さらに，Version 0.91以降では，
+スクロールバー・インタフェースを提供するようになり，
+ディスプレイに収まりきらないような
+大きな画素サイズの画像を容易に扱えるようになりました．
+
+%商用のXサーバ(例えばXsunやSGIのX端末)のように複数のVisualを持つ
+%Xサーバにも対応し，
+%デフォルトがPseudoColorでもEGGX/ProCALLではTrueColor Visualで
+%ウィンドゥを開くようになっています．
+%Sunのワークステーションのように
+%商用Xサーバ+Pseudo Visualなアプリケーションをベースとした環境でも
+%スムーズに導入できます．
+
+\subsection{EGGX / ProCALLに関する情報}
+
+EGGX / ProCALL のWebページ:\\
+~~~~\verb|http://www.ir.isas.jaxa.jp/~cyamauch/eggx_procall/|\\
+では，サンプルプログラムやリリース情報の他，
+派生ライブラリや情報教育等での活用についてまとめています．
+目的に応じてご利用ください．
+
+%\subsection{C言語を使おう}
+
+%このライブラリを作り始めた当初は，
+%NECのパーソナルコンピュータ・PC-9801上で動作する
+%「Pro-FORTRAN」というGKS，カルコンプコンパチブルのグラフィックスルーチ
+%ンが扱えるFORTRANコンパイラと互換となるように作成していました．
+%格好悪い「ProCALL」という名前はこの Pro-FORTRAN が由来です．
+%しかし現在では，FORTRANは廃れた言語となってしまいました．
+%ソフトウェア開発の主流は，柔軟性に富むC，C++です．
+%また，数値計算の分野では，いまだにFORTRANが多く使われているようですが，
+%コーディングレベルでのアルゴリズムの考案を伴った
+%新しいスキームの開発は，FORTRANの言語仕様では難しいと予測
+%されます(FORTRAN9xという新しいFORTRANがありますが，
+%大半の利用者の頭脳はFORTRAN77から進化していないので，
+%FORTRAN77が実質の言語仕様になっていると思われます)．
+%数値計算技術の未来は，C，C++が支えていくことでしょう．
+
+%EGGX / ProCALLもCから使った方が，いくつかの点において好都合です
+%(もちろん，EGGX / ProCALLはCで書いています)．
+%EGGX の関数には，ProCALLでは使えないいくつかの便利な機能があります．
+%今，プログラミングを始めたばかりの方々は，
+%C言語をターゲットにする事をお勧めします．
+
+%EGGXでは，有名なウィンドゥマネージャである
+%AfterStep，WindowMaker の本格的なアプレットが
+%きわめて簡単に作成できます．
+%EGGXの拡張関数で，アプレット用に初期化するように設定すると，
+%ドックに入れるためのウィンドゥ属性をライブラリ側で設定します．
+%例えば，デジタル時計程度のもの
+%であれば，わずか数十行で作れてしまうほどの簡単さを提供しています．
+
+%
+%
+%cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+%
+%CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+%
+\clearpage
+%
+\section{C編}
+%
+\subsection{チュートリアル}
+
+\subsubsection{使い方の基本}
+%
+ユーザプログラムの冒頭で，\\
+\verb|　　#include <eggx.h>|\\
+と宣言します%
+\footnt{本格的なソフトウェア開発でEGGXを利用する場合は，
+{\tt eggxlib.h}を利用する事をお勧めします．
+\S \ref{eggxlib.h}をご覧ください．}%
+．
+C標準関数と同じようにEGGXの関数を使って
+プログラムを書き，コンパイルは {\tt egg} コマンドを用います．
+
+\rei ~~{\verb|egg program.c -o program|}
+
+\subsubsection{プログラム例}
+
+EGGXを使って円を描くプログラムを示します．
+
+\vspace*{-5.0mm}
+\begin{center}
+\renewcommand{\arraystretch}{0.95}
+\begin{tabular}{|l|}
+\hline
+\verb|#include <eggx.h>                     /* EGGXを使う時に必要 */ |\\
+\verb| |\\
+\verb|int main()|\\
+\verb|{|\\
+\verb|    int win;                          /* ウィンドゥ番号を格納する変数 */|\\
+\verb|    win = gopen(640,400);             /* |{\small \tt 640x400ピクセルのグラフィックス用ウィンドゥを開く~}\verb|*/ |\\
+\verb|    circle(win, 280, 180, 110, 110);  /* 中心(280,180)，半径110の円を描く */|\\
+\verb|    ggetch();                         /* キー入力があるまで待つ */   |\\
+\verb|    gclose(win);                      /* グラフィックス用ウィンドゥを閉じる */|\\
+\verb|    return 0;                         /* 終了 */|\\
+\verb|}|\\
+\hline
+\end{tabular}
+\end{center}
+
+ウィンドゥを開き，ウィンドゥ中央より少し左下に円を描きます．
+ウインドゥを閉じる前に{\tt ggetch()}を使っていますが，
+これはプログラムが一瞬で終わってしまわないようにするためのものです．
+
+次の絵は，実行結果のスクリーンショットです．
+
+\begin{center}
+\includegraphics[scale=0.91]{example_circ.eps}
+\end{center}
+
+デフォルトではこのように，ウィンドゥの左下が座標系の原点となっています．
+例では円を描きましたが，点，線，多角形，シンボル，文字等も
+同じようにウィンドゥ番号と座標を与えて描画します．
+
+
+\subsection{EGGXの関数一覧}
+\label{eggx}
+
+\subsubsection{標準関数}
+%
+\vspace*{-4.2mm}
+\begin{center}
+%
+\renewcommand{\arraystretch}{0.83}
+\begin{tabular}{lll}
+ \hline
+ 章 & 関数名 & 機能   \\
+ \hline
+ \S\ref{gopen}&
+   gopen &
+   任意のサイズのグラフィックス用ウィンドゥを開く 
+   \\ %\hline
+ \S\ref{gclose} &
+   gclose &
+   任意のグラフィックス用ウィンドゥを閉じる 
+   \\ %\hline
+ \S\ref{gcloseall} &
+   gcloseall &
+   すべてのグラフィックス用ウィンドゥを閉じ，Xサーバと接続を断つ
+   \\ %\hline
+ \S\ref{gresize} &
+   gresize &
+   グラフィックス描画領域のサイズ変更を行なう
+   \\ %\hline
+ \S\ref{winname} &
+   winname &
+   ウィンドゥのタイトルを変更する
+   \\ %\hline
+ \S\ref{coordinate} &
+   coordinate &
+   アプリケーション座標系の変更(参照点の座標とスケールを与える)
+   \\ %\hline
+ \S\ref{window} &
+   window &
+   アプリケーション座標系の変更(左下と右上の座標を与える)
+   \\ %\hline
+ \S\ref{layer} &
+   layer  &
+   レイヤの設定を行う
+   \\ %\hline
+ \S\ref{copylayer} &
+   copylayer &
+   レイヤのコピーを行う
+   \\ %\hline
+ \S\ref{gsetbgcolor} &
+   gsetbgcolor &
+   ウィンドゥのバックグラウンドカラー(gclrでの色)を指定する 
+   \\ %\hline
+ \S\ref{gclr} &
+   gclr &
+   描画レイヤの全消去
+   \\ %\hline
+ \S\ref{tclr} &
+   tclr &
+   端末画面の消去
+   \\ %\hline
+ \S\ref{newpen} &
+   newpen &
+   描画色(16色)の変更
+   \\ %\hline
+ \S\ref{newcolor} &
+   newcolor &
+   描画色の変更(Xサーバの持つ色を直接指定)
+   \\ %\hline
+ \S\ref{newrgbcolor} &
+   newrgbcolor &
+   描画色の変更(Red,Green,Blueの輝度を指定)
+   \\ %\hline
+ \S\ref{newhsvcolor} &
+   newhsvcolor &
+   描画色の変更(Hue,Saturation,Valueを指定)
+   \\ %\hline
+ \S\ref{makecolor} &
+   makecolor &
+   変数からカラーを生成する(カラーバー生成)
+   \\ %\hline
+ \S\ref{newlinewidth} &
+   newlinewidth &
+   線幅の変更
+   \\ %\hline
+ \S\ref{newlinestyle} &
+   newlinestyle &
+   線のスタイルの変更
+   \\ %\hline
+ \S\ref{newgcfunction} &
+   newgcfunction &
+   GCファンクションの変更
+   \\ %\hline
+ \S\ref{pset} &
+   pset &
+   点の描画 
+   \\ %\hline
+ \S\ref{drawline} &
+   drawline &
+   直線の描画 
+   \\ %\hline
+ \S\ref{lineto} &
+   moveto, lineto &
+   連続的に直線を描く
+   \\ %\hline
+ %line & 連続的に直線を描く
+ %& \S\ref{line}
+ % \\ %\hline
+ \S\ref{drawpts} &
+   drawpts &
+   複数の点を描く
+   \\ %\hline
+ \S\ref{drawlines} &
+   drawlines &
+   折れ線を描く
+   \\ %\hline
+ \S\ref{drawpoly} &
+   drawpoly &
+   多角形を描く
+   \\ %\hline
+ \S\ref{fillpoly} &
+   fillpoly &
+   多角形を塗り潰す
+   \\ %\hline
+ \S\ref{drawrect} &
+   drawrect &
+   長方形を描く
+   \\ %\hline
+ \S\ref{fillrect} &
+   fillrect &
+   長方形の領域を塗り潰す
+   \\ %\hline
+ \S\ref{drawcirc} &
+   drawcirc, circle &
+   中心座標，半径を与えて円を描く
+   \\ %\hline
+ \S\ref{fillcirc} &
+   fillcirc &
+   中心座標，半径を与えて円を塗り潰す
+   \\ %\hline
+ \S\ref{drawarc} &
+   drawarc &
+   円の中心，半径，始点，終点の角度を与えて円弧を描く
+   \\ %\hline
+ \S\ref{fillarc} &
+   fillarc &
+   円の中心，半径，始点，終点の角度を与えて円弧を塗り潰す
+   \\ %\hline
+ \S\ref{drawsym} &
+   drawsym &
+   1個のシンボルの描画 
+   \\ %\hline
+ \S\ref{drawsyms} &
+   drawsyms &
+   複数のシンボルを描く
+   \\ %\hline
+ \S\ref{drawarrow} &
+   drawarrow &
+   種々の矢印の描画
+   \\ %\hline
+ \S\ref{newfontset} &
+   newfontset &
+   フォントセット(日本語フォント)の指定
+   \\ %\hline
+ \S\ref{drawstr} &
+   drawstr &
+   文字列の描画
+   \\ %\hline
+
+ \S\ref{gscroll} &
+   gscroll &
+   ピクセル単位で描画レイヤをスクロールする
+   \\ %\hline
+
+ \S\ref{gputarea} &
+   gputarea &
+   任意のウィンドゥ・レイヤ・領域の画像を描画レイヤにコピーする
+   \\ %\hline
+
+ \S\ref{gputimage} &
+   gputimage &
+   メモリバッファの(マスク付き)画像データを描画レイヤに一括転送する
+   \\ %\hline
+
+ \S\ref{ggetimage} &
+   ggetimage &
+   任意のウィンドゥ・レイヤ・領域の画像データをメモリバッファに取り込む
+   \\ %\hline
+
+ %putimg24 & バッファに用意した画像をウィンドゥに一括転送する
+ %& \S\ref{putimg24}
+ % \\ %\hline
+ %putimg24m & {\small バッファに用意したマスク付き画像をウィンドウに一括転送する(背景透過処理が可能)}
+ %& \S\ref{putimg24m}
+ % \\ %\hline
+
+ \S\ref{gsaveimage} &
+   gsaveimage &
+   {\small 任意のウィンドゥ・レイヤ・領域の画像をコンバータを通してファイルに保存する}
+   \\ %\hline
+
+ \S\ref{readimage} &
+   readimage &
+   {\small ファイルの画像データをコンバータ(netpbm等)を通してメモリバッファに取り込む}
+   \\ %\hline
+ \S\ref{writeimage} &
+   writeimage &
+   {\small メモリバッファの画像データをコンバータ(netpbm等)を通してファイルに保存する}
+   \\ %\hline
+
+ \S\ref{gsetnonblock} &
+   gsetnonblock &
+   {\tt ggetch()}，{\tt ggetevent()}，{\tt ggetxpress()}の動作モードを設定する
+   \\ %\hline
+ \S\ref{ggetch} &
+   ggetch &
+   キーボードから入力された文字を返す
+   \\ %\hline
+ \S\ref{ggetevent} &
+   ggetevent &
+   マウスやキーボードからの入力の情報を返す
+   \\ %\hline
+ \S\ref{ggetxpress} &
+   ggetxpress &
+   マウスからのボタンクリック，キーボードからの入力の情報を返す
+   \\ %\hline
+ \S\ref{msleep} &
+   msleep &
+   ミリ秒単位で実行を延期する
+   \\ %\hline
+ \hline
+\end{tabular}
+\end{center}
+%
+%\clearpage
+
+\subsubsection{Advanced関数(中級〜上級者向け)}
+%
+\begin{center}
+\renewcommand{\arraystretch}{0.86}
+\begin{tabular}{lll}
+ \hline
+ 章 & 関数名 & 機能   \\
+ \hline
+ \S\ref{ggetdisplayinfo} &
+   ggetdisplayinfo & 
+   Xサーバの情報(depth,画面サイズ)を取得する
+   \\ %\hline
+ \S\ref{gsetnonflush} &
+   {\small gsetnonflush, ggetnonflush} &
+   描画関数等におけるフラッシュに関する設定 
+   \\ %\hline
+ \S\ref{gflush} &
+   gflush & 
+   描画命令等をフラッシュする 
+   \\ %\hline
+ \S\ref{gsetinitialattributes} &
+   gsetinitialattributes &
+   {\tt gopen()}でのウィンドゥ属性を変更する 
+   \\ %\hline
+ \S\ref{ggetinitialattributes} &
+   ggetinitialattributes &
+   {\tt gopen()}でのウィンドゥ属性を取得する
+   \\ %\hline
+ \S\ref{gsetinitialbgcolor} &
+   gsetinitialbgcolor &
+   {\tt gopen()}での背景カラーを指定する 
+   \\ %\hline
+ \S\ref{gsetborder} &
+   gsetborder & 
+   ウィンドゥのホーダーと色を指定する 
+   \\ %\hline
+ \S\ref{gsetinitialborder} &
+   gsetinitialborder &
+   {\tt gopen()}でののウィンドゥのボーダーを指定する 
+   \\ %\hline
+ \S\ref{gsetinitialgeometry} &
+   gsetinitialgeometry &
+   {\small x,yの値を含む文字列から{\tt gopen()}でのウィンドゥ出現座標等を設定する}
+   \\ %\hline
+ \S\ref{gsetinitialwinname} &
+   gsetinitialwinname &
+   {\small {\tt gopen()}でのウィンドゥ名,アイコン名,リソース名,クラス名を指定する}
+   \\ %\hline
+ \S\ref{gsetscrollbarkeymask} &
+   gsetscrollbarkeymask &
+   {\small EGGXによるスクロールバーのキー操作のためのキーマスクを設定する} 
+   \\ %\hline
+ \S\ref{generatecolor} &
+   generatecolor &
+   {\small 変数からカラーを生成する(コントラスト，ブライトネス，$\gamma$補正等が可能)}
+   \\
+ \hline
+\end{tabular}
+\end{center}
+
+\subsection{TIPS}
+
+\subsubsection{描画速度を改善する方法}
+%
+\begin{itemize}
+ \item
+      レイヤ(ダブルバッファリング)を使う
+
+      layer()関数(\S\ref{layer})と
+      copylayer()関数(\S\ref{copylayer})とを使って，
+      描画関数では常に非表示レイヤに描きましょう．描き終わったら，
+      非表示レイヤを表示レイヤにコピーします(copylayer()関数)．
+      このようにする事で，かなり描画速度が改善されます．
+
+      次の例は，アニメーションを描く場合の典型的なコードです．
+
+\renewcommand{\arraystretch}{0.95}
+\begin{tabular}{|l|}
+\hline
+\verb|#include <eggx.h>|\\
+\verb| |\\
+\verb|int main()|\\
+\verb|{|\\
+\verb|    int win;|\\
+\verb|    win = gopen(640,400);|\\
+\verb|    layer(win,0,1);                 /* 表示対象をレイヤ0，描画対象をレイヤ1に設定 */|\\
+\verb|    while ( 1 ) {|\\
+\verb|        gclr(win);                  /* レイヤ1を初期化 */|\\
+\verb|            :                       /* ←この部分に描画関数を書く */|\\
+\verb|        copylayer(win,1,0);         /* レイヤ1をレイヤ0に「瞬時に」コピー */|\\
+\verb|        msleep(10);                 /* 10ミリ秒遅らせる(アニメーションの速度調整) */|\\
+\verb|    }|\\
+\hline
+\end{tabular}
+
+ \item
+      色設定は，newcolor()関数以外を使う．
+
+      できるだけnewpen()関数(\S\ref{newpen})，
+      newrgbcolor()関数(\S\ref{newrgbcolor})など，
+      数値で色を指定する関数を使いましょう．
+ \item
+      色設定の頻度を最小化する
+
+      {\tt newpen()}→{\tt pset()}→{\tt newpen()}→{\tt pset()}→
+      {\tt newpen()}→{\tt pset()}→{\tt newpen()}→{\tt pset()}→…
+      のように頻繁に色設定を行なうと，
+      描画パフォーマンスが得られない事があります．
+
+      {\tt newpen()}→{\tt pset()}→{\tt pset()}→{\tt pset()}→
+      {\tt newpen()}→{\tt pset()}→{\tt pset()}→{\tt pset()}→…
+      のように，できるだけ同じ色ごとに描画命令をまとめるようにします．
+ \item
+      非自動フラッシュを使う(上級者向き)
+
+      \S \ref{gsetnonflush}と\S \ref{gflush}をご覧ください．
+\end{itemize}
+
+\subsubsection{ウィンドゥ座標の原点(0,0)を左上に変更するには}
+%
+次のように，gsetinitialattributes()関数(\S\ref{gsetinitialattributes})
+で，\verb|BOTTOM_LEFT_ORIGIN|属性を無効化してから，ウィンドゥを開きます．
+
+\rei ~~{\verb|gsetinitialattributes(DISABLE, BOTTOM_LEFT_ORIGIN);|}
+
+\subsubsection{C++からの利用}
+%
+C++の場合，EGGXで提供しているヘッダファイルで，
+「\verb|extern "C" {|…\verb|}|」
+が宣言されますので，
+C++の場合もそのまま{\tt eggx.h}をインクルードできます．
+コンパイル方法はCの場合と同様です．ソースファイル名のサフィックスは
+「{\tt .cc}」としてください．
+
+\rei ~~{\verb|egg program.cc -o program|}
+
+\vspace*{2.5mm}
+
+デフォルトではコンパイラとして，「{\tt g++}」が設定されています．
+他のコンパイラを使いたい場合は，スクリプト egg を編集してください．
+
+\subsubsection{本格的なソフトウェア開発でEGGXを利用する場合}
+\label{eggxlib.h}
+
+EGGXの実際の関数名(シンボル名)は，必ず先頭に「\verb|eggx_|」
+がつく名称となっていますが，
+情報教育等での利用のしやすさを考慮して，
+ヘッダファイル{\tt eggx.h}では，
+例えば\\
+\verb|    #define gopen eggx_gopen|\\
+のように，
+関数名を短く書けるようにするためのマクロが定義されています．
+しかし，こういったマクロ定義は，
+構造体やC++のクラスを使う場合にはトラブルを引き起こす事があります．
+
+したがって，
+EGGXを本格的なソフトウェア開発で利用する場合は，次のように
+{\tt eggx.h}のかわりに
+{\tt eggxlib.h}を使う事をお勧めします:\\
+\verb|    #include <eggxlib.h>|\\
+{\tt eggxlib.h}では関数名に対するマクロは定義されないので，
+実際の関数名をソースコードに記述する必要がありますが，
+上記のマクロ定義によって「構造体等のメンバ名」が置換されてエラーとなる，
+といったトラブルを避ける事ができます．
+この場合には，
+次のように，このマニュアルに書かれている
+関数名の先頭に「\verb|eggx_|」をつけて関数を利用します．
+
+\rei ~~{\verb|win = eggx_goepn(800,600) ;|}
+
+
+%\subsubsection{日本語の描画に関して}
+%
+%日本語の描画は，
+%日本語EUCの環境(環境変数{\tt LANG}が「{\tt ja\_JP.eucJP}」あるいは
+%「{\tt ja}」)
+%でのみサポートしています．
+%UTF-8の環境では，日本語を描画する事はできません．
+
+\clearpage
+
+\setlength{\tabcolsep}{1.5mm}
+
+\subsection{EGGXの標準関数リファレンス}
+%
+%
+\subsubsection{int gopen( int xsize, int ysize )}
+\label{gopen}
+
+\kino{　任意のサイズのグラフィックス画面を開く}
+
+グラフィックス用ウィンドゥを開き，
+返り値として，EGGXで使用するウィンドゥ番号を返します．
+EGGXでは，この番号を描画関数に与えてグラフィックスを扱います．
+
+引数{\tt xsize}，{\tt ysize}にはそれぞれ横方向，
+縦方向の描画領域のピクセル数を指定します．
+指定できる最大値は，32767です．
+
+デフォルトでは，
+ルートウィンドゥ(つまり背景)のピクセル数とほぼ同じ，
+あるいはそれを越えるサイズの描画領域が指定された場合には，
+描画領域よりも小さいウィンドゥを開きます%
+\footnt{%
+EGGX/ProCALLのビルド時にXineramaが有効にされていた場合は，
+最小サイズのディスプレイのピクセルサイズと比較されます．
+}%
+．
+この場合，スクロールバー・インタフェースが提供され，
+マウスまたはキーボードから任意の描画領域を表示する事が可能です．
+
+\shiyorei{　\verb|win = gopen(800,600) ;|}
+%
+\subsubsection{void gclose( int wn )}
+\label{gclose}
+
+\kino{　グラフィックス用ウィンドゥを閉じる}
+
+{\tt wn}で指定されたウィンドゥを閉じます．
+
+\shiyorei{　\verb|gclose(win) ;|}
+%
+\subsubsection{void gcloseall( void )}
+\label{gcloseall}
+
+\kino{　すべてのグラフィックス用ウィンドゥを閉じ，Xサーバと接続を断つ}
+
+全てのウィンドゥを閉じ，Xサーバと接続を断ち，
+ライブラリの内部処理で利用しているメモリ領域を開放します．
+
+\shiyorei{　\verb|gcloseall() ;|}
+%
+\subsubsection{void gresize( int wn, int xsize, int ysize )}
+\label{gresize}
+
+\kino{　グラフィックス描画領域のサイズ変更を行なう}
+
+{\tt wn}で指定されたウィンドゥの描画領域のサイズを
+変更します．引数{\tt xsize}，{\tt ysize}にはそれぞれ横方向，
+縦方向のピクセル数を指定します．
+
+デフォルトでは，描画領域と同時にウィンドゥの大きさも変更されますが，
+スクロールバー・インタフェースが有効な場合に
+gsetinitialgeometry()関数(\S\ref{gsetinitialgeometry})による
+指定があった場合，ウィンドゥのサイズはその指定に従います．
+
+描画領域のサイズ変更は，デフォルトでは左下を原点として行ないますが，
+gsetinitialattributes()関数(\S\ref{gsetinitialattributes})
+で，\verb|BOTTOM_LEFT_ORIGIN|属性が無効化されている場合は，
+左上が原点となります．
+
+\shiyorei{　\verb|gresize(win, 1280,960) ;|}
+%
+\subsubsection{int winname( int wn, const char *argsformat, ... )}
+\label{winname}
+
+\kino{　ウィンドゥのタイトルを変更する}
+
+{\tt gopen()}で開いたウィンドゥはデフォルトでは
+ユーザの実行ファイル名がウィンドゥのタイトルとして設定されますが，
+このタイトルは自由に変更できます．
+最初の引数{\tt wn}はウィンドゥ番号で，
+{\tt argsformat}(とそれに続く引数)で指定される文字列が
+タイトルとして設定されます．
+2つめの引数
+{\tt argsformat}以降は，C標準関数のprintf()関数の場合と同様の
+可変引数となっています．
+使用例のように，変数の値を表示するような使い方もあります．
+
+返り値は設定したウィンドゥタイトルの文字列の長さです．
+
+\shiyorei{　\verb|winname(win,"penguin x=%f y=%f",x,y) ;|}
+%
+%\subsubsection{void orgeometry( int x, int y, int bw )}
+%
+%\kino{　gopen()で開くウィンドゥ座標を指定する}
+%
+%この関数を呼ぶと，
+%{\tt gopen()}で次に開くウィンドゥに限り，
+%{\gt Xサーバでの座標}({\tt x},{\tt y})に
+%{\tt bw}で指定した幅で外枠をつけて表示します
+%(ウィンドゥマネージャによるデコレーションはつきません)．
+%{\tt bw}が0の場合は外枠をつけません．
+%
+%\begin{center}
+%\includegraphics[scale=1.0]{procall_orgeometry_C.eps}
+%\end{center}
+%
+%\shiyorei{　\verb|orgeometry(60,128,0) ;|}
+%
+\subsubsection{void coordinate( int wn, int xw, int yw, double xa, double ya, \\~~~~~~~~~~~~~~~~~~~~~~double xscale, double yscale )}
+\label{coordinate}
+
+\kino{　アプリケーション座標系の変更(参照点の座標とスケールを与える)}
+
+{\tt wn}で指定したウィンドゥのアプリケーション座標系を変更します
+
+ウィンドゥ上のウィンドゥ座標系(座標値は整数)は，
+左下が({\tt 0}, {\tt 0})で，
+右上が({\tt xsize-1}, {\tt ysize-1})であり，デフォルトでは
+アプリケーション座標系(座標値は実数)の座標値は
+ウィンドゥ座標系のそれに一致しています．
+
+coordinate()関数を使う事により，
+アプリケーション座標系の({\tt xa}, {\tt ya})を
+ウィンドゥ座標系の({\tt xw}, {\tt yw})に対応させ，それぞれの
+スケーリングファクターを{\tt xscale}，{\tt yscale}で指定します．
+すなわち，描画関数等におけるアプリケーション座標$(x,y)$から
+ウィンドゥ座標$(\mbox{\tt x},\mbox{\tt y})$
+への変換は，次の式により行なわれる事を意味します:\\
+~~~~~~~~
+$\mbox{\tt x} = \mbox{\tt xw} + (x - \mbox{ \tt xa}) \cdot \mbox{\tt xscale}$\\
+~~~~~~~~
+$\mbox{\tt y} = \mbox{\tt yw} + (y - \mbox{ \tt ya}) \cdot \mbox{\tt yscale}$
+
+EGGXの描画関数は，アプリケーション座標系(座標値は実数)で指定するので，
+この関数を一度使えば，座標系の変換は各描画関数が自動的に行なうようになります．
+
+次の使用例では，ウィンドゥの左下を
+アプリケーション座標系の(-40.0, -20.0)に対応させ，
+スケーリングファクターを縦・横とも2.0に設定します．
+
+\shiyorei{　\verb|coordinate(win, 0,0, -40.0,-20.0, 2.0,2.0) ;|}
+
+\vspace*{2.5mm}
+
+なお，gsetinitialattributes()関数(\S\ref{gsetinitialattributes})
+で，\verb|BOTTOM_LEFT_ORIGIN|属性が無効化されている場合は，
+ウィンドゥ座標系の原点({\tt 0}, {\tt 0})は左上になります．
+
+座標系の変更には，
+window()関数(\S \ref{window})を使う方法もあります．
+ご検討ください．
+%
+\subsubsection{void window( int wn, double xs, double ys, double xe, double ye )}
+\label{window}
+
+\kino{　アプリケーション座標系の変更(左下と右上の座標を与える)}
+
+{\tt wn}で指定したウィンドゥのアプリケーション座標系を変更します
+(実際のグラフィックスエリアの大きさが変わるわけではありません)．
+
+ウィンドゥ上のウィンドゥ座標系(座標値は整数)は，左下が({\tt 0}, {\tt 0})で，
+右上が({\tt xsize-1}, {\tt ysize-1})であり，デフォルトでは
+アプリケーション座標系(座標値は実数)の座標値は
+ウィンドゥ座標系のそれに一致しています．
+
+window()関数を使う事により，
+アプリケーション座標系の左下
+(つまりウィンドゥ座標系での({\tt 0}, {\tt 0}))を({\tt xs}, {\tt ys})，
+右上を({\tt xe}, {\tt ye})に変更できます．
+
+EGGXの描画関数は，アプリケーション座標系(座標値は実数)で指定するので，
+この関数を一度使えば，座標系の変換は各描画関数が自動的に行なうようになります．
+
+次の使用例では，アプリケーション座標系の左下を(-20.0, -10.0)，
+右上を(799.0, 599.0)に変更します．
+
+\shiyorei{　\verb|window(win, -20.0, -10.0, 799.0, 599.0) ;|}
+
+\vspace*{2.5mm}
+
+なお，gsetinitialattributes()関数(\S\ref{gsetinitialattributes})
+で，\verb|BOTTOM_LEFT_ORIGIN|属性が無効化されている場合は，
+ウィンドゥ座標系の原点({\tt 0}, {\tt 0})は左上になります．
+
+座標系の変更には，
+coordinate()関数(\S \ref{coordinate})を使う方法もあります．
+ご検討ください．
+%
+\subsubsection{void layer( int wn, int lys, int lyw )}
+\label{layer}
+
+\kino{　レイヤの設定をする}
+
+EGGXではグラフィックス用ウィンドゥ毎に8枚のレイヤを持ち，
+表示するレイヤと書き込むレイヤを独立に指定できます．
+{\tt wn}にはウィンドウ番号を指定し，
+{\tt lys}には表示するレイヤ番号，
+{\tt lyw}には書き込むレイヤ番号を{\tt 0}〜{\tt 7}で指定します．
+
+現在表示しているレイヤに対して
+({\tt lys == lyw}の場合に)
+連続して描画関数を実行すると，描画パフォーマンスが得られない事があり
+ます．
+高速な描画が必要な場合には，現在表示していないレイヤに対して描画し，
+copylayer()関数(\S\ref{copylayer})で
+描画レイヤの画像を表示レイヤにコピーするようにします．
+
+デフォルトでは{\tt layer(wn,0,0)}の状態となっています．
+
+\shiyorei{　\verb|layer(win,0,1) ;|}
+%
+\subsubsection{void copylayer( int wn, int lysrc, int lydest )}
+\label{copylayer}
+
+\kino{　レイヤのコピーをする}
+
+{\tt wn}のウィンドウ番号の，
+レイヤ{\tt lysrc}の画像をレイヤ{\tt lydest}
+にそのままコピーします．
+このコピーは瞬時に行われるため，
+アニメーションの再生に使うことができます．
+
+\shiyorei{　\verb|copylayer(win,1,0) ;|}
+%
+\subsubsection{void gsetbgcolor( int wn, const char *argsformat, ... )}
+\label{gsetbgcolor}
+
+\kino{　ウィンドゥの背景色を変更する}
+
+{\tt wn}で指定されたウィンドゥの背景色
+(gclr()関数(\S\ref{gclr})で初期化される色)
+を変更します．
+{\tt argsformat}(とそれに続く引数)で指定される文字列
+を背景色に設定します．
+2つめの引数
+{\tt argsformat}以降は，C標準関数のprintf()関数の場合と同様の
+可変引数となっています．
+この背景色の文字列には，
+Xサーバの{\tt rgb.txt}\footnt{%
+{\tt rgb.txt}はUNIX系のOSなら {\tt /usr/X11R6/lib/X11/}
+などにあります．}
+に設定されている色か，
+\verb|"#c0c0ff"|のように，16進数のRed,Green,Blue
+を指定します．
+
+\shiyorei{　\verb|gsetbgcolor(win,"white") ;|}
+%
+\subsubsection{void gclr( int wn )}
+\label{gclr}
+
+\kino{　描画レイヤの全消去}
+
+{\tt wn}で指定したウィンドゥの描画レイヤを
+gsetinitialbgcolor()関数(\S\ref{gsetinitialbgcolor})
+あるいは
+gsetbgcolor()関数(\S\ref{gsetbgcolor})
+で指定した色で初期化します．
+gsetbgcolor()関数，
+gsetinitialbgcolor()関数での指定がない場合の色は黒となっています．
+
+\shiyorei{　\verb|gclr(win) ;|}
+%
+\subsubsection{void tclr( void )}
+\label{tclr}
+
+\kino{　端末のクリア}
+
+端末をクリアし，カーソルの位置をホームポジションに戻します．
+
+\shiyorei{　\verb|tclr() ;|}
+%
+\subsubsection{void newpen( int wn, int cn )}
+\label{newpen}
+
+\kino{　描画色の変更}
+
+{\tt wn}で指定したウィンドゥでの描画色を
+変更します．{\tt cn}と色との関係は以下の通りです．
+
+\begin{tabular}{llllllll}
+{\tt 0}:黒 &
+{\tt 1}:白 &
+{\tt 2}:赤 &
+{\tt 3}:緑 &
+{\tt 4}:青 &
+{\tt 5}:シアン &
+{\tt 6}:マゼンタ &
+{\tt 7}:黄\\
+{\tt 8}:DimGray &
+{\tt 9}:Gray &
+{\tt 10}:red4 &
+{\tt 11}:green4 &
+{\tt 12}:blue4 &
+{\tt 13}:cyan4 &
+{\tt 14}:magenta4 &
+{\tt 15}:yellow4\\
+\end{tabular}\\
+%
+red4，green4…の``4''のつく色は，
+暗い赤，暗い緑…となっています．
+
+デフォルトでは，白が指定されています．
+
+\shiyorei{　\verb|newpen(win,2) ;|}
+%
+\subsubsection{void newcolor( int wn, const char *argsformat, ... )}
+\label{newcolor}
+
+\kino{　描画色の変更}
+
+{\tt wn}で指定したウィンドゥでの描画色を変更します．
+{\tt argsformat}(とそれに続く引数)で指定される文字列
+を描画色に設定します．
+2つめの引数
+{\tt argsformat}以降は，C標準関数のprintf()関数の場合と同様の
+可変引数となっています．
+この描画色の文字列には，
+Xサーバの{\tt rgb.txt}\footnt{%
+{\tt rgb.txt}はUNIX系のOSなら {\tt /usr/X11R6/lib/X11/}
+などにあります．}
+に設定されている色か，
+\verb|"#c0c0ff"|のように，16進数のRed,Green,Blue
+を指定します．
+
+\shiyorei{　\verb|newcolor(win,"Violet") ;|}
+%
+\subsubsection{void newrgbcolor( int wn, int r, int g, int b )}
+\label{newrgbcolor}
+
+\kino{　描画色の変更}
+
+{\tt wn}で指定したウィンドゥでの描画色を変更します．
+{\tt r,g,b}にはそれぞれRed,Green,Blueの
+輝度を256段階の整数(0〜255)で指定します．
+
+\shiyorei{　\verb|newrgbcolor(win,255,127,0) ;|}
+%
+\subsubsection{void newhsvcolor( int wn, int h, int s, int v )}
+\label{newhsvcolor}
+
+\kino{　描画色の変更}
+
+{\tt wn}で指定したウィンドゥでの描画色を変更します．
+{\tt h,s,v}にはそれぞれ，Hue, Satulation, Valueを指定します%
+\footnt{newhsvcolor()関数は，京都産業大学の安田様からいただきました．}%
+．
+{\tt s}と{\tt v}は256段階の整数(0〜255)を，
+{\tt h}は0〜359までの整数(角度)を指定します．
+
+\shiyorei{　\verb|newhsvcolor(win,120,250,240) ;|}
+%
+\subsubsection{int makecolor( int cmode, double dmin, double dmax, double data,\\~~~~~~~~~~~~~~~~~~~~int *r, int *g, int *b )}
+\label{makecolor}
+
+\kino{　変数からカラーを生成する(カラーバー生成)}
+
+変数{\tt data}の値を使って，{\tt r},{\tt g},{\tt b} それぞれに
+256段階のRed,Greed,Blueのカラーを生成します．
+変数の最小，最大は{\tt dmin},{\tt dmax}で指定します．
+この関数で得た，{\tt r},{\tt g},{\tt b}の
+値はnewrgbcolor()関数(\S\ref{newrgbcolor})
+にそのまま与えて使う事ができます．
+
+返り値は{\tt data}が{\tt dmin},{\tt dmax}の範囲内に
+あった場合は{\tt 0}を返し，{\tt dmin}未満であれば負の値を，
+{\tt dmax}を越えていれば，正の値を返します．
+
+{\tt cmode}はカラーパターンの番号で，以下に示す
+約50種類のカラーパターンが
+利用できます．{\tt DS9\_GRAY}等はマクロで，実際の値は
+0から始まる整数です．詳細は，
+{\tt eggx\_color.h}を見てください．
+
+以下は fitsビューア DS9 コンパチのカラーパターンです．
+
+\begin{center}
+%\renewcommand{\arraystretch}{0.90}
+\begin{tabular}{ll}
+ \verb|DS9_GRAY|  & \includegraphics[scale=0.5]{color000.eps2} \\
+ \verb|DS9_RED|   & \includegraphics[scale=0.5]{color001.eps2} \\
+ \verb|DS9_GREEN| & \includegraphics[scale=0.5]{color002.eps2} \\
+ \verb|DS9_BLUE|  & \includegraphics[scale=0.5]{color003.eps2} \\
+ \verb|DS9_A|     & \includegraphics[scale=0.5]{color004.eps2} \\
+ \verb|DS9_B|     & \includegraphics[scale=0.5]{color005.eps2} \\
+ \verb|DS9_BB|    & \includegraphics[scale=0.5]{color006.eps2} \\
+ \verb|DS9_HE|    & \includegraphics[scale=0.5]{color007.eps2} \\
+ \verb|DS9_I8|    & \includegraphics[scale=0.5]{color008.eps2} \\
+ \verb|DS9_AIPS0| & \includegraphics[scale=0.5]{color009.eps2} \\
+ \verb|DS9_SLS|   & \includegraphics[scale=0.5]{color010.eps2} \\
+ \verb|DS9_HEAT|  & \includegraphics[scale=0.5]{color011.eps2} \\
+ \verb|DS9_COOL|  & \includegraphics[scale=0.5]{color012.eps2} \\
+ \verb|DS9_RAINBOW|   & \includegraphics[scale=0.5]{color013.eps2} \\
+ \verb|DS9_STANDARD|  & \includegraphics[scale=0.5]{color014.eps2} \\
+ \verb|DS9_STAIRCASE| & \includegraphics[scale=0.5]{color015.eps2} \\
+ \verb|DS9_COLOR|     & \includegraphics[scale=0.5]{color016.eps2} \\
+\end{tabular}
+\end{center}
+
+以下は可視化ソフトウェア IDL コンパチのカラーパターンです．
+
+\begin{center}
+\renewcommand{\arraystretch}{0.85}
+\begin{tabular}{ll}
+ \verb|IDL1_B_W_LINEAR|  & \includegraphics[scale=0.5]{color017.eps2} \\
+ \verb|IDL1_BLUE_WHITE|  & \includegraphics[scale=0.5]{color018.eps2} \\
+ \verb|IDL1_GRN_RED_BLU_WHT|  & \includegraphics[scale=0.5]{color019.eps2} \\
+ \verb|IDL1_RED_TEMPERATURE|  & \includegraphics[scale=0.5]{color020.eps2} \\
+ \verb|IDL1_BLUE_GREEN_RED_YELLOW|  & \includegraphics[scale=0.5]{color021.eps2} \\
+ \verb|IDL1_STD_GAMMA_II|  & \includegraphics[scale=0.5]{color022.eps2} \\
+ \verb|IDL1_PRISM|  & \includegraphics[scale=0.5]{color023.eps2} \\
+ \verb|IDL1_RED_PURPLE|  & \includegraphics[scale=0.5]{color024.eps2} \\
+ \verb|IDL1_GREEN_WHITE_LINEAR|  & \includegraphics[scale=0.5]{color025.eps2} \\
+ \verb|IDL1_RGN_WHT_EXPONENTIAL|  & \includegraphics[scale=0.5]{color026.eps2} \\
+ \verb|IDL1_GREEN_PINK|  & \includegraphics[scale=0.5]{color027.eps2} \\
+ \verb|IDL1_BLUE_RED|  & \includegraphics[scale=0.5]{color028.eps2} \\
+ \verb|IDL1_16_LEVEL|  & \includegraphics[scale=0.5]{color029.eps2} \\
+ \verb|IDL1_RAINBOW|  & \includegraphics[scale=0.5]{color030.eps2} \\
+ \verb|IDL1_STEPS|  & \includegraphics[scale=0.5]{color031.eps2} \\
+ \verb|IDL1_STERN_SPECIAL|  & \includegraphics[scale=0.5]{color032.eps2} \\
+\end{tabular}
+\end{center}
+
+\begin{center}
+\renewcommand{\arraystretch}{0.85}
+\begin{tabular}{ll}
+ \verb|IDL2_HAZE|  & \includegraphics[scale=0.5]{color033.eps2} \\
+ \verb|IDL2_BLUE_PASTEL_RED|  & \includegraphics[scale=0.5]{color034.eps2} \\
+ \verb|IDL2_PASTELS|  & \includegraphics[scale=0.5]{color035.eps2} \\
+ \verb|IDL2_HUE_SAT_LIGHTNESS_1|  & \includegraphics[scale=0.5]{color036.eps2} \\
+ \verb|IDL2_HUE_SAT_LIGHTNESS_2|  & \includegraphics[scale=0.5]{color037.eps2} \\
+ \verb|IDL2_HUE_SAT_VALUE_1|  & \includegraphics[scale=0.5]{color038.eps2} \\
+ \verb|IDL2_HUE_SAT_VALUE_2|  & \includegraphics[scale=0.5]{color039.eps2} \\
+ \verb|IDL2_PURPLE_RED_WITH_STRIPES|  & \includegraphics[scale=0.5]{color040.eps2} \\
+ \verb|IDL2_BEACH|  & \includegraphics[scale=0.5]{color041.eps2} \\
+ \verb|IDL2_MAC_STYLE|  & \includegraphics[scale=0.5]{color042.eps2} \\
+ \verb|IDL2_EOS_A|  & \includegraphics[scale=0.5]{color043.eps2} \\
+ \verb|IDL2_EOS_B|  & \includegraphics[scale=0.5]{color044.eps2} \\
+ \verb|IDL2_HARDCANDY|  & \includegraphics[scale=0.5]{color045.eps2} \\
+ \verb|IDL2_NATURE|  & \includegraphics[scale=0.5]{color046.eps2} \\
+ \verb|IDL2_OCEAN|  & \includegraphics[scale=0.5]{color047.eps2} \\
+ \verb|IDL2_PEPPERMINT|  & \includegraphics[scale=0.5]{color048.eps2} \\
+ \verb|IDL2_PLASMA|  & \includegraphics[scale=0.5]{color049.eps2} \\
+ \verb|IDL2_BLUE_RED|  & \includegraphics[scale=0.5]{color050.eps2} \\
+ \verb|IDL2_RAINBOW|  & \includegraphics[scale=0.5]{color051.eps2} \\
+ \verb|IDL2_BLUE_WAVES|  & \includegraphics[scale=0.5]{color052.eps2} \\
+ \verb|IDL2_VALCANO|  & \includegraphics[scale=0.5]{color053.eps2} \\
+ \verb|IDL2_WAVES|  & \includegraphics[scale=0.5]{color054.eps2} \\
+ \verb|IDL2_RAINBOW18|  & \includegraphics[scale=0.5]{color055.eps2} \\
+ \verb|IDL2__RAINBOW|  & \includegraphics[scale=0.5]{color056.eps2} \\
+ \verb|IDL2_ORBIT_VIEWER_COLOR|  & \includegraphics[scale=0.5]{color057.eps2} \\
+ \verb|IDL2_ORBIT_VIEWER_GRAY|  & \includegraphics[scale=0.5]{color058.eps2} \\
+\end{tabular}
+\end{center}
+
+\shiyorei{　\verb|makecolor(DS9_SLS,v_min,v_max,v,&r,&g,&b) ;|}
+%
+%
+%
+\subsubsection{void newlinewidth( int wn, int width )}
+\label{newlinewidth}
+
+\kino{　線幅の変更}
+
+{\tt wn}で指定したウィンドゥで線を描く時の線幅を変更します．
+デフォルトでは幅1が設定されています．
+
+この関数で線幅を変更すると，drawsym()関数(\S \ref{drawsym})
+やdrawarrow()関数(\S \ref{drawarrow})等で描かれる図形にも影響を与えるので
+注意してください．
+
+\shiyorei{　\verb|newlinewidth(win, 2) ;|}
+%
+\subsubsection{void newlinestyle( int wn, int style )}
+\label{newlinestyle}
+
+\kino{　線のスタイルの変更}
+
+{\tt wn}で指定したウィンドゥで線を描く時のスタイルを変更します．
+引数{\tt style}に与える事ができる値は，
+{\tt LineSolid}(実線)と{\tt LineOnOffDash}(点線)です．
+デフォルトでは実線({\tt LineSolid})が設定されています．
+
+この関数で線のスタイルを変更すると，drawsym()関数(\S \ref{drawsym})
+やdrawarrow()関数(\S \ref{drawarrow})等で描かれる図形にも影響を与えるので
+注意してください．
+
+\shiyorei{　\verb|newlinestyle(win, LineOnOffDash) ;|}
+%
+\subsubsection{void newgcfunction( int wn, int fnc )}
+\label{newgcfunction}
+
+\kino{　GCファンクションの変更}
+
+{\tt wn}で指定したウィンドゥでの描画関数(画像の転送等も含む)
+を実行する時の，GCファンクションを変更します．
+
+GCファンクションとは，
+源泉RGB値(例えばnewcolor()関数で指定したカラーのRGB値)と
+描画先ピクセルのRGB値との論理演算により，
+描画されるRGB値を決定する仕組みです．
+
+指定可能なGCファンクションは次の16種類で，デフォルトでは
+{\tt GXcopy}が設定されています．「src」は源泉RGB値，「dst」は
+描画先ピクセルのRGB値を示しています．
+
+\begin{center}
+\renewcommand{\arraystretch}{0.83}
+\begin{tabular}{ll}
+  \hline 
+  ファンクション名 & 論理演算 \\
+  \hline 
+       {\tt GXclear}            &    0 \\
+       {\tt GXand}              &    src AND dst \\
+       {\tt GXandReverse}       &    src AND NOT dst \\
+       {\tt GXcopy}             &    src \\
+       {\tt GXandInverted}      &    (NOT src) AND dst \\
+       {\tt GXnoop}             &    dst \\
+       {\tt GXxor}              &    src XOR dst \\
+       {\tt GXor}               &    src OR dst \\
+       {\tt GXnor}              &    (NOT src) AND (NOT dst) \\
+       {\tt GXequiv}            &    (NOT src) XOR dst \\
+       {\tt GXinvert}           &    NOT dst \\
+       {\tt GXorReverse}        &    src OR (NOT dst) \\
+       {\tt GXcopyInverted}     &    NOT src \\
+       {\tt GXorInverted}       &    (NOT src) OR dst \\
+       {\tt GXnand}             &    (NOT src) OR (NOT dst) \\
+       {\tt GXset}              &    1 \\
+  \hline 
+\end{tabular}
+\end{center}
+
+よく用いられるGCファンクションの1つとして「{\tt GXxor}」があります．
+源泉RGB値と描画先ピクセルのRGB値とのXORをとった値を描画するので，
+2回同じ場所を描画すると必ず元の値に戻ります．
+カーソル描画や領域表示を行なう場合によく用いられます．
+この他，画像の反転表示や，
+Red，Green，Blueの合成などでの利用が考えられます．
+
+この関数で設定したGCファンクションは各種描画関数と
+gputarea()関数(\S\ref{gputarea})，
+gputimage()関数(\S\ref{gputimage})で有効です．
+
+なお，複数回同じ場所を描画した場合にそれぞれが同じ結果にならない
+GCファンクションを指定した場合，
+drawsym()関数(\S \ref{drawsym})，drawsyms()関数(\S \ref{drawsyms})，
+drawarrow()関数(\S \ref{drawarrow})で描かれる図形についての結果は
+定義されていません．
+
+\shiyorei{　\verb|newgcfunction(win, GXxor) ;|}
+%
+\subsubsection{void pset( int wn, double x, double y )}
+\label{pset}
+
+\kino{　点の描画}
+
+{\tt wn}で指定したウィンドゥに点を描画します．
+
+描画関数等で用いられる
+アプリケーション座標系は，デフォルトでは左下が({\tt 0.0}, {\tt 0.0})で
+右上が({\tt xsize-1.0}, {\tt ysize-1.0})になっています．
+この座標は，coordinate()関数(\S\ref{coordinate})または
+window()関数(\S\ref{window})で変更が可能です．
+
+\shiyorei{　\verb|pset(win,gx,gy) ;|}
+%
+\subsubsection{void drawline( int wn, double x0, double y0, double x1, double y1 )}
+\label{drawline}
+
+\kino{　直線の描画}
+
+{\tt wn}で指定したウィンドゥの({\tt x0}, {\tt y0})から
+({\tt x1}, {\tt y1})に直線を描画します．
+
+\shiyorei{　\verb|drawline(win,gx0,gy0,gx1,gy1) ;|}
+%
+\subsubsection{void moveto( int wn, double x, double y ), void lineto( int wn, double x, double y )}
+\label{lineto}
+
+\kino{　連続的に直線を描く}
+
+lineto()関数を複数回使う事により，
+{\tt wn}で指定したウィンドゥに連続的に直線を描画します．
+
+moveto()関数は，({\tt x}, {\tt y})をlineto()関数のための初期位置に設定します．
+lineto()関数は，以前{\tt moveto()}または{\tt lineto()}が呼ばれた時に
+指定された座標から，({\tt x}, {\tt y})へ直線を引きます．
+{\tt moveto()}でペンを上げて移動，
+{\tt lineto()}でペンを下ろして描画，
+と考えるとわかりやすいでしょう．
+
+%これらの関数は，この後のline()関数の{\tt mode}に{\tt PENUP}，{\tt PENDOWN}
+%を与えた場合と同じ動作をします．
+
+\shiyorei{　\verb|lineto(win,gx,gy) ;|}
+%
+\subsubsection{void line( int wn, double x, double y, int mode )}
+\label{line}
+
+\kino{　連続的に直線を描く}
+
+この関数は，\S \ref{lineto}
+の{\tt moveto()}，{\tt lineto()}と同じ動作をします．
+
+{\bf 新しいプログラムでは，moveto()・lineto()関数を使用してください．}
+
+line()関数を複数回使う事により，
+{\tt wn}で指定したウィンドゥに連続的に直線を描画します．
+{\tt mode}に{\tt PENDOWN}を指定すると以前line()関数が呼ばれた時に
+指定された座標から，({\tt x}, {\tt y})へ直線を引きます．
+{\tt mode}に{\tt PENUP}を指定すると({\tt x}, {\tt y})を
+line()関数の初期位置に設定します．
+{\tt mode=PENDOWN}でペンを下ろして描画，
+{\tt mode=PENUP}でペンを上げて移動と考えるとわかりやすいでしょう．
+
+%また，{\tt mode}={\tt PSET}の場合は (x,y) に点を描き，
+%ペンの位置が更新されます．
+
+\shiyorei{　\verb|line(win,gx,gy,PENDOWN) ;|}
+%
+\subsubsection{void drawpts( int wn, const double x[], const double y[], int n )}
+\label{drawpts}
+
+\kino{　複数の点を描く}
+
+{\tt wn}で指定したウィンドゥで，{\tt n}個の点を描きます．
+{\tt x}，{\tt y}は{\tt n}個の実数の一次元配列で，
+{\tt x[0]}〜{\tt x[n-1]}，
+{\tt y[0]}〜{\tt y[n-1]}に各点の座標を入れておきます．
+
+引数{\tt x}，{\tt y}がfloat型の配列の場合も，
+double型の場合と同じ関数名で使用可能です．
+
+\shiyorei{　\verb|drawpts(win,plx,ply,5) ;|}
+%
+\subsubsection{void drawlines( int wn, const double x[], const double y[], int n )}
+\label{drawlines}
+
+\kino{　折れ線を描く}
+
+{\tt wn}で指定したウィンドゥで，折れ線を描きます．
+{\tt x}，{\tt y}は{\tt n}個の実数の一次元配列で，
+{\tt x[0]}〜{\tt x[n-1]}，
+{\tt y[0]}〜{\tt y[n-1]}に折れ線の各点の座標を入れておきます．
+
+引数{\tt x}，{\tt y}がfloat型の配列の場合も，
+double型の場合と同じ関数名で使用可能です．
+
+\shiyorei{　\verb|drawlines(win,plx,ply,5) ;|}
+%
+\subsubsection{void drawpoly( int wn, const double x[], const double y[], int n )}
+\label{drawpoly}
+
+\kino{　多角形を描く}
+
+{\tt wn}で指定したウィンドゥで，多角形を描きます．
+{\tt x}，{\tt y}は{\tt n}個の実数の一次元配列で，
+{\tt x[0]}〜{\tt x[n-1]}，
+{\tt y[0]}〜{\tt y[n-1]}に多角形の各点の座標を入れておきます．
+
+引数{\tt x}，{\tt y}がfloat型の配列の場合も，
+double型の場合と同じ関数名で使用可能です．
+
+\shiyorei{　\verb|drawpoly(win,plx,ply,5) ;|}
+%
+\subsubsection{void fillpoly( int wn, const double x[], const double y[], int n, int i )}
+\label{fillpoly}
+
+\kino{　多角形を塗り潰す}
+
+{\tt wn}で指定したウィンドゥで，多角形の領域を塗り潰します．
+{\tt x}，{\tt y}は{\tt n}個の実数の一次元配列で，
+{\tt x[0]}〜{\tt x[n-1]}，
+{\tt y[0]}〜{\tt y[n-1]}に多角形の各点の座標を入れておきます．
+{\tt i}は塗り潰す時の形状で通常は{\tt 0}を，
+凸多角形の時は{\tt 1}を指定します．
+
+引数{\tt x}，{\tt y}がfloat型の配列の場合も，
+double型の場合と同じ関数名で使用可能です．
+
+\shiyorei{　\verb|fillpoly(win,plx,ply,5,0) ;|}
+%
+%
+\subsubsection{void drawrect( int wn, double x, double y, double w, double h )}
+\label{drawrect}
+
+\kino{　長方形を描く}
+
+{\tt wn}で指定したウィンドゥに，
+頂点({\tt x}, {\tt y})から正の方向に
+幅{\tt w}，高さ{\tt h}
+の長方形を描きます．
+
+\shiyorei{　\verb|drawrect(win,50.0,60.0,30.0,20.0) ;|}
+%
+\subsubsection{void fillrect( int wn, double x, double y, double w, double h )}
+\label{fillrect}
+
+\kino{　長方形の領域を塗り潰す}
+
+{\tt wn}で指定したウィンドゥで，
+頂点({\tt x}, {\tt y})から正の方向に
+幅{\tt w}，高さ{\tt h}
+の長方形の領域を塗り潰します．
+
+\shiyorei{　\verb|fillrect(win,50.0,60.0,30.0,20.0) ;|}
+%
+\subsubsection{void drawcirc( int wn, double xcen, double ycen, double xrad, double yrad )}
+\label{drawcirc}
+
+\kino{　中心座標，半径を与えて円を描く}
+
+{\tt wn}で指定したウィンドゥに，
+({\tt xcen}, {\tt ycen})を中心に
+横方向の半径{\tt xrad}，
+縦方向の半径{\tt yrad}の
+円を描きます．
+
+別名として，{\tt circle}が使えます．
+次の2つの使用例は，同じ動作となります．
+
+\shiyorei{　\verb|drawcirc(win,50.0,60.0,30.0,40.0) ;   circle(win,50.0,60.0,30.0,40.0) ;|}
+%
+\subsubsection{void fillcirc( int wn, double xcen, double ycen, double xrad, double yrad )}
+\label{fillcirc}
+
+\kino{　中心座標，半径を与えて円を塗り潰す}
+
+{\tt wn}で指定したウィンドゥに，
+({\tt xcen}, {\tt ycen})を中心に
+横方向の半径{\tt xrad}，
+縦方向の半径{\tt yrad}の
+円を塗り潰します．
+
+\shiyorei{　\verb|fillcirc(win,50.0,60.0,30.0,40.0) ;|}
+%
+\subsubsection{void drawarc( int wn, double xcen, double ycen, double xrad, double yrad,\\~~~~~~~~~~~~~~~~~~~double sang, double eang, int idir )}
+\label{drawarc}
+
+\kino{　円の中心，半径，始点，終点の角度を与えて円弧を描く}
+
+{\tt wn}で指定したウィンドゥに，
+({\tt xcen}, {\tt ycen})を中心に
+横方向の半径{\tt xrad}，
+縦方向の半径{\tt yrad}の
+円弧を描きます．
+{\tt sang}は開始角，{\tt eang}は終了角で，度で与えます．
+{\tt idir}は円弧を描く方向で{\tt 1}で左廻り，{\tt -1}で右廻りとなります．
+
+\shiyorei{　\verb|drawarc(win,50.0,60.0,30.0,40.0,-10.0,-170.0,-1) ;|}
+%
+\subsubsection{void fillarc( int wn, double xcen, double ycen, double xrad, double yrad,\\~~~~~~~~~~~~~~~~double sang, double eang, int idir )}
+\label{fillarc}
+
+\kino{　円の中心，半径，始点，終点の角度を与えて円弧を塗り潰す}
+
+{\tt wn}で指定したウィンドゥで，
+({\tt xcen}, {\tt ycen})を中心に
+横方向の半径{\tt xrad}，
+縦方向の半径{\tt yrad}の
+の円弧を塗り潰します．
+{\tt sang}は開始角，{\tt eang}は終了角で，度で与えます．
+{\tt idir}は円弧を描く方向で{\tt 1}で左廻り，{\tt -1}で右廻りとなります．
+
+\shiyorei{　\verb|fillarc(win,50.0,60.0,30.0,40.0,-10.0,-170.0,-1) ;|}
+%
+%
+%
+\subsubsection{void drawsym( int wn, int x, int y, int size, int sym\_type )}
+\label{drawsym}
+
+\kino{　センターシンボルの描画}
+
+{\tt wn}で指定したウィンドゥに
+センターシンボルを座標({\tt x}, {\tt y})に描きます．
+{\tt size}はシンボルの大きさでピクセル単位，
+{\tt sym\_type}でシンボルの種類を指定します．
+
+{\tt sym\_type}とシンボルの関係は，次の図のとおりです．
+
+\begin{center}
+\includegraphics[scale=1.0]{syms.eps}
+\end{center}
+
+%{\tt sym\_type}とシンボルの関係は，だいたい次のようなものとなっています．
+
+%　{\tt 1}:・
+%　{\tt 2}:＋
+%　{\tt 3}:×\hspace{-3.40mm}＋
+%　{\tt 4}:○
+%　{\tt 5}:×
+%　{\tt 6}:Ｙ
+%　{\tt 7}:△
+%　{\tt 8}:□
+%　{\tt 9}:▽
+%　{\tt 10}:◇
+
+%別名として，{\tt symbol}が使えます．
+%次の2つの使用例は，同じ動作となります．
+
+\shiyorei{　\verb|drawsym(win,gx,gy,16,2) ;|}
+%
+%
+\subsubsection{void drawsyms( int wn, const double x[], const double y[], int n, int size,\\~~~~~~~~~~~~~~~~~~~~~int sym\_type )}
+\label{drawsyms}
+
+\kino{　複数のシンボルを描く}
+
+{\tt wn}で指定したウィンドゥで，{\tt n}個のシンボルを描きます．
+{\tt x}，{\tt y}は{\tt n}個の実数の一次元配列で，
+{\tt x[0]}〜{\tt x[n-1]}，
+{\tt y[0]}〜{\tt y[n-1]}に各シンボルの座標を入れておきます．
+
+{\tt size}はシンボルの大きさでピクセル単位，
+{\tt sym\_type}でシンボルの種類を指定します．
+
+{\tt sym\_type}とシンボルの関係については，
+\S \ref{drawsym}をご覧ください．
+
+引数{\tt x}，{\tt y}がfloat型の配列の場合も，
+double型の場合と同じ関数名で使用可能です．
+
+\shiyorei{　\verb|drawsyms(win,plx,ply,5,16,8) ;|}
+%
+\subsubsection{void drawarrow( int wn, double xs, double ys, double xt, double yt,\\~~~~~~~~~~~~~~~~~~~~~~double s, double w, int 10{\tt *}i+j )}
+\label{drawarrow}
+
+\kino{　種々の型の矢印を描く}
+
+{\tt wn}で指定したウィンドゥに
+({\tt xs}, {\tt ys})から({\tt xt}, {\tt yt})に向かって矢印を描きます．
+矢印の形状は以下の図の通りで，{\tt s}と{\tt w}は実数で指定します．
+{\tt i}が{\tt 0}〜{\tt 2}の場合には{\tt w},{\tt s}はピクセル数を，
+{\tt i}が{\tt 10}〜{\tt 12}の場合には{\tt w},{\tt s}は矢印の長さに対する
+割合で{\tt 0.0}〜{\tt 1.0}の値を指定します．
+
+\begin{center}
+\includegraphics[scale=0.7]{procall_arohd0.eps}
+\end{center}
+
+%\begin{center}
+% \includegraphics[scale=0.30]{roche_arr_f.eps2}\\
+% {\tt i}={\tt 11}での矢印の描画例
+%\end{center}
+
+\shiyorei{　\verb|drawarrow(win,gx0,gy0,gx1,gy1,0.3,0.2,114) ;|}
+%
+%
+\subsubsection{int newfontset( int wn, const char *argsformat, ... )}
+\label{newfontset}
+
+\kino{　フォントセット(日本語フォント)の指定}
+
+{\tt wn}で指定したウィンドゥで描くフォントセットを指定します．
+文字の描画はdrawstr()関数を利用します．
+
+{\tt argsformat}(とそれに続く引数)で指定される文字列
+がフォントセットに設定されます．
+{\tt argsformat}以降は，C標準関数のprintf()関数の場合と同様の
+可変引数となっているため，
+文字を拡大・縮小する時など，使用例のように引数を与えると大変便利です．
+
+返り値は，指定されたフォントセットが
+取得できた場合は{\tt 0}，代替フォントで取得できた場合は正の値，
+フォントセットの取得に失敗した場合は負の値となります．
+
+フォントセットの設定は，Xサーバにインストールされたフォントを
+指定する必要があり，OSやディストリビューションに依存します．
+確実に表示したい場合は，次のような設定を推奨します:
+
+\begin{center}
+\begin{tabular}{|l|l|}
+  \hline 
+  14ドットフォント & \verb|"-*-fixed-medium-r-normal--14-*"| \\
+  \hline 
+  16ドットフォント & \verb|"-*-fixed-medium-r-normal--16-*"| \\
+  \hline 
+  24ドットフォント & \verb|"-*-fixed-medium-r-normal--24-*"| \\
+  \hline 
+\end{tabular}
+\end{center}
+
+\shiyorei{　\verb|st = newfontset(win,"-kochi-gothic-medium-r-normal--%d-*-*-*-*-*-*-*",fsize) ;|}
+
+\shiyorei{　\verb|st = newfontset(win,"-adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-iso8859-1,"|\\
+    　　　　\verb|                   "-*-fixed-medium-r-normal--14-*") ;| } 
+%
+%
+\subsubsection{int drawstr( int wn, double x, double y, int size, double theta,\\　　　　 　~~~const char *argsformat, ... )}
+\label{drawstr}
+
+\kino{　文字列の描画}
+
+{\tt wn}で指定したウィンドゥに，
+文字列を座標({\tt x}, {\tt y})から描きます．
+{\tt size}は文字の大きさで，ピクセル単位で指定します．
+{\tt theta}は文字列の回転を指定する引数ですが，現バージョンでは
+機能しません．
+{\tt argsformat}(とそれに続く引数)で指定される文字列
+が描かれます．
+なお，
+{\tt argsformat}以降は，C標準関数のprintf()関数の場合と同様の
+可変引数となっていますので，
+使用例のように変数の値などを描く事もできます．
+
+文字のサイズ{\tt size}は{\tt 1}〜{\tt 24}の範囲で指定できます．
+{\tt size}と実際のフォントとの関係は以下の表のようになっています．
+この場合，文字は半角英数字のみ描画できます．
+
+マルチバイト文字(漢字)を描画する場合は，
+{\tt size}には{\tt FONTSET}を指定します．
+この場合のフォントの指定は，newfontset()関数(\S\ref{newfontset})
+を利用します．
+{\tt newfontset()}でのフォント指定がない場合は，
+デフォルトの14ドットのフォントセットで描画されます．
+
+この関数の返り値は描いた文字列の長さです．
+
+\begin{center}
+\begin{tabular}{|ccc|ccc|ccc|ccc|ccc|}
+  \hline 
+ {\tt 1}〜{\tt 7}&:& $5 \times 7$ &
+ {\tt 8}&:& $5 \times 8$ &
+ {\tt 9}&:& $6 \times 9$ &
+ {\tt 10}〜{\tt 11}&:& $6 \times 10$ &
+ {\tt 12}&:& $6 \times 12$  \\
+ \hline
+ {\tt 13}&:& $7 \times 13$ &
+ {\tt 14}〜{\tt 15}&:& $7 \times 14$ &
+ {\tt 16}〜{\tt 19}&:& $8 \times 16$ &
+ {\tt 20}〜{\tt 23}&:& $10 \times 20$ &
+ {\tt 24}&:& $12 \times 24$ \\
+  \hline 
+\end{tabular}
+\end{center}
+
+\shiyorei{　\verb|drawstr(win,gx,gy,16,0,"velocity v=%f",v) ;|}
+
+\shiyorei{　\verb|drawstr(win,gx,gy,FONTSET,0,"日本語の描画もOK!") ;|}
+%
+%
+\subsubsection{void gscroll( int wn, int inc\_x, int inc\_y, int clr )}
+\label{gscroll}
+
+\kino{　ピクセル単位で描画レイヤをスクロールする}
+
+{\tt wn}で指定したウィンドゥの描画レイヤを，({\tt inc\_x}, {\tt inc\_y})
+ピクセル分スクロールさせます．引数
+{\tt inc\_x}と{\tt inc\_y}はウィンドゥ座標系(座標値は整数)での増分を与えます．
+
+{\tt clr}が{\tt 0}の場合，画面の上下左右がつながっている状態でスクロールします
+が，{\tt clr}が{\tt 1}の場合はスクロール・インした部分を背景色で初期化しま
+す．
+
+次の例は，上方向に2ピクセルスクロールする例です．
+
+\shiyorei{　\verb|gscroll(win,0,2,1) ;|}
+
+\vspace*{2.5mm}
+
+なお，gsetinitialattributes()関数(\S\ref{gsetinitialattributes})
+で，\verb|BOTTOM_LEFT_ORIGIN|属性が無効化されている場合は，
+この例では下方向にスクロールします．
+%
+%
+%\subsubsection{void drawnum( int wn, double xg, double yg, int size, double
+%   v, double theta, int n )}
+%
+%\kino{　変数の値を描く}
+%
+%{\tt wn}で指定したウィンドゥに
+%実数型変数{\tt v}の値を座標{\tt (xg,yg)}から描きます．
+%{\tt size}は文字列の大きさで，ピクセル単位で指定します．
+%{\tt n}は表示する小数点の桁数で，整数値を与えます．
+%{\tt theta}は文字列の回転を指定する実数の引数ですが，現バージョンでは
+%機能しません．
+%
+%\shiyorei{　\verb|drawnum(win,gx,gy,16,prm,0.0,3) ;|}
+%
+%
+%\subsubsection{int putimg24( int wn, double x, double y, int width, int height,\\~~~~~~~~~~~~~~~~~~~unsigned char *buf )}
+%\label{putimg24}
+
+%\kino{　バッファに用意した画像をウィンドウに一括転送する}
+
+%{\tt wn}で指定したウィンドゥの座標({\tt x}, {\tt y})に
+%{\tt buf}に用意した，幅{\tt width}，高さ{\tt height}の画像
+%を一括転送します．
+%デフォルトでは，バッファに用意された画像の原点は左下として
+%扱われますが，
+%gsetinitialattributes()関数(\S\ref{gsetinitialattributes})
+%で\verb|BOTTOM_LEFT_ORIGIN|属性が無効化されている場合は，
+%画像の原点は左上として扱われます．
+
+%バッファ{\tt buf}には，データを0(任意の値で良い),Blue,Green,Redの順に
+%4つずつ，水平方向に走査しながら画像の上から下へ用意します
+%({\tt buf[0]=0x000}，
+%{\tt buf[1]=blue[0]}，
+%{\tt buf[2]=green[0]}，
+%{\tt buf[3]=red[0]}，といった具合いです)．
+%Blue,Green,Redの値には{\tt 0x000}〜{\tt 0x0ff}の範囲の輝度を与えておきます．
+
+%なおXサーバのdepthが16以上でない場合は
+%何もせず，返り値は{\tt -1}となります．それ以外の場合は{\tt 0}
+%を返します．
+%Xサーバのdepthは
+%ggetdisplayinfo()関数(\S\ref{ggetdisplayinfo})で調べる事ができます．
+
+%EGGX/ProCALLのソースパッケージに収録している
+%{\tt tools/ppmtoh.c}
+%を利用すると，
+%putimg24()関数の最後の3つの引数に与えるための値と配列を，
+%ppmファイルから作成する事ができます．
+%次のようにして，ヘッダファイルを作成すると便利です．\\
+%\verb|  $ ./ppmtoh my_image1.ppm >> my_images.h|
+
+%\shiyorei{　\verb|putimg24(win,gx,gy,640,400,buffer) ;|}
+%
+%
+%\subsubsection{int putimg24m( int wn, double x, double y, int width, int height,\\~~~~~~~~~~~~~~~~~~~~~unsigned char *buf )}
+%\label{putimg24m}
+
+%\kino{　バッファに用意したマスク付き画像をウィンドウに一括転送する(背景透過処理が可能)}
+
+%{\tt wn}で指定したウィンドゥの座標({\tt x},{\tt y})に
+%{\tt buf}に用意した，幅{\tt width}，高さ{\tt height}の画像
+%を一括転送します．
+%デフォルトでは，バッファに用意された画像の原点は左下として
+%扱われますが，
+%gsetinitialattributes()関数(\S\ref{gsetinitialattributes})
+%で\verb|BOTTOM_LEFT_ORIGIN|属性が無効化されている場合は，
+%画像の原点は左上として扱われます．
+
+%バッファ{\tt buf}には，データをマスク値,Blue,Green,Redの順に
+%4つずつ，水平方向に走査しながら画像の上から下へ用意します
+%({\tt buf[0]=0x0ff}，
+%{\tt buf[1]=blue[0]}，
+%{\tt buf[2]=green[0]}，
+%{\tt buf[3]=red[0]}，といった具合いです)．
+%Blue,Green,Redの値には{\tt 0x000}〜{\tt 0x0ff}の範囲の輝度を与えて，
+%マスク値は{\tt 0x0ff}(不透明)か{\tt 0x000}(透明)を与えます．
+
+%なおXサーバのdepthが16以上でない場合は
+%何もせず，返り値は{\tt -1}となります．それ以外の場合は{\tt 0}
+%を返します．
+%Xサーバのdepthは
+%ggetdisplayinfo()関数(\S\ref{ggetdisplayinfo})で調べる事ができます．
+
+%EGGX/ProCALLのソースパッケージに収録している
+%{\tt tools/xpmtoh.c}%
+%\footnt{xpmtohの利用には，netpbmのインストールが必要です．}%
+%を利用すると，
+%putimg24m()関数の最後の3つの引数に与えるための値と配列を，
+%xpmファイルから作成する事ができます．
+%次のようにして，ヘッダファイルを作成すると便利です．\\
+%\verb|  $ ./xpmtoh my_image1.xpm >> my_images.h|
+
+%\shiyorei{　\verb|putimg24m(win,gx,gy,640,400,buffer) ;|}
+%
+%
+\subsubsection{void gputarea( int wn, double x, double y, int src\_wn, int src\_ly,\\~~~~~~~~~~~~~~~~~~~~double src\_xs, double src\_ys, double src\_xe, double src\_ye )}
+\label{gputarea}
+
+\kino{　任意のウィンドゥ・レイヤ・領域の画像を描画レイヤにコピーする}
+
+ウィンドウ番号\verb|src_wn|，レイヤ番号\verb|src_ly|の
+(\verb|src_xs|, \verb|src_ys|)から(\verb|src_xe|, \verb|src_ye|)の範囲の画像を，
+ウィンドゥ番号{\tt wn}の座標({\tt x}, {\tt y})にコピーします．
+座標({\tt x}, {\tt y})には取り出した画像の原点を指定します．
+
+デフォルトでは，\verb|src_wn|から取り出した画像の原点は左下として
+扱われますが，
+gsetinitialattributes()関数(\S\ref{gsetinitialattributes})
+で\verb|BOTTOM_LEFT_ORIGIN|属性が無効化されている場合は，
+画像の原点は左上として扱われます．
+
+この関数の動作は，
+newgcfunction()関数(\S\ref{newgcfunction})による設定の影響を受けます．
+
+\shiyorei{　\verb|gputarea(win,gx,gy, wn1,0, 0.0,0.0,99.0,99.0) ;|}
+%
+%
+\subsubsection{int gputimage( int wn, double x, double y,\\~~~~~~~~~~~~~~~~~~~~unsigned char *buf, int width, int height, int msk )}
+\label{gputimage}
+
+\kino{　メモリバッファの(マスク付き)画像データを描画レイヤに一括転送する(背景透過処理が可能)}
+
+{\tt wn}で指定したウィンドゥの座標({\tt x}, {\tt y})に
+{\tt buf}に用意した，幅{\tt width}，高さ{\tt height}の
+24-bit画像データを一括転送します．
+デフォルトでは，バッファに用意された画像の原点は左下として
+扱われますが，
+gsetinitialattributes()関数(\S\ref{gsetinitialattributes})
+で\verb|BOTTOM_LEFT_ORIGIN|属性が無効化されている場合は，
+画像の原点は左上として扱われます．
+
+この関数の動作は，
+newgcfunction()関数(\S\ref{newgcfunction})による設定の影響を受けます．
+
+バッファ{\tt buf}には，データをマスク値,Red,Green,Blueの順に
+4つずつ，水平方向に走査しながら画像の上から下へ用意します
+({\tt buf[0]=0x0ff}，
+{\tt buf[1]=red[0]}，
+{\tt buf[2]=green[0]}，
+{\tt buf[3]=blue[0]}，といった具合いです)．
+Red,Green,Blueの値には{\tt 0x000}〜{\tt 0x0ff}の範囲の輝度を与えて，
+マスク値は{\tt 0x0ff}(不透明)か{\tt 0x000}(透明)を与えます．
+
+引数{\tt msk}にはマスク値の有無を与えます．
+マスク値を有効にする場合(背景透過処理を有効にする場合)
+は{\tt 1}を，そうでない場合は{\tt 0}とします(これ以外の値は，
+将来アルファに対応した時に使う予定です)．
+
+なお，Xサーバのdepthが16以上でない等の
+エラーの場合は，返り値として負の値を返します．
+正常終了の場合は{\tt 0}を返します．
+Xサーバのdepthは
+ggetdisplayinfo()関数(\S\ref{ggetdisplayinfo})で調べる事ができます．
+
+EGGX/ProCALLのソースパッケージに収録している{\tt tools/ppmtoh.c}
+または
+{\tt tools/xpmtoh.c}%
+\footnt{xpmtohの利用には，netpbmのインストールが必要です．}%
+を利用すると，
+gputimage()関数の第4引数から第6引数に与えるための値と配列を，
+ppmまたはxpmファイルから作成する事ができます．
+次のようにして，ヘッダファイルを作成すると便利です．\\
+\verb|  $ ./ppmtoh my_image1.ppm >> my_images.h|\\
+\verb|  $ ./xpmtoh my_image1.xpm >> my_images.h|
+
+\shiyorei{　\verb|gputimage(win,gx,gy,buffer,640,400,1) ;|}
+%
+%
+\subsubsection{unsigned char *ggetimage( int wn, int ly, double xs, double ys,\\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~double xe, double ye, int *r\_width, int *r\_height )}
+\label{ggetimage}
+
+\kino{　任意のウィンドゥ・レイヤ・領域の画像データをメモリバッファに取り込む}
+
+ウィンドウ番号{\tt wn}，レイヤ番号{\tt ly}の
+({\tt xs}, {\tt ys})から({\tt xe}, {\tt ye})
+の範囲の画像データをメモリバッファに取り込み，そのバッファの
+アドレスを返します．取り込まれた画像データの幅と高さは
+\verb|*r_width|と\verb|*r_height|に返ります．
+
+メモリバッファには画像データが，{\tt 0x0ff},Red,Green,Blueの順に
+4つずつ，水平方向に走査しながら画像の上から下へ格納されます．
+({\tt buf[0]=0x0ff}，
+{\tt buf[1]=red[0]}，
+{\tt buf[2]=green[0]}，
+{\tt buf[3]=blue[0]}，といった具合いです)．
+Red,Green,Blueの値には{\tt 0x000}〜{\tt 0x0ff}の範囲の輝度が入ります．
+
+なお，
+{\bf 返されたバッファは，free()関数を使って
+ユーザ・プログラム側で開放する必要があります}．
+
+引数に設定された値が不正等のエラーの場合は，
+返り値としてNULLを返します．
+
+\shiyorei{　\verb|buffer = ggetimage(win, 0, 0.0,0.0, 639.0,399.0, &width, &height) ;|}
+%
+%
+\subsubsection{int gsaveimage( int wn, int ly, double xs, double ys, double xe, double ye,\\~~~~~~~~~~~~~~~~~~~~~const char *conv, int nd, const char *argsformat, ... )}
+\label{gsaveimage}
+
+\kino{　任意のウィンドゥ・レイヤ・領域の画像をコンバータ(netpbm等)を通してファイルに保存する}
+
+バックグラウンドプロセスを起動し，
+ウィンドウ番号{\tt wn}，レイヤ番号{\tt ly}の
+({\tt xs}, {\tt ys})から({\tt xe}, {\tt ye})
+の範囲を
+コンバータ(netpbmの各種コマンド,ImageMagickのconvert等)
+を通してファイルに保存します\footnt{%
+netpbm は http://sourceforge.net/projects/netpbm/ ，%
+ImageMagick は http://www.imagemagick.org/ などで配布されています．}%
+．
+{\tt conv}にはppm形式から各画像フォーマットに変換するコンバータのコマンド
+ラインを指定します．
+例えば，netpbmを利用してpng形式に保存する場合は，\verb|"pnmtopng"|とします．
+ImageMagickを利用する場合は，\verb|"convert"|とします．
+もちろん，オプションスイッチも含める事もでき，
+\verb|"pnmtops -scale 0.125"|
+%，あるいは
+%\verb|"convert -compress ZIP"|
+といった指定も可能です．
+次の引数{\tt nd}は減色パラメータで，
+R,G,B 1チャンネルあたりの色の段階数を指定します．
+{\tt nd}は簡単な図形では{\tt 16}くらいで十分ですが，
+多くの色を使っている場合は最大値の{\tt 256}を指定してください．
+
+{\tt argsformat}(とそれに続く引数)で指定される文字列
+がファイル名として扱われます．
+{\tt argsformat}以降は，C標準関数のprintf()関数の場合と同様の
+可変引数となっているため，
+使用例のようにファイル名に変数の値を含む，といった事も可能です．
+このようにすると動画作成時に大変便利です．
+
+ppmから他の画像フォーマットに変換するnetpbmのコマンドの例を挙げておきます．
+各コンバータの使用方法に関しては端末から{\tt man }コンバータ名 とタイプ
+する事で調べることができます．
+ImageMagickのconvertコマンドを利用する場合は，
+ファイル名のサフィックス(ドット以降の文字列，
+例えば{\tt .jpg}，{\tt .png}，{\tt .eps}など)から保存フォーマットが決定されます．
+
+%\\
+%\vspace{-1\baselineskip}
+\begin{center}
+{\small
+\begin{tabular}{cc}
+{
+\begin{tabular}{ll}
+ \hline
+ 画像フォーマット & コンバータ名 \\
+ \hline
+ AutoCAD DXB     	& {\tt ppmtoacad} \\
+ windows bitmap 	& {\tt ppmtobmp} \\
+ Berkeley YUV           & {\tt ppmtoeyuv}\\
+ GIF			& {\tt ppmtogif} \\
+ NCSA ICR graphics	& {\tt ppmtoicr} \\
+ IFF ILBM		& {\tt ppmtoilbm} \\
+ Interleaf image        & {\tt ppmtoleaf} \\
+ HP LaserJet PCL 5 Color & {\tt ppmtolj} \\
+% mag			& {\tt ppmtomag} \\
+ map			& {\tt ppmtomap} \\
+ Mitsubishi S340-10 printer 	& {\tt ppmtomitsu} \\
+ Atari Neochrome .neo   & {\tt ppmtoneo} \\
+ PPC Paintbrush 	& {\tt ppmtopcx} \\
+ portable graymap	& {\tt ppmtopgm} \\
+% pi			& {\tt ppmtopi} \\
+ Atari Degas .pi1	& {\tt ppmtopi1} \\
+% pic			& {\tt ppmtopic} \\
+ Macintosh PICT		& {\tt ppmtopict} \\
+ HP PaintJet 	& {\tt ppmtopj} \\
+ HP PaintJet XL PCL 		& {\tt ppmtopjxl} \\
+ X11 ``puzzle'' 	& {\tt ppmtopuzz} \\
+ three portable graymaps		& {\tt ppmtorgb3} \\
+ DEC sixel 	& {\tt ppmtosixel} \\
+ TrueVision Targa 	& {\tt ppmtotga} \\
+ \hline
+\end{tabular}
+} 
+ 　&　
+{
+\begin{tabular}{ll}
+ \hline
+ 画像フォーマット & コンバータ名 \\
+ \hline
+ Motif UIL icon 	& {\tt ppmtouil} \\
+ Windows .ico           & {\tt ppmtowinicon} \\
+ XPM format		& {\tt ppmtoxpm} \\
+ Abekas YUV 	& {\tt ppmtoyuv} \\
+ YUV triplets		& {\tt ppmtoyuvsplit} \\
+% & (以下,{\tt pnmto***})\\
+ DDIF			& {\tt pnmtoddif} \\
+ FIASCO compressed      & {\tt pnmtofiasco} \\
+ FITS			& {\tt pnmtofits} \\
+ JBIG                   & {\tt pnmtojbig} \\
+ JFIF ("JPEG") image    & {\tt pnmtojpeg} \\
+ Palm pixmap            & {\tt pnmtopalm} \\
+ plain (ASCII) anymap   & {\tt pnmtoplainpnm} \\
+ Portable Network Graphics  & {\tt pnmtopng} \\
+ PostScript		& {\tt pnmtops} \\ 
+ Sun raster 	& {\tt pnmtorast} \\
+ RLE image              & {\tt pnmtorle} \\
+ sgi image 	& {\tt pnmtosgi} \\
+ Solitaire image recorder  & {\tt pnmtosir} \\
+ TIFF file		& {\tt pnmtotiff} \\
+ CMYK encoded TIFF      & {\tt pnmtotiffcmyk} \\
+ X11 window dump	& {\tt pnmtoxwd} \\
+ \hline
+\end{tabular}
+\vspace{1mm}
+}
+\end{tabular}
+}
+\end{center}
+
+%もちろん，コンバータはすでにインストールされている必要があり，
+%インストールされていない場合は指定できません．
+ここに挙げた以外のコンバータも，標準入力からppm形式で入力し，
+標準出力から変換データを出力するものであれば使用する事ができます．
+
+コンバータを通さずに直接ppm形式で保存する場合は{\tt conv}には
+\verb|""|と指定してください．
+ただしその場合，非圧縮のバイナリデータが
+保存されるので，ファイルのサイズが大きくなります．
+
+この関数ではXサーバから画像データを転送し，保存するわけですが，
+ネットワークが遅かったりすると非常に時間がかかります．
+その事を考慮してこの関数では子プロセスを起動して，
+バックグラウンドでXサーバからの画像の転送・ディスクへの書き込みを行うように
+しています．したがってユーザプログラムは{\tt gsaveimage();}の後
+すぐに他の作業ができるようになります．ただし，この子プロセスが
+終わるまではXサーバでの描画等ができないので，もし{\tt gsaveimage();}
+のすぐ後にEGGXの描画関数
+などを呼んだ場合は画像の転送・保存が完了するまで待たされる事になります．
+
+なお，{\tt gsaveimage}を使っている場合は
+\underline{プログラムは必ずgclose()関数(\S\ref{gclose})を呼んでから終了する}
+ようにしてください．
+%{\tt gclose}を呼ばずにプログラム
+%を終了した場合，子プロセスがまだ作業中だった場合に
+%強制終了させられて正常に画像が保存されません．
+
+返り値は，子プロセスの起動失敗などのエラーの場合は負の値，
+正常終了の場合は{\tt 0}となります．
+
+\shiyorei{　
+\verb|gsaveimage(win,0, 0.0,0.0, 639.0,399.0, "pnmtopng",256,"img%d.png",i) ;|}
+
+png形式に保存する例です．gif形式の場合は {\tt conv} を
+\verb|"ppmtogif"| にします．
+
+\shiyorei{　\small
+\verb|gsaveimage(win,0, 0.0,0.0, 639.0,399.0,|\\\verb|             "pnmtops -noturn -dpi 72 -equalpixels -psfilter -flate -ascii85",256,"figure.eps") ;|}
+
+%\shiyorei{　
+%\verb|gsaveimage(win,0,0.0,0.0,639.0,399.0,"convert -compress ZIP",256,"figure.eps2") ;|}
+
+PostScript形式に保存する例です．netpbmの{\tt pnmtops}では
+RunLength圧縮やGZIP圧縮(可逆圧縮)をサポートしています．
+上記のように「{\tt -psfilter -flate -ascii85}」
+をつける事で画質を損うことなくファイルサイズを小さくできます．
+
+%ImageMagickではRunLengthの他，LZW，ZIP(使用例)などのアルゴリズムでより効率良く
+%圧縮したビットマップイメージをPostscript Level 2ファイルに埋め込む事ができます．
+%ただし，ImageMagickのPostscript Level 2の出力は5.3.3以降で改悪され，
+%一般的なPostscriptインタープリタ(Adobe Postscript 3など)
+%では読めません．ImageMagick-{\bf 5.3.2}の利用をお勧めします．
+%
+%
+\subsubsection{unsigned char *readimage( const char *conv, const char *filename,\\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~int *r\_width, int *r\_height, int *r\_msk ) }
+\label{readimage}
+
+\kino{　ファイルの画像データをコンバータ(netpbm等)を通してメモリバッファに取り込む}
+
+ファイル{\tt filename}の画像データを
+コンバータ(netpbmの各種コマンド,ImageMagickのconvert等)
+を通してメモリバッファに読み込み，そのバッファのアドレスを返します．
+取り込まれた画像データの幅と高さが，
+\verb|*r_width|と\verb|*r_height|に返ります．
+アルファ値が読み込まれた場合には，\verb|*r_msk|
+に{\tt 1}以上の値が返り，そうでない場合には{\tt 0}が返ります．
+{\tt 1}が返るのは，アルファ値が
+{\tt 0x000}，{\tt 0x0ff}の二値だった場合です．
+
+引数{\tt conv}には，各画像フォーマットから
+pbm,pgm,ppm,pamのいずれかの形式に変換するコンバータのコマンド
+ラインを指定します．
+例えば，netpbmを利用してpng形式のファイルを読み取る場合は，
+\verb|"pngtopnm"|(新しいバージョンでは\verb|"pngtopam"|)とします．
+ImageMagickを利用する場合は，\verb|"convert"|とします．
+netpbm，ImageMagick以外のコンバータも，標準入力から
+{\tt filename}の内容を入力し，
+標準出力から変換データを出力するものであれば使用する事ができます．
+もちろん，{\tt conv}にはオプションスイッチも含める事もできます．
+
+コンバータを通さずに直接ファイルを読み込む場合は{\tt conv}には
+\verb|""|と指定してください．
+ただし，読み込めるフォーマットはバイナリ形式の
+pbm,pgm,ppm,pamのいずれかに限定されます．
+
+メモリバッファには画像データが，Alpha(マスク値),Red,Green,Blueの順に
+4つずつ，水平方向に走査しながら画像の上から下へ格納されます．
+({\tt buf[0]=alpha[0]}，
+{\tt buf[1]=red[0]}，
+{\tt buf[2]=green[0]}，
+{\tt buf[3]=blue[0]}，といった具合いです)．
+Alpha,Red,Green,Blueの値には{\tt 0x000}〜{\tt 0x0ff}の範囲の輝度が入ります．
+
+なお，
+{\bf 返されたバッファは，free()関数を使って
+ユーザ・プログラム側で開放する必要があります}．
+
+ファイルが読み込めない等のエラーが発生した場合は，
+返り値としてNULLを返します．
+
+\shiyorei{　\verb|buffer = readimage("pngtopnm", "myimage.png", &width, &height, &msk) ;|}
+
+%コンバータはすでにインストールされている必要があり，
+%インストールされていない場合は指定できません．
+
+%
+%
+\subsubsection{int writeimage( const unsigned char *buf, int width, int height, int msk,\\~~~~~~~~~~~~~~~~~~~~~const char *conv, int nd, const char *argsformat, ... )}
+\label{writeimage}
+
+\kino{　メモリバッファの画像データをコンバータ(netpbm等)を通してファイルに保存する}
+
+引数{\tt buf}で指定されたメモリバッファに格納された，
+高さ{\tt width}，幅{\tt height}の画像データを
+コンバータ(netpbmの各種コマンド,ImageMagickのconvert等)
+を通してファイルに保存します．
+引数{\tt msk}には，アルファ値(マスク)を保存する場合は{\tt 1}以上の値を，
+そうでない場合は{\tt 0}を指定します．
+{\tt conv}にはppmまたはpam形式から各画像フォーマットに変換する
+コンバータのコマンドラインを指定します．
+例えば，netpbmを利用してpng形式に保存する場合は，
+\verb|"pnmtopng"|(アルファなし)または\verb|"pamrgbatopng"|(アルファあり)
+とします．
+ImageMagickを利用する場合は，\verb|"convert"|とします．
+もちろん，オプションスイッチも含める事もでき，
+\verb|"pnmtops -scale 0.125"|
+%，あるいは
+%\verb|"convert -compress ZIP"|
+といった指定も可能です．
+次の引数{\tt nd}は減色パラメータで，
+R,G,B 1チャンネルあたりの色の段階数を指定します．
+{\tt nd}は簡単な図形では{\tt 16}くらいで十分ですが，
+多くの色を使っている場合は最大値の{\tt 256}を指定してください．
+
+{\tt argsformat}(とそれに続く引数)で指定される文字列
+がファイル名として扱われます．
+{\tt argsformat}以降は，C標準関数のprintf()関数の場合と同様の
+可変引数となっているため，
+使用例のようにファイル名に変数の値を含む，といった事も可能です．
+このようにすると動画作成時に大変便利です．
+
+バッファ{\tt buf}には，データをAlpha(マスク値),Red,Green,Blueの順に
+4つずつ，水平方向に走査しながら画像の上から下へ用意します
+({\tt buf[0]=0x0ff}，
+{\tt buf[1]=red[0]}，
+{\tt buf[2]=green[0]}，
+{\tt buf[3]=blue[0]}，といった具合いです)．
+Alpha,Red,Green,Blueの値には{\tt 0x000}〜{\tt 0x0ff}の範囲の輝度を与えます．
+
+ImageMagickのconvertコマンドを利用する場合は，
+ファイル名のサフィックス(ドット以降の文字列，
+例えば{\tt .jpg}，{\tt .png}，{\tt .eps}など)
+から保存フォーマットが決定されます．
+
+netpbm，ImageMagick以外のコンバータも，
+標準入力からppmまたはpam形式で入力し，
+標準出力から変換データを出力するものであれば使用する事ができます．
+
+コンバータを通さずに直接ppmまたはpam形式で保存する場合は{\tt conv}には
+\verb|""|と指定してください．ただしその場合，非圧縮のバイナリデータが
+保存されるので，ファイルのサイズが大きくなります．
+
+コンバータあるいはファイルに対して，ppmとpamのどちらが出力されるかは，
+引数{\tt msk}とファイル名のサフィックスで決まります．
+pamが出力されるのは，
+「ファイル名のサフィックスが\verb|".pam"|の場合」
+「{\tt msk}が{\tt 1}以上の場合」
+です．それ以外の場合はppmが出力されます．
+
+返り値は，子プロセスの起動失敗などのエラーの場合は負の値，
+正常終了の場合は{\tt 0}となります．
+
+コンバータのコマンドの詳細については，
+\S\ref{gsaveimage}をご覧ください．
+
+\shiyorei{　
+\verb|writeimage(buffer,640,400,0,"pnmtopng",256,"img%d.png",i) ;|}
+
+%コンバータはすでにインストールされている必要があり，
+%インストールされていない場合は指定できません．
+
+%
+%
+\subsubsection{void gsetnonblock( int flag )}
+\label{gsetnonblock}
+
+\kino{　{\tt ggetch()}，{\tt ggetevent()}，{\tt ggetxpress()}の動作モードを設定する}
+
+デフォルトでは，
+キーボードやマウスの入力情報を取得する関数
+{\tt ggetch()}，{\tt ggetevent()}，{\tt ggetxpress()}
+が呼ばれると，入力があるまで関数から抜けずに待ち続けます(ブロッキングモード)．
+
+{\tt flag}に{\tt ENABLE}を設定してgsetnonblock()関数が呼ばれると
+ノンブロッキングモードとなり，
+{\tt ggetch()}，{\tt ggetevent()}，{\tt ggetxpress()}
+は入力の有無にかかわらずすぐに関数から戻るようになります．
+
+デフォルトのブロッキングモードに戻すには，{\tt flag}に{\tt DISABLE}
+を与えてください．
+
+gsetnonblock()関数の呼び出しは，
+ウィンドゥのオープンの前あるいは後のどのタイミングでも有効です．
+
+\shiyorei{　\verb|gsetnonblock(ENABLE) ;|}
+
+
+\subsubsection{int ggetch()}
+\label{ggetch}
+
+\kino{　キーボードから入力された文字を返す}
+
+EGGXで開いたすべてのウィンドゥからの
+キーボードの入力情報を返します．
+ブロッキングモード(デフォルト)ではキー入力があるまで待ち続けますが，
+ノンブロッキングモードでは入力の有無にかかわらずすぐに関数から
+戻ります(動作モードについては\S \ref{gsetnonblock}のgsetnonblock()関数を
+参照してください)．
+ノンブロッキングモードにおいて入力が無かった場合は，負の値が返ります．
+
+ggetch()関数は，端末からの1文字入力{\tt fgetc(stdin)}と似ていますが，
+改行まで待たないという点と，
+0x001〜0x01f，0x07fの「特殊キー」と「Ctrl+アルファベットキー」
+の入力を拾う点が異っています．
+
+次の表で16進の文字コードを知る事ができます．
+イタリック体の数字が16進
+2桁の上位を表します．
+
+\input charcode0
+
+例えば，「a」は 0x061，「A」は 0x041 です．
+
+0x001〜0x01a の中にはいくつか特殊キーが含まれていますが，
+この区間は「Ctrl+アルファベットキー」のコードと共有となります．
+例えば，「BackSpace」と「Ctrl+H」のコードはどちらも 0x008 となります．
+0x001〜0x01a で空白になっている個所は，
+「Ctrl+アルファベットキー」にのみコードが割り当てられています．
+
+キーボード入力があったウィンドゥ番号をチェックしたい場合は，
+ggetxpress()関数(\S \ref{ggetxpress})を使ってください．
+
+\shiyorei{　\verb|key=ggetch() ;|}
+
+
+\subsubsection{int ggetevent( int *type, int *button, double *x, double *y )}
+\label{ggetevent}
+
+\kino{　マウスやキーボードからの入力の情報を返す}
+
+EGGXで開いたすべてのウィンドゥからの
+マウスやキーボードの入力情報を返します．
+ブロッキングモード(デフォルト)では入力があるまで待ち続けますが，
+ノンブロッキングモードでは入力の有無にかかわらずすぐに関数から
+戻ります(動作モードについては\S \ref{gsetnonblock}のgsetnonblock()関数を
+参照してください)．
+ノンブロッキングモードにおいて入力が無かった場合は，負の値が返ります．
+
+この関数の返り値は，入力のあったウィンドゥ番号です．
+これを使って，ユーザ・プログラム側で
+意図したウィンドゥからの入力かどうかをチェックします．
+
+{\tt *type}には，
+マウスのモーションの場合は{\tt MotionNotify}，{\tt EnterNotify}，
+{\tt LeaveNotify}のいずれか，
+マウスのボタンが押された場合は{\tt ButtonPress}，
+キーボードからの入力の場合は{\tt KeyPress}
+が返ります．
+{\tt EnterNotify}，{\tt LeaveNotify}は，それぞれ
+マウスカーソルがウィンドゥに入った時，ウィンドゥから出た時に
+発行されます．
+
+マウスの入力の場合，
+{\tt *button}にはクリック(on・off)された，または押されている
+ボタンの番号({\tt 1,2,3,}…)が代入され，
+ウィンドゥ上でのマウスポインタの座標
+(アプリケーション座標系)が{\tt *x}，{\tt *y}に代入されます．
+
+キー入力の場合は，キーコードが{\tt *button}に返ります．
+キーコードはggetch()関数(\S\ref{ggetch})の返り値と同一です．
+
+4つの引数
+{\tt type}，{\tt button}，{\tt x}，{\tt y}
+それぞれについて値を取り出す必要がない場合は，{\tt NULL}
+を与えてもかまいません．なお，C++のコードでは，
+{\tt NULL}は必ず{\tt (double *)}または{\tt (float *)}でキャストしてください．
+
+引数{\tt x}，{\tt y}がfloat型のポインタ変数の場合も，
+double型の場合と同じ関数名で使用可能です．
+
+\shiyorei{　\verb|win_ev=ggetevent(&type,&b,&x,&y) ;|}
+
+
+\subsubsection{int ggetxpress( int *type, int *button, double *x, double *y )}
+\label{ggetxpress}
+
+\kino{　マウスからのボタンクリック，キーボードからの入力の情報を返す}
+
+EGGXで開いたすべてのウィンドゥからの
+マウスのボタンクリック，キータイプ
+の入力情報を返します．この関数は，
+ggetevent()関数(\S \ref{ggetevent})の簡易版です．
+ブロッキングモード(デフォルト)では入力があるまで待ち続けますが，
+ノンブロッキングモードでは入力の有無にかかわらずすぐに関数から
+戻ります(動作モードについては\S \ref{gsetnonblock}のgsetnonblock()関数を
+参照してください)．
+ノンブロッキングモードにおいて入力が無かった場合は，負の値が返ります．
+
+この関数の返り値は，入力のあったウィンドゥ番号です．
+これを使って，ユーザ・プログラム側で
+意図したウィンドゥからの入力かどうかをチェックします．
+
+{\tt *type}には，
+マウスのボタンクリックの場合は{\tt ButtonPress}，
+キーボードからの入力の場合は{\tt KeyPress}
+が返ります．
+
+マウスのボタンクリックの場合，
+{\tt *button}にはクリックされたボタンの番号({\tt 1,2,3,}…)，
+クリックされた時のウィンドゥ上でのマウスポインタの
+座標(アプリケーション座標系)が{\tt *x}，{\tt *y}に代入されます．
+
+キー入力の場合は，キーコードが{\tt *button}に返ります．
+キーコードはggetch()関数(\S \ref{ggetch})の返り値と同一です．
+
+4つの引数
+{\tt type}，{\tt button}，{\tt x}，{\tt y}
+それぞれについて値を取り出す必要がない場合は，{\tt NULL}
+を与えてもかまいません．なお，C++のコードでは，
+{\tt NULL}は必ず{\tt (double *)}または{\tt (float *)}でキャストしてください．
+
+引数{\tt x}，{\tt y}がfloat型のポインタ変数の場合も，
+double型の場合と同じ関数名で使用可能です．
+
+\shiyorei{　\verb|win_ev=ggetxpress(&type,&b,&x,&y) ;|}
+
+
+\subsubsection{void msleep( unsigned long msec )}
+\label{msleep}
+
+\kino{　ミリ秒単位で実行を延期する}
+
+少なくとも{\tt msec}ミリ秒の間，プログラムの実行をなにもせずに待ちます．
+アニメーション速度の調整に利用できます．
+
+一般的には，時間の精度は10ミリ秒の単位です．
+
+\shiyorei{　\verb|msleep(100) ;|}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{EGGXのAdvanced関数リファレンス}
+
+以下でとりあげる関数は，より細かい制御を行なったりするためのもので，
+C言語に習熟していないと利用が難しい関数もあります．
+なお，これらの関数のほとんどは，
+それぞれに対応するFORTRANのルーチンは用意していません．
+
+\subsubsection{int ggetdisplayinfo( int *depth, int *root\_width, int *root\_height )}
+\label{ggetdisplayinfo}
+
+\kino{　Xサーバの情報(depth，画面サイズ)を取得する}
+
+Xサーバに接続し，depth，画面サイズを調べます．
+{\tt *depth}はEGGXでウィンドゥをオープンした時に使われるdepth
+値(ピクセルに何ビット使っているか)，すなわち
+{\tt 8}(PseudoColor：256色カラー)，
+{\tt 16}(TrueColor：65536色カラー)，
+{\tt 24}(TrueColor：1677万色カラー)
+といった値が代入されます．
+{\tt *root\_width},
+{\tt *root\_height}
+はそれぞれXサーバの画面のピクセルサイズが代入されます．
+
+3つの引数
+{\tt depth}，{\tt root\_width}, {\tt root\_height}
+それぞれについて値を取り出す必要がない場合は，{\tt NULL}
+を与えてもかまいません．
+
+関数の返り値は，Xサーバへの接続が成功した場合は{\tt 0}，
+失敗した場合は負の値となります．
+
+%putimg24()関数(\S\ref{putimg24})を使用する時は，
+%必ずdepth値を調べるようにします．
+
+\shiyorei{　\verb|status = ggetdisplayinfo(&depth,NULL,NULL) ;|}
+%
+\subsubsection{void gsetnonflush( int flag )，int ggetnonflush()}
+\label{gsetnonflush}
+
+\kino{　描画関数等におけるフラッシュに関する設定}
+
+デフォルトでは，
+EGGXの描画関数やウィンドゥの装飾に関する関数は，
+関数から抜ける直前に{\tt XFlush()}を呼んで，
+直ちにXサーバがEGGXからの命令を反映するようにしています(自動フラッシュモード)．
+しかし，
+Xサーバによっては，{\tt XFlush()}の連発によって描画パフォーマンスが
+低下する事があります．
+
+{\tt flag}に{\tt ENABLE}を設定してgsetnonflush()関数が呼ばれると，
+それ以降，EGGXの関数内部で{\tt XFlush()}
+が呼ばれなくなり，
+ユーザ・プログラム側で，gflush()関数(\S \ref{gflush})
+を呼んで任意のタイミングでフラッシュする事ができるようになります
+(非自動フラッシュモード)．
+
+デフォルトの状態に戻すには，{\tt flag}に{\tt DISABLE}
+を与えてください．
+
+gsetnonflush()関数の呼び出しは，
+ウィンドゥのオープンの前あるいは後のどのタイミングでも有効です．
+
+ggetnonflush()関数は，現在の自動フラッシュに関する設定を
+読み取ります．gsetnonflush()関数で設定された値が返ります．
+
+\shiyorei{　\verb|gsetnonflush(ENABLE) ;|}
+
+
+\subsubsection{void gflush()}
+\label{gflush}
+
+\kino{　描画命令等をフラッシュする}
+
+描画関数等で発行したXサーバに対する一連の命令をフラッシュします．
+gsetnonflush()関数で非自動フラッシュモードを設定した時に使います．
+
+\shiyorei{　\verb|gflush() ;|}
+
+\subsubsection{void gsetinitialattributes( int values, int att\_msk )}
+\label{gsetinitialattributes}
+
+\kino{　{\tt gopen()}でのウィンドゥ属性を変更する}
+
+gopen()関数で開かれる新規ウィンドゥの
+各種属性を変更します．gsetinitialattributes()関数で
+一旦ある属性を変更すると，以降gopen()関数で
+開くウィンドゥすべてにその指定が反映されます．
+
+ウィンドゥ属性は，次に示す4つのビットフラグで表現され，
+{\tt values}には，{\tt ENABLE}(全有効)，{\tt DISABLE}(全無効)
+あるいは任意の属性値を指定し，
+{\tt att\_msk}には各属性に対する変更フラグ(マスク)を指定します．
+
+\begin{itemize}
+ \item
+      \verb|BOTTOM_LEFT_ORIGIN|
+
+      ウィンドゥの左下をウィンドゥ座標系の原点(0,0)にします．
+      デフォルトではこの属性は有効になっています．
+
+      この属性を無効に設定すると，
+      ウィンドゥ座標系の原点はウィンドゥの左上になります．
+\item
+      \verb|SCROLLBAR_INTERFACE|
+
+      EGGXによるスクロールバー・インタフェースを提供します．
+      デフォルトではこの属性は有効になっています．
+
+      この属性を無効に設定すると，
+      ウィンドゥがリサイズされてもスクロールバーはつきません．
+ \item
+      \verb|OVERRIDE_REDIRECT|
+
+      XにおけるOverrideRedirect属性を指定します．
+      デフォルトではこの属性は無効になっています．
+
+      OverrideRedirect属性で開いたウィンドゥは，ウィンドゥマネージャの
+      介入をうけず，ウィンドゥに枠がつきません．また，
+      ウィンドゥを開いた時は常に最前面に表示されます．
+      このモードはアプリケーション起動時の
+      バナー表示などに用いられる事があります．
+\item
+      \verb|DOCK_APPLICATION|
+
+      この属性を有効にすると，
+      AfterStep，WindowMakerのアプレットとなるための各種設定を
+      行なうようになります．
+      デフォルトではこの属性は無効になっています．
+
+      この属性を有効に設定すると，
+      ウィンドゥがリサイズされてもスクロールバーはつきません．
+\end{itemize}
+
+次の例は，\verb|DOCK_APPLICATION|属性を有効にする例です．
+
+\shiyorei{　\verb| gsetinitialattributes(ENABLE, DOCK_APPLICATION) ;|}
+
+\vspace*{2.5mm}
+
+複数の属性を変更する場合は，次のようにします．
+この例では，\verb|OVERRIDE_REDIRECT|属性を有効にし，
+\verb|BOTTOM_LEFT_ORIGIN|属性を無効にしています．
+
+\shiyorei{　\verb' gsetinitialattributes(OVERRIDE_REDIRECT, BOTTOM_LEFT_ORIGIN | OVERRIDE_REDIRECT) ;'}
+
+\vspace*{2.5mm}
+
+属性値のすべてのビットを設定する場合は，次のように{\tt att\_msk}を{\tt -1}に
+(すなわち全ビットを1に)します．
+
+\shiyorei{　\verb' gsetinitialattributes(SCROLLBAR_INTERFACE | BOTTOM_LEFT_ORIGIN, -1) ;'}
+
+
+\subsubsection{int ggetinitialattributes()}
+\label{ggetinitialattributes}
+
+\kino{　{\tt gopen()}でのウィンドゥ属性を取得する}
+
+現在設定されている，{\tt gopen()}のための属性値を読み取ります．
+gsetinitialattributes()関数で設定された値が返ります．
+
+\shiyorei{　\verb| att=ggetinitialattributes() ;|}
+
+
+\subsubsection{void gsetinitialbgcolor( const char *argsformat, ... )}
+\label{gsetinitialbgcolor}
+
+\kino{　{\tt gopen()}での背景カラーを指定する}
+
+gopen()関数で開かれる新規ウィンドゥの
+背景色(gclr()関数(\S\ref{gclr})で初期化される色)を指定します．
+{\tt argsformat}(とそれに続く引数)で指定される文字列
+を背景色として設定します．
+2つめの引数
+{\tt argsformat}以降は，C標準関数のprintf()関数の場合と同様の
+可変引数となっています．
+この背景色の文字列には，
+Xサーバの{\tt rgb.txt}\footnt{%
+{\tt rgb.txt}はUNIX系のOSなら {\tt /usr/X11R6/lib/X11/}
+などにあります．}
+に設定されている色か，
+\verb|"#c0c0ff"|のように，16進数のRed,Green,Blue
+を指定します．
+
+{\tt argsformat}が{\tt NULL}の場合は，
+デフォルトの設定(黒)に戻します．
+
+\shiyorei{　\verb|gsetinitialbgcolor("white") ;|}
+
+\subsubsection{void gsetborder( int wn, int width, const char *argsformat, ... )}
+\label{gsetborder}
+
+\kino{　ウィンドゥのホーダーと色を指定する}
+
+{\tt wn}で指定されたウィンドゥのボーダー(枠)の幅と
+とカラーを変更します．
+引数{\tt width}にはボーダーの幅をピクセル単位で指定します．
+{\tt argsformat}(とそれに続く引数)で指定される文字列
+をボーダーの色に設定します．
+3つめの引数
+{\tt argsformat}以降は，C標準関数のprintf()関数の場合と同様の
+可変引数となっています．
+
+%この関数でのボーダーの指定は，
+%gsetinitialattributes()関数(\S\ref{gsetinitialattributes})
+%で\verb|OVERRIDE_REDIRECT|のウィンドゥ属性を
+%指定した時だけ機能します．
+
+一般的に，ウィンドゥのボーダーは
+ウィンドゥマネージャによって再設定されるので，
+ここで設定した値は無効になります．
+ただし，OverrideRedirect属性なウィンドゥの場合は，
+この設定が反映されます．
+OverrideRedirect属性については，
+gsetinitialattributes()関数(\S\ref{gsetinitialattributes})
+の解説を参照してください．
+
+{\tt width}が負の場合，{\tt argsformat}が{\tt NULL}の場合は
+それぞれ設定変更を行ないません．
+
+\shiyorei{　\verb|gsetborder(win,1,"white") ;|}
+%
+\subsubsection{void gsetinitialborder( int width, const char *argsformat, ... )}
+\label{gsetinitialborder}
+
+\kino{　{\tt gopen()}でのウィンドゥのボーダーを指定する}
+
+gopen()関数で開かれる新規ウィンドゥの
+ボーダー(枠)の幅とカラーを指定します．
+引数{\tt width}にはボーダーの幅をピクセル単位で指定します．
+{\tt argsformat}(とそれに続く引数)で指定される文字列
+をボーダーの色に設定します．
+2つめの引数
+{\tt argsformat}以降は，C標準関数のprintf()関数の場合と同様の
+可変引数となっています．
+
+{\tt width}が負の場合，{\tt argsformat}が{\tt NULL}の場合は
+それぞれ設定変更を行ないません．
+
+デフォルトではボーダー幅は{\tt 0}，
+ボーダーカラーは{\tt Black}に設定されています．
+
+\shiyorei{　\verb|gsetinitialborder(1,"White") ;|}
+%
+\subsubsection{void gsetinitialgeometry( const char *argsformat, ... )}
+\label{gsetinitialgeometry}
+
+\kino{　x,yの値を含む文字列から{\tt gopen()}でのウィンドゥの大きさと出現座標を設定する}
+
+gopen()関数で開かれる新規ウィンドゥの
+大きさと出現位置を，
+{\tt argsformat}(とそれに続く引数)で指定される文字列
+から決定します．
+2つめの引数
+{\tt argsformat}以降は，C標準関数のprintf()関数の場合と同様の
+可変引数となっています．
+X11のクライアントでは標準的な「{\tt -geometry}」に続く
+コマンドオプション，例えば \verb|"800x600+100-200"| ような文字列を
+与えることができます．
+
+{\tt argsformat}が{\tt NULL}の場合には
+デフォルトすなわち無指定の状態に戻します．
+
+使用例のようにすると，整数値を与えることもできます．
+
+\shiyorei{　\verb|gsetinitialgeometry("800x600%+d%+d",-30,40) ;|}
+%
+\subsubsection{void gsetinitialwinname( const char *storename, const char *iconname,\\
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~　const char *resname, const char *classname )}
+\label{gsetinitialwinname}
+
+\kino{　{\tt gopen()}でのウィンドゥ名，アイコン名，リソース名，クラス名を指定する}
+
+デフォルトでは，ウィンドゥ名やアイコン名はユーザプログラムの
+コマンド名から決定されますが，この関数を使う事で
+gopen()関数で開かれる新規ウィンドゥの
+ウィンドゥ名，アイコン名，リソース名，クラス名を
+引数{\tt storename}，{\tt iconname}，{\tt resname}，{\tt classname}
+で指定できます．
+
+それぞれの引数に{\tt NULL}を与えると，それぞれをデフォルトの設定
+に戻します．
+
+\shiyorei{　\verb|gsetinitialwinname("AyuClock","AyuClock","ayuclock","AyuClock") ;|}
+
+
+\subsubsection{void gsetscrollbarkeymask( int wn, unsigned int keymask )}
+\label{gsetscrollbarkeymask}
+
+\kino{　EGGXによるスクロールバーのキー操作のためのキーマスクを設定する}
+
+EGGXでは，ディスプレイのサイズに収まりきらない画素サイズを引数として
+gopen()関数が呼ばれた場合や，ユーザがウィンドゥをリサイズした
+場合に，スクロールバー・インタフェースを提供します．
+
+このスクロールバーは，デフォルトでは
+Altキーを押しながらカーソルキー等で操作できるようになっていますが，
+この関数でこの仕様を変更できます．
+
+引数{\tt keymask}には，次の表にある値を与えます．
+
+\begin{center}
+\renewcommand{\arraystretch}{0.90}
+\begin{tabular}{ll}
+  \hline 
+  マスク値 & 動作 \\
+  \hline 
+  {\tt ShiftMask}
+    & Shiftキーが押されている時のみスクロールーバーのキー操作が有効 \\
+  {\tt LockMask}
+    & CapsLockされている時のみスクロールーバーのキー操作が有効 \\
+  {\tt ControlMask}
+    & Ctrlキーが押されている時のみスクロールーバーのキー操作が有効 \\
+  {\tt Mod1Mask}
+    & Altキーが押されている時のみスクロールーバーのキー操作が有効 \\
+  {\tt Mod2Mask}
+    & NumLockされている時のみスクロールーバーのキー操作が有効 \\
+  {\tt Mod5Mask}
+    & ScrollLockされている時のみスクロールーバーのキー操作が有効 \\
+  {\tt 0}
+    & 常にスクロールーバーのキー操作が有効 \\
+  \hline 
+\end{tabular}
+\end{center}
+
+{\tt keymask}に{\tt 0}を与えた場合には，
+ggetch()関数(\S \ref{ggetch})等でカーソルキー等の入力イベントを
+扱う事ができなくなりますので，注意してください．
+
+\shiyorei{　\verb|gsetscrollbarkeymask(win, ShiftMask) ;|}
+
+
+\subsubsection{int generatecolor( color\_prms *p, double dmin, double dmax, double data,\\
+~~~~~~~~~~~~~~~~~~~~~~~~int *r, int *g, int *b )}
+\label{generatecolor}
+
+\kino{　変数からカラーを生成する(コントラスト，ブライトネス，γ補正などが可能)}
+
+変数{\tt data}の値を使って，{\tt r},{\tt g},{\tt b} それぞれに
+256段階のRed,Greed,Blueのカラーを生成します．
+変数の最小，最大は{\tt dmin},{\tt dmax}で指定します．
+この関数で得た，{\tt r},{\tt g},{\tt b}の
+値はnewrgbcolor()関数(\S\ref{newrgbcolor})
+にそのまま与えて使う事ができます．
+
+返り値は{\tt data}が{\tt dmin},{\tt dmax}の範囲内に
+あった場合は{\tt 0}を返し，{\tt dmin}未満であれば負の値を，
+{\tt dmax}を越えていれば，正の値を返します．
+
+現在のEGGXでは，
+構造体{\tt color\_prms}は次のようなメンバ構成になっていますが，
+将来拡張する可能性がありますので，
+変数宣言時に初期値を代入するコードは書かない事をお勧めします．
+
+{\small
+\begin{verbatim}
+    typedef struct _color_prms {
+        int colormode ;
+        int flags ;
+        double contrast ;
+        double brightness ;
+        double gamma ;
+        int seplevel ;
+        void *ptr ;
+        void (*function)( double,void *,double,double,double,double *,double *,double * ) ;
+    } color_prms ;
+\end{verbatim}
+}
+
+{\tt colormode}はカラーパターンの番号で，
+詳細は，makecolor()関数(\S\ref{makecolor})をご覧ください．
+
+{\tt flags}は，
+コントラスト{\tt contrast}，
+ブライトネス{\tt brightness}，
+ガンマ補正{\tt gamma}，
+カラーセパレーションレベル{\tt seplevel}，
+ユーザ関数{\tt function}，
+のどれを有効にするかを示すためのフラグです．
+
+%\vspace*{4mm}
+\begin{center}
+\renewcommand{\arraystretch}{0.90}
+\begin{tabular}{lll}
+\hline
+フラグ & 対応するメンバ & 解説 \\
+\hline
+{\tt C\_REVERSE} & - & カラーパターンをデータ{\tt data}の大小と逆にする \\
+{\tt CP\_CONTRAST} & {\tt contrast} & コントラスト制御を有効化．
+                            ({\tt 0} $\le$ {\tt contrast} $\le$ {\tt 1}) \\
+{\tt CP\_BRIGHTNESS} & {\tt brightness} & ブライトネス制御を有効化．
+                            ({\tt 0} $\le$ {\tt brightness} $\le$ {\tt 1}) \\
+{\tt CP\_GAMMA} & {\tt gamma} & ガンマ補正を有効化．
+                            ({\tt 0} $\le$ {\tt gamma} $\le$ {\tt 1}) \\
+{\tt CP\_SEPLEVEL} & {\tt seplevel} & カラーセパレーションレベルを有効化．
+                            ({\tt 2} $\le$ {\tt seplevel}) \\
+{\tt CP\_FUNCTION} & {\tt function} & ユーザ関数呼出しを有効化． \\
+\hline
+\end{tabular}
+\end{center}
+
+%\vspace*{4mm}
+{\tt seplevel}を使うと，リニアに変化するカラーをデジタイズできます．
+例えば，{\tt DS9\_GRAY8}ではリニアに黒から白へ変化しますが，
+{\tt seplevel=10}に設定しておくと，10色を使って段階的に変化するよう
+になります．
+
+{\tt function}は{\tt generatecolor()}が処理の最後に
+実行するユーザ関数です．
+{\tt function}の引数はそれぞれ，
+{\tt data}をMax=1.0,Min=0.0で標準化した値，
+{\tt ptr}，Red,Green,Blueの値(inとout)となっています．
+この部分はEGGXのソースを見て理解できる方のみご利用ください．
+
+\shiyorei{　\\
+\vspace*{-2\baselineskip}\\
+\verb|          color_prms cl ;|\\
+\verb|          cl.colormode  = DS9_RAINBOW ;|\\
+\verb#          cl.flags      = CP_CONTRAST | CP_BRIGHTNESS | CP_GAMMA ;#\\
+\verb|          cl.contrast   = 1.0 ;|\\ 
+\verb|          cl.brightness = 0.0 ;|\\ 
+\verb|          cl.gamma      = 1.0 ;|\\ 
+\verb|              : |\\ 
+\verb|          generatecolor(&cl,zmin,zmax,zvalue,&cl_r,&cl_g,&cl_b) ; |\\
+}
+%
+%
+%
+%
+%
+%
+
+\clearpage
+
+\section{FORTRAN編}
+%
+\subsection{ProCALLのルーチン一覧}
+\label{procall}
+%
+\subsubsection{ProCALL標準ルーチン}
+\begin{center}
+
+\renewcommand{\arraystretch}{0.90}
+\begin{tabular}{lll}
+ \hline
+ 章 & ルーチン名 & 機能 \\
+ \hline
+ \S\ref{f_ggetdisplayinfo} &
+   ggetdisplayinfo &
+   Xサーバの情報(depth,画面サイズ)を取得する
+   \\ %\hline
+ \S\ref{f_gopen} &
+   gopen & 
+   任意のサイズのグラフィックス用ウィンドゥを開く 
+   \\ %\hline
+ \S\ref{f_gclose} &
+   gclose &
+   任意のグラフィックス用ウィンドゥを閉じる
+   \\ %\hline
+ \S\ref{f_gcloseall} &
+   gcloseall &
+   すべてのグラフィックス用ウィンドゥを閉じ，Xサーバと接続を断つ
+   \\ %\hline
+ \S\ref{f_newcoordinate} &
+   newcoordinate &
+   アプリケーション座標系の変更(参照点の座標とスケールを与える)
+   \\ %\hline
+ \S\ref{f_newwindow} &
+   newwindow &
+   アプリケーション座標系の変更(左下と右上の座標を与える)
+   \\ %\hline
+ \S\ref{f_layer} &
+   layer &
+   レイヤの設定を行う
+   \\ %\hline
+ \S\ref{f_copylayer} &
+   copylayer &
+   レイヤのコピーを行う
+   \\ %\hline
+ \S\ref{f_gsetbgcolor} &
+   gsetbgcolor &
+   ウィンドゥのバックグラウンドカラー(gclrでの色)を指定する
+   \\ %\hline
+ \S\ref{f_gclr} &
+   gclr &
+   グラフィックス用ウィンドゥの消去
+   \\ %\hline
+ \S\ref{f_tclr} &
+   tclr &
+   端末画面の消去
+   \\ %\hline
+ \S\ref{f_newpencolor} &
+   newpencolor &
+   描画色(16色)の変更
+   \\ %\hline
+ \S\ref{f_newcolor} &
+   newcolor &
+   描画色の変更(Xサーバの持つ色を直接指定)
+   \\ %\hline
+ \S\ref{f_newrgbcolor} &
+   newrgbcolor &
+   描画色の変更(Red,Green,Blueの輝度を指定)
+   \\ %\hline
+ \S\ref{f_newhsvcolor} &
+   newhsvcolor &
+   描画色の変更(Hue,Saturation,Valueを指定)
+   \\ %\hline
+ \S\ref{f_makecolor} &
+   makecolor &
+   変数からカラーを生成する(カラーバー生成)
+   \\ %\hline
+ \S\ref{f_newlinewidth} &
+   newlinewidth &
+   線幅の変更
+   \\ %\hline
+ \S\ref{f_newlinestyle} &
+   newlinestyle &
+   線のスタイルの変更
+   \\ %\hline
+ \S\ref{f_pset} &
+   pset &
+   点の描画
+   \\ %\hline
+ \S\ref{f_drawline} &
+   drawline &
+   直線の描画
+   \\ %\hline
+ \S\ref{f_lineto} &
+   moveto, lineto &
+   連続的に直線を描く
+   \\ %\hline
+% line & 連続的に直線を描く
+% & \S\ref{f_line} \\ %\hline
+ \S\ref{f_drawpts} &
+   drawpts &
+   複数の点を描く
+   \\ %\hline
+ \S\ref{f_drawlines} &
+   drawlines &
+   折れ線を描く
+   \\ %\hline
+ \S\ref{f_drawpoly} &
+   drawpoly &
+   多角形を描く
+   \\ %\hline
+ \S\ref{f_fillpoly} &
+   fillpoly &
+   多角形を塗り潰す
+   \\ %\hline
+ \S\ref{f_drawrect} &
+   drawrect &
+   長方形を描く
+   \\ %\hline
+ \S\ref{f_fillrect} &
+   fillrect &
+   長方形の領域を塗り潰す
+   \\ %\hline
+ \S\ref{f_drawcirc} &
+   drawcirc &
+   中心座標と半径を与えて円を描く
+   \\ %\hline
+ \S\ref{f_fillcirc} &
+   fillcirc &
+   中心座標と半径を与えて円を塗り潰す
+   \\ %\hline
+ \S\ref{f_drawarc} &
+   drawarc &
+   円の中心，半径，始点，終点の角度を与えて円弧を描く
+   \\ %\hline
+ \S\ref{f_fillarc} &
+   fillarc &
+   円の中心，半径，始点，終点の角度を与えて円弧を塗り潰す
+   \\ %\hline
+ \S\ref{f_drawsym} &
+   drawsym &
+   1個のシンボルの描画 
+   \\ %\hline
+ \S\ref{f_drawsyms} &
+   drawsyms &
+   複数のシンボルを描く
+   \\ %\hline
+ \S\ref{f_drawarrow} &
+   drawarrow &
+   種々の矢印の描画
+   \\ %\hline
+ \S\ref{f_newfontset} &
+   newfontset &
+   フォントセット(日本語フォント)の指定 
+   \\ %\hline
+ \S\ref{f_drawstr} &
+   drawstr &
+   文字列の描画 
+   \\ %\hline
+ \S\ref{f_drawnum} &
+   drawnum &
+   実数の値を描く
+   \\ %\hline
+ \S\ref{f_putimg24} &
+   putimg24 &
+   整数配列に用意した画像をウィンドゥに一括転送する
+   \\ %\hline
+ \S\ref{f_saveimg} &
+   saveimg &
+   特定のレイヤの画像をコンバータ(netpbm等)を通してファイルに保存する
+   \\ %\hline
+ \S\ref{f_gsetnonblock} &
+   gsetnonblock &
+   ggetch，ggetevent，ggetxpressルーチンの動作モードを設定する
+   \\ %\hline
+ \S\ref{f_ggetch} &
+   ggetch &
+   キーボードから入力された文字を返す
+   \\ %\hline
+ \S\ref{f_ggetevent} &
+   ggetevent &
+   マウスやキーボードからの入力の情報を返す
+   \\ %\hline
+ \S\ref{f_ggetxpress} &
+   ggetxpress &
+   マウスからのボタンクリック，キーボードからの入力の情報を返す
+   \\ %\hline
+ \S\ref{f_selwin} &
+   selwin &
+   カルコンプ互換ルーチンで，どのウィンドゥにアクセスするか指定する
+   \\ %\hline
+ \hline
+\end{tabular}
+\end{center}
+%
+\subsubsection{カルコンプ互換ルーチン}
+{\small
+\begin{center}
+\begin{tabular}{lll}
+ \hline
+ 章 & ルーチン名 & 機能 \\
+ \hline
+ \S\ref{f_plots} &
+   plots &
+   640×400ピクセルのグラフィックス用ウィンドゥを開く
+   \\ %\hline
+ \S\ref{f_window} &
+   window &
+   座標系の変更
+   \\ %\hline
+ \S\ref{f_newpen} &
+   newpen &
+   描画色の変更
+   \\ %\hline
+ \S\ref{f_clsc} &
+   clsc &
+   端末画面の消去
+   \\ %\hline
+ \S\ref{f_clsx} &
+   clsx &
+   グラフィックス画面の消去
+   \\ %\hline
+ \S\ref{f_plot} &
+   plot &
+   直線・点の描画 
+   \\ %\hline
+ \S\ref{f_arc} &
+   arc &
+   円の中心，半径，始点，終点の角度を与えて円弧を描く
+   \\ %\hline
+ \S\ref{f_circ1} &
+   circ1 &
+   中心座標と半径を与えて円を描く
+   \\ %\hline
+ \S\ref{f_arohd} &
+   arohd &
+   種々の矢印の描画
+   \\ %\hline
+ \S\ref{f_symbol} &
+   symbol &
+   文字列または1個のシンボルの描画 
+   \\ %\hline
+ \S\ref{f_number} &
+   number &
+   実数の値を描く
+   \\ %\hline
+ \hline
+\end{tabular}
+\end{center}
+}
+%
+\subsubsection{補助ルーチン}
+\begin{center}
+\begin{tabular}{lll}
+ \hline
+ 章 & ルーチン名 & 機能 \\
+ \hline
+ \S\ref{f_msleep} &
+   msleep &
+   ミリ秒単位で実行を延期する
+    \\ %\hline
+ \S\ref{f_isnan} &
+   isnan &
+   実数型変数が非数(Not a Number)かどうか調べる
+   \\ %\hline
+ \S\ref{f_rtoc} &
+   rtoc &
+   実数型変数を文字列に変換する
+   \\ %\hline
+ \hline
+\end{tabular}
+\end{center}
+%
+%
+\subsection{基本的な使用方法}
+%
+ユーザプログラムについての特別な注意はありません．
+プログラムを書いたら，コンパイルは {\tt egg} コマンドを用います．
+
+\rei ~~{\verb|egg program.f -o program|}
+
+\subsection{描画速度をアップする方法}
+%
+layerルーチン(\S\ref{f_layer})と
+copylayerルーチン(\S\ref{f_copylayer})とを使って，
+描画ルーチンでは常に非表示レイヤに描きましょう．描き終わったら，
+copylayerルーチンを使って，
+非表示レイヤを表示レイヤにコピーします．
+このようにする事で，かなり描画速度が改善されます．
+%
+%\newpage
+%\setlength{\tabcolsep}{1.5mm}
+%
+\subsection{ProCALL標準ルーチンのリファレンス}
+
+%ここからは，PROCALL独自のルーチンです．
+%
+\subsubsection{ggetdisplayinfo(ndepth,nrwidth,nrheight)}
+\label{f_ggetdisplayinfo}
+
+\kino{　Xサーバの情報(depth，画面サイズ)を取得する}
+
+Xサーバに接続し，depth，画面サイズを調べます．
+{\tt ndepth}には
+ProCALLでウィンドゥをオープンした時に使われる
+depth値(ピクセルに何ビット使っているか)，すなわち
+{\tt 8}(PseudoColor：256色カラー)，
+{\tt 16}(TrueColor：65536色カラー)，
+{\tt 24}(TrueColor：1677万色カラー)
+といった値が返ってきます．
+{\tt nrwidth}，{\tt nrheight}には，それぞれ
+Xサーバの画面のピクセルサイズが返ります．
+なお，Xサーバへの接続が失敗した場合は{\tt ndepth}には負の値
+が返ってきます．
+
+%{\tt putimg24}(\S\ref{f_putimg24})をcallする時は，必ずdepth値を調べるように
+%します．
+
+\shiyorei{　\verb|call ggetdisplayinfo(ndepth,nrwidth,nrheight)|}
+%
+%
+\subsubsection{gopen(nxsize,nysize,nw)}
+\label{f_gopen}
+
+\kino{　任意のサイズのグラフィックス画面を開く}
+
+任意のサイズの描画領域を持つウィンドゥを開きます．
+
+引数{\tt nxsize}，{\tt nysize}にはそれぞれ横方向，
+縦方向の描画領域のピクセル数を指定します．
+指定できる最大値は，32767です．
+
+{\tt nw}にはProCALLで使用するウィンドゥ番号(整数)が返ってきます．
+{\tt gopen}を呼ぶと，{\tt nw}には
+ProCALL側で生成されたウィンドゥ番号が設定されるため，
+{\bf ユーザが{\tt nw}に値を代入しておく必要はありません}．
+ここで取得したウィンドゥ番号はProCALLのグラフィックス
+描画ルーチンに渡します．
+
+デフォルトでは，
+ルートウィンドゥ(つまり背景)のピクセル数とほぼ同じ，
+あるいはそれを越えるサイズの描画領域が指定された場合には，
+描画領域よりも小さいウィンドゥを開きます%
+\footnt{%
+EGGX/ProCALLのビルド時にXineramaが有効にされていた場合は，
+最小サイズのディスプレイのピクセルサイズと比較されます．
+}%
+．
+この場合，スクロールバー・インタフェースが提供され，
+マウスまたはキーボードから任意の描画領域を表示する事が可能です．
+
+互換ルーチンでどのウィンドゥにアクセスするかは，
+このウィンドゥ番号{\tt nw}を selwinルーチン(\S\ref{f_selwin})
+で指定します．
+
+\shiyorei{　\verb|call gopen(800,600,nwin)|}
+%
+\subsubsection{gclose(nw)}
+\label{f_gclose}
+
+\kino{　グラフィックス用ウィンドゥを閉じる}
+
+{\tt nw}で指定されたウィンドゥを閉じます．
+
+\shiyorei{　\verb|call gclose(nwin)|}
+%
+\subsubsection{gcloseall}
+\label{f_gcloseall}
+
+\kino{　すべてのグラフィックス用ウィンドゥを閉じ，Xサーバと接続を断つ}
+
+全てのウィンドゥを閉じ，Xサーバと接続を断ち，
+ライブラリの内部処理で利用しているメモリ領域を開放します．
+
+\shiyorei{　\verb|call gcloseall|}
+%
+%\subsubsection{orgeometry(nx,ny,nb)}
+%
+%\kino{　plotsやgopenで開くウィンドゥ座標を指定する}
+%
+%このルーチンを呼ぶと，
+%{\tt call plots}または{\tt call gopen(…)}で次に開くウィンドゥ
+%に限り，
+%{\gt Xサーバでの座標}({\tt nx}, {\tt ny})に
+%{\tt nb}で指定した幅で外枠をつけて表示します
+%(ウィンドゥマネージャによるデコレーションはつきません)．
+%{\tt nb}が0の場合は外枠をつけません．
+%なお，引数はすべて整数値です．
+%
+%\begin{center}
+%\includegraphics[scale=1]{procall_orgeometry.eps}
+%\end{center}
+%
+%\shiyorei{　\verb|call orgeometry(60,128,0)|}
+%
+\subsubsection{newcoordinate(nw,nxw,nyw,xa,ya,xscale,yscale )}
+\label{f_newcoordinate}
+
+\kino{　アプリケーション座標系の変更(参照点の座標とスケールを与える)}
+
+{\tt nw}で指定したウィンドゥのアプリケーション座標系を変更します
+
+ウィンドゥ上のウィンドゥ座標系(座標値は整数)は，左下が({\tt 0}, {\tt 0})で，
+右上が({\tt nxsize-1}, {\tt nysize-1})であり，デフォルトでは
+アプリケーション座標系(座標値は実数)の座標値は
+ウィンドゥ座標系のそれに一致しています．
+
+newcoordinateルーチンを使う事により，
+アプリケーション座標系の({\tt xa}, {\tt ya})を
+ウィンドゥ座標系の({\tt nxw}, {\tt nyw})に対応させ，それぞれの
+スケーリングファクターを{\tt xscale}，{\tt yscale}で指定します．
+すなわち，描画ルーチン等におけるアプリケーション座標$(x,y)$から
+ウィンドゥ座標$(\mbox{\tt nx},\mbox{\tt ny})$
+への変換は，次の式により行なわれる事を意味します:\\
+~~~~~~~~
+$\mbox{\tt nx} = \mbox{\tt nxw} + (x - \mbox{ \tt xa}) \cdot \mbox{\tt xscale}$\\
+~~~~~~~~
+$\mbox{\tt ny} = \mbox{\tt nyw} + (y - \mbox{ \tt ya}) \cdot \mbox{\tt yscale}$
+
+ProCALLの描画ルーチンは，アプリケーション座標系(座標値は実数)で指定するので，
+このルーチンを一度使えば，座標系の変換は各描画ルーチンが自動的に行なうようになります．
+
+次の使用例では，ウィンドゥの左下を
+アプリケーション座標系の(-40.0, -20.0)に対応させ，
+スケーリングファクターを縦・横とも2.0に設定します．
+
+\shiyorei{　\verb|call newcoordinate(nwin, 0,0, -40.0,-20.0, 2.0,2.0)|}
+
+座標系の変更には，
+newwindowルーチン(\S \ref{f_newwindow})を使う方法もあります．
+ご検討ください．
+%
+\subsubsection{newwindow(nw,xs,ys,xe,ye)}
+\label{f_newwindow}
+
+\kino{　アプリケーション座標系の変更(左下と右上の座標を与える)}
+
+{\tt nw}で指定したウィンドゥのアプリケーション座標系を変更します
+(実際のグラフィックスエリアの大きさが変わるわけではありません)．
+
+ウィンドゥ上のウィンドゥ座標系(座標値は整数)は，左下が({\tt 0}, {\tt 0})で，
+右上が({\tt nxsize-1}, {\tt nysize-1})であり，デフォルトでは
+アプリケーション座標系(座標値は実数)の座標値は
+ウィンドゥ座標系のそれに一致しています．
+
+newwindowルーチンを使う事により，
+アプリケーション座標系の左下
+(つまりウィンドゥ座標系での({\tt 0}, {\tt 0}))を({\tt xs}, {\tt ys})，
+右上を({\tt xe}, {\tt ye})に変更できます．
+
+ProCALLの描画ルーチンは，アプリケーション座標系(座標値は実数)で指定するので，
+このルーチンを一度使えば，座標系の変換は各描画ルーチンが自動的に行なうようになります．
+
+次の使用例では，アプリケーション座標系の左下を(-20.0, -10.0)，
+右上を(799.0, 599.0)に変更します．
+
+\shiyorei{　\verb|call newwindow(nwin, -20.0, -10.0, 799.0, 599.0)|}
+
+座標系の変更には，
+newcoordinateルーチン(\S \ref{f_newcoordinate})を使う方法もあります．
+ご検討ください．
+%
+\subsubsection{layer(nw,lys,lyw)}
+\label{f_layer}
+
+\kino{　レイヤの設定をする}
+
+ProCALLではグラフィックス用ウィンドゥ毎に8枚のレイヤを持ち，
+表示するレイヤと書き込むレイヤを独立に指定できます．
+{\tt nw}にはウィンドウ番号を指定し，
+{\tt lys}には表示するレイヤ番号，
+{\tt lyw}には書き込むレイヤ番号を{\tt 0}〜{\tt 7}の整数で指定します．
+
+なお，現在表示しているレイヤに対して
+({\tt lys = lyw}の場合に)
+連続して描画ルーチンを実行すると，描画パフォーマンスが得られない事が
+あります．
+高速な描画が必要な場合には，現在表示していないレイヤに対して描画し，
+copylayerルーチン(\S\ref{f_copylayer})で
+描画レイヤの画像を表示レイヤにコピーするようにします．
+
+デフォルトでは{\tt layer(nw,0,0)}の状態となっています．
+
+\shiyorei{　\verb|call layer(nwin,0,1)|}
+%
+\subsubsection{copylayer(nw,lysrc,lydest)}
+\label{f_copylayer}
+
+\kino{　レイヤのコピーをする}
+
+{\tt nw}のウィンドウ番号の，
+レイヤ{\tt lysrc}の画像をレイヤ{\tt lydest}
+にそのままコピーします．
+このコピーは瞬時に行われるため，
+アニメーションの再生に使うことができます．
+
+\shiyorei{　\verb|call copylayer(nwin,1,0)|}
+%
+\subsubsection{gsetbgcolor(nw,strc)}
+\label{f_gsetbgcolor}
+
+\kino{　ウィンドゥの背景色を変更する}
+
+{\tt nw}で指定されたウィンドゥの背景色
+(gclrルーチンで初期化される色)
+を変更します．
+
+{\tt strc}にはXサーバの{\tt rgb.txt}\footnt{%
+{\tt rgb.txt}はUNIX系のOSなら {\tt /usr/X11R6/lib/X11/}
+などにあります．}
+に設定されている色を指定し，
+「\verb|'Blue'//CHAR(0)|」のように
+必ず最後に「\verb|CHAR(0)|」を追加します．
+また，「\verb|'#c0c0ff'//CHAR(0)|」のように，16進数のRed,Green,Blue
+での指定も可能です．
+
+\shiyorei{　\verb|call gsetbgcolor(nwin,'white'//CHAR(0)) ;|}
+%
+\subsubsection{gclr(nw)}
+\label{f_gclr}
+
+\kino{　描画レイヤの全消去}
+
+gsetbgcolorルーチン(\S\ref{f_gsetbgcolor})
+で指定した色で，描画レイヤを初期化します．
+{\tt gsetbgcolor}での指定がない場合の色は黒となっています．
+
+\shiyorei{　\verb|call gclr(nwin)|}
+%
+\subsubsection{tclr}
+\label{f_tclr}
+
+\kino{　端末のクリア}
+
+端末をクリアし，カーソルの位置をホームポジションに戻します．
+
+\shiyorei{　\verb|call tclr|}
+%
+\subsubsection{newpencolor(nw,nc)}
+\label{f_newpencolor}
+
+\kino{　描画色の変更}
+
+{\tt nw}で指定したウィンドゥでの描画色を
+変更します．ncと色との関係は以下の通りです．
+
+\begin{tabular}{llllllll}
+{\tt 0}:黒 &
+{\tt 1}:白 &
+{\tt 2}:赤 &
+{\tt 3}:緑 &
+{\tt 4}:青 &
+{\tt 5}:シアン &
+{\tt 6}:マゼンタ &
+{\tt 7}:黄\\
+{\tt 8}:DimGray &
+{\tt 9}:Gray &
+{\tt 10}:red4 &
+{\tt 11}:green4 &
+{\tt 12}:blue4 &
+{\tt 13}:cyan4 &
+{\tt 14}:magenta4 &
+{\tt 15}:yellow4\\
+\end{tabular}\\
+%
+red4，green4…の``4''のつく色は，
+暗い赤，暗い緑…となっています．
+
+デフォルトでは，白が指定されています．
+
+\shiyorei{　\verb|call newpencolor(nwin,2)|}
+%
+\subsubsection{newcolor(nw,strc)}
+\label{f_newcolor}
+
+\kino{　描画色の変更}
+
+{\tt nw}で指定したウィンドゥでの描画色を変更します．
+{\tt strc}にはXサーバの{\tt rgb.txt}\footnt{%
+{\tt rgb.txt}はUNIX系のOSなら {\tt /usr/X11R6/lib/X11/}
+などにあります．}
+に設定されている色を指定し，
+「\verb|'Blue'//CHAR(0)|」のように
+必ず最後に「\verb|CHAR(0)|」を追加します．
+また，「\verb|'#c0c0ff'//CHAR(0)|」のように，16進数のRed,Green,Blue
+での指定も可能です．
+
+\shiyorei{　\verb|call newcolor(nwin,'Violet'//CHAR(0))|}
+%
+\subsubsection{newrgbcolor(nw,nr,ng,nb)}
+\label{f_newrgbcolor}
+
+\kino{　描画色の変更}
+
+{\tt nw}で指定したウィンドゥでの描画色を変更します．
+{\tt nr,ng,nb}にはそれぞれRed,Green,Blueの
+輝度を256段階の整数(0〜255)で指定します．
+
+\shiyorei{　\verb|call newrgbcolor(nwin,255,127,0)|}
+%
+\subsubsection{newhsvcolor(nw,nh,ns,nv)}
+\label{f_newhsvcolor}
+
+\kino{　描画色の変更}
+
+{\tt nw}で指定したウィンドゥでの描画色を変更します．
+{\tt nh,ns,nv}にはそれぞれ，Hue, Satulation, Valueを指定します．
+{\tt ns}と{\tt nv}は256段階の整数(0〜255)を，
+{\tt nh}は0〜359までの整数(角度)を指定します．
+
+\shiyorei{　\verb|call newhsvcolor(nwin,120,250,240)|}
+%
+\subsubsection{makecolor(ncolormode,dmin,dmax,data,nr,ng,nb)}
+\label{f_makecolor}
+
+\kino{　変数からカラーを生成する(カラーバー生成)}
+
+変数{\tt data}の値を使って，{\tt nr},{\tt ng},{\tt nb} それぞれに
+256段階のRed,Greed,Blueのカラーを生成します．
+変数の最小，最大は{\tt dmin},{\tt dmax}で指定します．
+このルーチンで得た，{\tt nr},{\tt ng},{\tt nb}の
+値はnewrgbcolorルーチン(\S\ref{f_newrgbcolor})
+にそのまま与えて使う事ができます．
+
+{\tt ncolormode}はカラーパターンの番号で，以下に示す
+約50種類のカラーパターンが
+利用できます．
+
+以下は fitsビューア DS9 コンパチのカラーパターンです．
+
+\begin{center}
+\begin{tabular}{ll}
+ \verb|0|   & \includegraphics[scale=0.5]{color000.eps2} \\
+ \verb|1|   & \includegraphics[scale=0.5]{color001.eps2} \\
+ \verb|2|   & \includegraphics[scale=0.5]{color002.eps2} \\
+ \verb|3|   & \includegraphics[scale=0.5]{color003.eps2} \\
+ \verb|4|   & \includegraphics[scale=0.5]{color004.eps2} \\
+ \verb|5|   & \includegraphics[scale=0.5]{color005.eps2} \\
+ \verb|6|   & \includegraphics[scale=0.5]{color006.eps2} \\
+ \verb|7|   & \includegraphics[scale=0.5]{color007.eps2} \\
+ \verb|8|   & \includegraphics[scale=0.5]{color008.eps2} \\
+ \verb|9|   & \includegraphics[scale=0.5]{color009.eps2} \\
+ \verb|10|  & \includegraphics[scale=0.5]{color010.eps2} \\
+ \verb|11|  & \includegraphics[scale=0.5]{color011.eps2} \\
+ \verb|12|  & \includegraphics[scale=0.5]{color012.eps2} \\
+ \verb|13|  & \includegraphics[scale=0.5]{color013.eps2} \\
+ \verb|14|  & \includegraphics[scale=0.5]{color014.eps2} \\
+ \verb|15|  & \includegraphics[scale=0.5]{color015.eps2} \\
+ \verb|16|  & \includegraphics[scale=0.5]{color016.eps2} \\
+\end{tabular}
+\end{center}
+
+以下は可視化ソフトウェア IDL コンパチのカラーパターンです．
+
+\begin{center}
+\renewcommand{\arraystretch}{0.85}
+\begin{tabular}{ll}
+ \verb|17|  & \includegraphics[scale=0.5]{color017.eps2} \\
+ \verb|18|  & \includegraphics[scale=0.5]{color018.eps2} \\
+ \verb|19|  & \includegraphics[scale=0.5]{color019.eps2} \\
+ \verb|20|  & \includegraphics[scale=0.5]{color020.eps2} \\
+ \verb|21|  & \includegraphics[scale=0.5]{color021.eps2} \\
+ \verb|22|  & \includegraphics[scale=0.5]{color022.eps2} \\
+ \verb|23|  & \includegraphics[scale=0.5]{color023.eps2} \\
+ \verb|24|  & \includegraphics[scale=0.5]{color024.eps2} \\
+ \verb|25|  & \includegraphics[scale=0.5]{color025.eps2} \\
+ \verb|26|  & \includegraphics[scale=0.5]{color026.eps2} \\
+ \verb|27|  & \includegraphics[scale=0.5]{color027.eps2} \\
+ \verb|28|  & \includegraphics[scale=0.5]{color028.eps2} \\
+ \verb|29|  & \includegraphics[scale=0.5]{color029.eps2} \\
+ \verb|30|  & \includegraphics[scale=0.5]{color030.eps2} \\
+ \verb|31|  & \includegraphics[scale=0.5]{color031.eps2} \\
+ \verb|32|  & \includegraphics[scale=0.5]{color032.eps2} \\
+\end{tabular}
+\end{center}
+
+\begin{center}
+\renewcommand{\arraystretch}{0.85}
+\begin{tabular}{ll}
+ \verb|33|  & \includegraphics[scale=0.5]{color033.eps2} \\
+ \verb|34|  & \includegraphics[scale=0.5]{color034.eps2} \\
+ \verb|35|  & \includegraphics[scale=0.5]{color035.eps2} \\
+ \verb|36|  & \includegraphics[scale=0.5]{color036.eps2} \\
+ \verb|37|  & \includegraphics[scale=0.5]{color037.eps2} \\
+ \verb|38|  & \includegraphics[scale=0.5]{color038.eps2} \\
+ \verb|39|  & \includegraphics[scale=0.5]{color039.eps2} \\
+ \verb|40|  & \includegraphics[scale=0.5]{color040.eps2} \\
+ \verb|41|  & \includegraphics[scale=0.5]{color041.eps2} \\
+ \verb|42|  & \includegraphics[scale=0.5]{color042.eps2} \\
+ \verb|43|  & \includegraphics[scale=0.5]{color043.eps2} \\
+ \verb|44|  & \includegraphics[scale=0.5]{color044.eps2} \\
+ \verb|45|  & \includegraphics[scale=0.5]{color045.eps2} \\
+ \verb|46|  & \includegraphics[scale=0.5]{color046.eps2} \\
+ \verb|47|  & \includegraphics[scale=0.5]{color047.eps2} \\
+ \verb|48|  & \includegraphics[scale=0.5]{color048.eps2} \\
+ \verb|49|  & \includegraphics[scale=0.5]{color049.eps2} \\
+ \verb|50|  & \includegraphics[scale=0.5]{color050.eps2} \\
+ \verb|51|  & \includegraphics[scale=0.5]{color051.eps2} \\
+ \verb|52|  & \includegraphics[scale=0.5]{color052.eps2} \\
+ \verb|53|  & \includegraphics[scale=0.5]{color053.eps2} \\
+ \verb|54|  & \includegraphics[scale=0.5]{color054.eps2} \\
+ \verb|55|  & \includegraphics[scale=0.5]{color055.eps2} \\
+ \verb|56|  & \includegraphics[scale=0.5]{color056.eps2} \\
+ \verb|57|  & \includegraphics[scale=0.5]{color057.eps2} \\
+ \verb|58|  & \includegraphics[scale=0.5]{color058.eps2} \\
+\end{tabular}
+\end{center}
+
+\shiyorei{　\verb|call makecolor(10,v_min,v_max,v,nr,ng,nb)|}
+%
+%
+\subsubsection{newlinewidth(nw,nwidth)}
+\label{f_newlinewidth}
+
+\kino{　線幅の変更}
+
+{\tt nw}で指定したウィンドゥで線を描く時の線幅を変更します．
+デフォルトでは幅1が設定されています．
+
+このルーチンで線幅を変更すると，drawsymルーチン(\S \ref{f_drawsym})
+やdrawarrowルーチン(\S \ref{f_drawarrow})等で描かれる図形にも影響を与えるので
+注意してください．
+
+\shiyorei{　\verb|call newlinewidth(nwin, 2)|}
+%
+\subsubsection{newlinestyle(nw,nstyle)}
+\label{f_newlinestyle}
+
+\kino{　線のスタイルの変更}
+
+{\tt nw}で指定したウィンドゥで線を描く時のスタイルを変更します．
+引数{\tt style}に与える事ができる値は，
+{\tt 0}(実線)と{\tt 1}(点線)です．
+デフォルトでは実線が設定されています．
+
+このルーチンで線のスタイルを変更すると，drawsymルーチン(\S \ref{f_drawsym})
+やdrawarrowルーチン(\S \ref{f_drawarrow})等で描かれる図形にも影響を与えるので
+注意してください．
+
+\shiyorei{　\verb|call newlinestyle(nwin, 1)|}
+%
+\subsubsection{pset(nw,xg,yg)}
+\label{f_pset}
+
+\kino{　点の描画}
+
+{\tt nw}で指定したウィンドゥに点を描画します．
+
+描画ルーチン等で用いられる
+アプリケーション座標系は，デフォルトでは左下が({\tt 0.0}, {\tt 0.0})で
+右上が({\tt nxsize-1.0}, {\tt nysize-1.0})になっています．
+この座標は，newcoordinateルーチン(\S\ref{f_newcoordinate})または
+newwindowルーチン(\S\ref{f_newwindow})で変更が可能です．
+
+\shiyorei{　\verb|call pset(nwin,x,y)|}
+%
+
+\subsubsection{drawline(nw,xg0,yg0,xg1,yg1)}
+\label{f_drawline}
+
+\kino{　直線の描画}
+
+{\tt nw}で指定したウィンドゥの({\tt xg0}, {\tt yg0})から
+({\tt xg1}, {\tt yg1})に直線を描画します．
+
+\shiyorei{　\verb|call drawline(nwin,x0,y0,x1,y1)|}
+%
+\subsubsection{moveto(nw,xg,yg), lineto(nw,xg,yg)}
+\label{f_lineto}
+
+\kino{　連続的に直線を描く}
+
+linetoルーチンを複数回使う事により，
+{\tt nw}で指定したウィンドゥに連続的に直線を描画します．
+
+movetoルーチンは，({\tt xg}, {\tt yg})を
+linetoルーチンのための初期位置に設定します．
+linetoルーチンは，以前{\tt moveto}または{\tt lineto}が呼ばれた時に
+指定された座標から，({\tt xg}, {\tt yg})へ直線を引きます．
+{\tt moveto}でペンを上げて移動，
+{\tt lineto}でペンを下ろして描画，
+と考えるとわかりやすいでしょう．
+
+{\tt xg}，{\tt yg}は実数型の引数です．
+
+\shiyorei{　\verb|call lineto(nwin,x,y)|}
+%
+\subsubsection{line(nw,xg,yg,mode)}
+\label{f_line}
+
+\kino{　連続的に直線を描く}
+
+このルーチンは，\S \ref{f_lineto}
+の{\tt moveto}，{\tt lineto}ルーチンと同じ動作をします．
+
+{\bf 新しいプログラムでは，moveto・linetoルーチンを使用してください．}
+
+lineルーチンを複数回使う事により，
+{\tt nw}で指定したウィンドゥに連続的に直線を描画します．
+{\tt mode}に{\tt 2}を指定すると
+以前lineルーチンが呼ばれた時に
+指定された座標から，({\tt xg}, {\tt yg})へ直線を引きます．
+{\tt mode}に{\tt 3}を指定すると({\tt xg}, {\tt yg})を
+lineルーチンの初期位置に設定します．
+{\tt mode=2}でペンを下ろして描画，
+{\tt mode=3}でペンを上げて移動と考えるとわかりやすいでしょう．
+
+%また，{\tt mode=1}の場合は (xg,yg) に点を描き，
+%ペンの位置が更新されます．
+
+{\tt xg}，{\tt yg}は実数型の引数です．
+
+\shiyorei{　\verb|call line(nwin,x,y,2)|}
+%
+\subsubsection{drawpts(nw,x,y,n)}
+\label{f_drawpts}
+
+\kino{　複数の点を描く}
+
+{\tt nw}で指定したウィンドゥで，{\tt n}個の点を描きます．
+{\tt x}，{\tt y}は{\tt n}個の実数の一次元配列で，
+{\tt x(1)}〜{\tt x(n)}，
+{\tt y(1)}〜{\tt y(n)}に各点の座標を入れておきます．
+
+\shiyorei{　\verb|call drawpts(nwin,x,y,5)|}
+%
+\subsubsection{drawlines(nw,x,y,n)}
+\label{f_drawlines}
+
+\kino{　折れ線を描く}
+
+{\tt nw}で指定したウィンドゥで，折れ線を描きます．
+{\tt x}，{\tt y}は{\tt n}個の実数の一次元配列で，
+{\tt x(1)}〜{\tt x(n)}，
+{\tt y(1)}〜{\tt y(n)}に折れ線の各点の座標を入れておきます．
+
+\shiyorei{　\verb|call drawlines(nwin,x,y,5)|}
+%
+\subsubsection{drawpoly(nw,x,y,n)}
+\label{f_drawpoly}
+
+\kino{　多角形を描く}
+
+{\tt nw}で指定したウィンドゥで，多角形を描きます．
+{\tt x}，{\tt y}は{\tt n}個の実数の一次元配列で，
+{\tt x(1)}〜{\tt x(n)}，
+{\tt y(1)}〜{\tt y(n)}に多角形の各点の座標を入れておきます．
+
+\shiyorei{　\verb|call drawpoly(nwin,x,y,5)|}
+%
+\subsubsection{fillpoly(nw,x,y,n,i)}
+\label{f_fillpoly}
+
+\kino{　多角形を塗り潰す}
+
+{\tt nw}で指定したウィンドゥで，多角形の領域を塗り潰します．
+{\tt x}，{\tt y}は{\tt n}個の実数の一次元配列で，
+{\tt x(1)}〜{\tt x(n)}，
+{\tt y(1)}〜{\tt y(n)}に多角形の各点の座標を入れておきます．
+{\tt i}は塗り潰す時の形状で通常は{\tt 0}を，
+凸多角形の時は{\tt 1}を指定します．
+
+\shiyorei{　\verb|call fillpoly(nwin,x,y,5,0)|}
+%
+%
+\subsubsection{drawrect(nw,x,y,w,h)}
+\label{f_drawrect}
+
+\kino{　長方形を描く}
+
+{\tt nw}で指定したウィンドゥに，
+頂点({\tt x}, {\tt y})から正の方向に
+幅{\tt w}，高さ{\tt h}
+の長方形を描きます．
+
+\shiyorei{　\verb|call drawrect(nwin,50.0,60.0,30.0,20.0)|}
+%
+\subsubsection{fillrect(nw,x,y,w,h)}
+\label{f_fillrect}
+
+\kino{　長方形の領域を塗り潰す}
+
+{\tt nw}で指定したウィンドゥで，
+頂点({\tt x}, {\tt y})から正の方向に
+幅{\tt w}，高さ{\tt h}
+の長方形の領域を塗り潰します．
+
+\shiyorei{　\verb|call fillrect(nwin,50.0,60.0,30.0,20.0)|}
+%
+\subsubsection{drawcirc(nw,xcen,ycen,xrad,yrad)}
+\label{f_drawcirc}
+
+\kino{　中心座標と半径を与えて円を描く}
+
+{\tt nw}で指定したウィンドゥに，
+({\tt xcen}, {\tt ycen})を中心に
+横方向の半径{\tt xrad}，
+縦方向の半径{\tt yrad}の
+円を描きます．
+
+\shiyorei{　\verb|call drawcirc(nwin,50.0,60.0,30.0,40.0)|}
+%
+\subsubsection{fillcirc(nw,xcen,ycen,xrad,yrad)}
+\label{f_fillcirc}
+
+\kino{　中心座標と半径を与えて円を塗り潰す}
+
+{\tt nw}で指定したウィンドゥに，
+({\tt xcen}, {\tt ycen})を中心に
+横方向の半径{\tt xrad}，
+縦方向の半径{\tt yrad}の
+円を塗り潰します．
+
+\shiyorei{　\verb|call fillcirc(nwin,50.0,60.0,30.0,40.0)|}
+%
+\subsubsection{drawarc(nw,xcen,ycen,xrad,yrad,sang,eang,idir)}
+\label{f_drawarc}
+
+\kino{　円の中心，半径，始点，終点の角度を与えて円弧を描く}
+
+{\tt nw}で指定したウィンドゥに，
+({\tt xcen}, {\tt ycen})を中心に
+横方向の半径{\tt xrad}，
+縦方向の半径{\tt yrad}の
+円弧を描きます．
+{\tt sang}は開始角，{\tt eang}は終了角で，度で与えます．
+{\tt idir}は円弧を描く方向で{\tt 1}で左廻り，{\tt -1}で右廻りとなります．
+
+\shiyorei{　\verb|call drawarc(nwin,50.0,60.0,30.0,40.0,-10.0,-170.0,-1)|}
+%
+\subsubsection{fillarc(nw,xcen,ycen,xrad,yrad,sang,eang,idir)}
+\label{f_fillarc}
+
+\kino{　円の中心，半径，始点，終点の角度を与えて円弧を塗り潰す}
+
+{\tt nw}で指定したウィンドゥで，
+({\tt xcen}, {\tt ycen})を中心に
+横方向の半径{\tt xrad}，
+縦方向の半径{\tt yrad}の
+円弧を塗り潰します．
+{\tt sang}は開始角，{\tt eang}は終了角で，度で与えます．
+{\tt idir}は円弧を描く方向で{\tt 1}で左廻り，{\tt -1}で右廻りとなります．
+
+\shiyorei{　\verb|call fillarc(nwin,50.0,60.0,30.0,40.0,-10.0,-170.0,-1)|}
+%
+%
+\subsubsection{drawsym(nw,xg,yg,size,nsym)}
+\label{f_drawsym}
+
+\kino{　センターシンボルの描画}
+
+{\tt nw}で指定したウィンドゥに
+センターシンボルを座標({\tt xg}, {\tt yg})に描きます．
+{\tt size}はシンボルの大きさでピクセル単位の実数，
+{\tt nsym}でシンボルの種類(整数)を指定します．
+
+{\tt nsym}とシンボルの関係は，次の図のとおりです．
+
+\begin{center}
+\includegraphics[scale=0.8]{syms.eps}
+\end{center}
+
+%{\tt nsym}とシンボルの関係は，だいたい次のようなものとなっています．
+
+%　{\tt 1}:・
+%　{\tt 2}:＋
+%　{\tt 3}:×\hspace{-3.40mm}＋
+%　{\tt 4}:○
+%　{\tt 5}:×
+%　{\tt 6}:Ｙ
+%　{\tt 7}:△
+%　{\tt 8}:□
+%　{\tt 9}:▽
+%　{\tt 10}:◇
+
+なお，{\tt xg}，{\tt yg}は実数型の引数です．
+
+\shiyorei{　\verb|call drawsym(nwin,x,y,16.0,2)|}
+%
+%
+\subsubsection{drawsyms(nw,x,y,n,size,nsym)}
+\label{f_drawsyms}
+
+\kino{　複数のシンボルを描く}
+
+{\tt nw}で指定したウィンドゥで，{\tt n}個のシンボルを描きます．
+{\tt x}，{\tt y}は{\tt n}個の実数の一次元配列で，
+{\tt x(1)}〜{\tt x(n)}，
+{\tt y(1)}〜{\tt y(n)}に各シンボルの座標を入れておきます．
+
+{\tt size}はシンボルの大きさでピクセル単位の実数，
+{\tt nsym}でシンボルの種類(整数)を指定します．
+
+{\tt nsym}とシンボルの関係については，
+\S \ref{f_drawsym}をご覧ください．
+
+\shiyorei{　\verb|call drawsyms(nwin,x,y,5,16.0,8)|}
+%
+\subsubsection{drawarrow(nw,xs,ys,xt,yt,s,w,10{\tt *}i+j)}
+\label{f_drawarrow}
+
+\kino{　種々の型の矢印を描く}
+
+{\tt nw}で指定したウィンドゥに
+({\tt xs}, {\tt ys})から({\tt xe}, {\tt ye})に向かって矢印を描きます．
+矢印の形状は以下の図の通りで，{\tt s}と{\tt w}は実数で指定します．
+{\tt i}が{\tt 0}〜{\tt 2}の場合には{\tt w},{\tt s}はピクセル数を，
+{\tt i}が{\tt 10}〜{\tt 12}の場合には{\tt w},{\tt s}は矢印の長さに対する
+割合で{\tt 0.0}〜{\tt 1.0}の値を指定します．
+
+\begin{center}
+\includegraphics[scale=0.7]{procall_arohd0.eps}
+\end{center}
+
+%\begin{center}
+% \includegraphics[scale=0.30]{roche_arr_f.eps2}\\
+% {\tt i}={\tt 11}での矢印の描画例
+%\end{center}
+
+\shiyorei{　\verb|call drawarrow(nwin,x0,y0,x1,y1,0.3,0.2,114)|}
+%
+\subsubsection{newfontset(nw,fontset,nstatus)}
+\label{f_newfontset}
+
+\kino{　フォントセット(日本語フォント)の指定}
+
+{\tt nw}で指定したウィンドゥで描くフォントセットを指定します．
+文字の描画はdrawstrルーチン(\S\ref{f_drawstr})を利用します．
+
+フォントセット名は{\tt fontset}で指定します．
+{\tt fontset}の最終文字は「\verb|CHAR(0)|」(終端文字)
+でなければなりません．
+
+最後の引数{\tt status}には，フォントセットの取得状況を示す
+整数値が代入されます．
+{\tt fontset}で指定したフォントセットが
+取得できた場合は{\tt 0}，代替フォントで取得できた場合は正の値，
+フォントセットの取得に失敗した場合は負の値が
+{\tt status}に返ってきます．
+
+フォントセットの設定は，Xサーバにインストールされたのフォントを
+指定する必要があり，OSやディストリビューションに依存します．
+確実に表示したい場合は，次のような設定を推奨します:
+
+\begin{center}
+\begin{tabular}{|l|l|}
+  \hline 
+  14ドットフォント & \verb|'-*-fixed-medium-r-normal--14-*'//CHAR(0)| \\
+  \hline 
+  16ドットフォント & \verb|'-*-fixed-medium-r-normal--16-*'//CHAR(0)| \\
+  \hline 
+  24ドットフォント & \verb|'-*-fixed-medium-r-normal--24-*'//CHAR(0)| \\
+  \hline 
+\end{tabular}
+\end{center}
+
+\shiyorei{　\verb|call newfontset(nwin,'-*-fixed-medium-r-normal--16-*'//CHAR(0),nstat)|}
+
+%
+\subsubsection{drawstr(nw,xg,yg,size,str,theta,len)}
+\label{f_drawstr}
+
+\kino{　文字列の描画}
+
+{\tt nw}で指定したウィンドゥに，
+文字列を座標({\tt xg}, {\tt yg})から描きます．
+{\tt size}は文字の大きさで，ピクセル単位の実数で指定します．
+{\tt str}に文字列を，{\tt len}には文字列の長さ(整数)を与えます．
+文字列{\tt str}の最終文字が終端文字「\verb|CHAR(0)|」であれば，
+{\tt len}に実際の文字列長のかわりに{\tt -1}を与えてもかまいません．
+{\tt theta}は文字列の回転を指定する実数の引数ですが，現バージョンでは
+機能しません．
+
+文字のサイズ{\tt size}は{\tt 1}〜{\tt 24}の範囲で指定できます．
+{\tt size}と実際のフォントとの関係は以下の表のようになっています．
+この場合，文字は半角英数字のみ描画できます．
+
+マルチバイト文字(漢字)を描画する場合は，{\tt size}には {\tt 0.0} を指定します．
+この場合のフォントの指定は，
+newfontsetルーチン(\S\ref{f_newfontset})を
+利用します．{\tt newfontset}でのフォント指定がなされて
+いない場合は，デフォルトの14ドットのフォントセットで描画されます．
+
+\begin{center}
+\begin{tabular}{|ccc|ccc|ccc|ccc|ccc|}
+  \hline 
+ {\tt 1}〜{\tt 7}&:& $5 \times 7$ &
+ {\tt 8}&:& $5 \times 8$ &
+ {\tt 9}&:& $6 \times 9$ &
+ {\tt 10}〜{\tt 11}&:& $6 \times 10$ &
+ {\tt 12}&:& $6 \times 12$  \\
+ \hline
+ {\tt 13}&:& $7 \times 13$ &
+ {\tt 14}〜{\tt 15}&:& $7 \times 14$ &
+ {\tt 16}〜{\tt 19}&:& $8 \times 16$ &
+ {\tt 20}〜{\tt 23}&:& $10 \times 20$ &
+ {\tt 24}&:& $12 \times 24$ \\
+  \hline 
+\end{tabular}
+\end{center}
+
+\shiyorei{　\verb|call drawstr(nwin,x,y,16.0,'Hoge',0.0,4)|}
+
+\shiyorei{　\verb|call drawstr(nwin,x,y,0.0,'日本語の描画もOK!'//CHAR(0),0.0,-1)|}
+
+\subsubsection{drawnum(nw,xg,yg,size,v,theta,n)}
+\label{f_drawnum}
+
+\kino{　変数の値を描く}
+
+{\tt nw}で指定したウィンドゥに
+実数型変数{\tt v}の値を座標({\tt xg}, {\tt yg})から描きます．
+{\tt size}は文字列の大きさで，ピクセル単位の実数で指定します．
+{\tt n}は表示する小数点の桁数で，整数値を与えます．
+{\tt theta}は文字列の回転を指定する実数の引数ですが，現バージョンでは
+機能しません．
+
+\shiyorei{　\verb|call drawnum(nwin,x,y,16.0,prm,0.0,3)|}
+%
+%
+\subsubsection{putimg24(nw,x,y,nw,nh,nbuf)}
+\label{f_putimg24}
+
+\kino{　整数配列に用意した画像をウィンドウに一括転送する}
+
+{\tt nw}で指定したウィンドゥの
+座標({\tt x}, {\tt y})に
+{\tt nbuf}に用意した，
+幅{\tt nw}，高さ{\tt nh}の画像
+を一括転送します．
+
+整数配列{\tt nbuf}には，Red,Green,Blueの順に
+3つずつ，水平方向に走査しながら画像の上から下へ用意します
+({\tt nbuf(1)=nRed(1)}，
+{\tt nbuf(2)=nGreen(1)}，
+{\tt nbuf(3)=nBlue(1)}，といった具合いです)．
+配列には{\tt 0}〜{\tt 255}の範囲の輝度を与えておきます．
+
+なおXサーバのdepthが8以下の場合はこのルーチンは
+使用できません(正常に動作しません)．Xサーバのdepthは
+ggetdisplayinfoルーチン(\S\ref{f_ggetdisplayinfo})
+で調べる事ができます．
+
+\shiyorei{　\verb|call putimg24(nwin,x,y,640,400,nbuffer)|}
+%
+%
+\subsubsection{saveimg(nw,ly,xs,ys,xe,ye,fname,n,conv,nd)}
+\label{f_saveimg}
+
+\kino{　特定のレイヤの画像をコンバータ(netpbm等)を通してファイルに保存する}
+
+バックグラウンドプロセスを起動し，
+ウィンドウ番号{\tt nw}，レイヤ番号{\tt ly}の({\tt xs}, {\tt ys})から
+({\tt xe}, {\tt ye})の範囲を
+コンバータ(netpbmの各種コマンド,ImageMagickのconvert等)
+を通してファイルに保存します\footnt{%
+netpbm は http://sourceforge.net/projects/netpbm/ ，%
+ImageMagick は http://www.imagemagick.org/ などで配布されています．}%
+．
+ファイル名は{\tt fname}で指定し，
+「\verb|'image.png'//CHAR(0)|」のように必ず最後に
+「\verb|CHAR(0)|」(終端文字)を追加します．
+{\tt n}に正の整数，例えば{\tt n}={\tt 12}を指定する
+と，実際のファイル名は{\tt image12.png}のように数字がつき，
+{\tt n}が負の場合は数字はつかずにそのままのファイル名で保存します．
+{\tt conv}にはppm形式から各画像フォーマットに変換するコンバータのコマンド
+ラインを指定します．例えば，netpbmを利用して
+png形式に保存する場合は，「\verb|'pnmtopng'//CHAR(0)|」とします．
+ImageMagickを利用する場合は，「\verb|'convert'//CHAR(0)|」とします．
+もちろん，オプションスイッチも含める事もでき，
+「\verb|'pnmtops -scale 0.125'//CHAR(0)|」
+%，あるいは
+%「\verb|'convert -compress ZIP'//CHAR(0)|」
+といった指定も可能です．
+最後の引数{\tt nd}は減色パラメータで，
+R,G,B 1チャンネルあたりの色の段階数を整数で指定します．
+{\tt nd}は簡単な図形では{\tt 16}くらいで十分ですが，
+多くの色を使っている場合は最大値の{\tt 256}を指定してください．
+
+ppmから他の画像フォーマットに変換するnetpbmのコマンドの例を挙げておきます．
+各コンバータの使用方法に関しては端末から{\tt man }コンバータ名 とタイプ
+する事で調べることができます．
+ImageMagickのconvertコマンドを利用する場合は，ファイル名の
+サフィックス(ドット以降の文字列，例えば{\tt .jpg}，{\tt .png}，{\tt .eps}
+など)から保存フォーマットが決定されます．
+
+\vspace{1mm}
+
+\begin{center}
+{\small
+\begin{tabular}{cc}
+{
+\begin{tabular}{ll}
+ \hline
+ 画像フォーマット & コンバータ名 \\
+ \hline
+ AutoCAD DXB     	& {\tt ppmtoacad} \\
+ windows bitmap 	& {\tt ppmtobmp} \\
+ Berkeley YUV           & {\tt ppmtoeyuv}\\
+ GIF			& {\tt ppmtogif} \\
+ NCSA ICR graphics	& {\tt ppmtoicr} \\
+ IFF ILBM		& {\tt ppmtoilbm} \\
+ Interleaf image        & {\tt ppmtoleaf} \\
+ HP LaserJet PCL 5 Color & {\tt ppmtolj} \\
+% mag			& {\tt ppmtomag} \\
+ map			& {\tt ppmtomap} \\
+ Mitsubishi S340-10 printer 	& {\tt ppmtomitsu} \\
+ Atari Neochrome .neo   & {\tt ppmtoneo} \\
+ PPC Paintbrush 	& {\tt ppmtopcx} \\
+ portable graymap	& {\tt ppmtopgm} \\
+% pi			& {\tt ppmtopi} \\
+ Atari Degas .pi1	& {\tt ppmtopi1} \\
+% pic			& {\tt ppmtopic} \\
+ Macintosh PICT		& {\tt ppmtopict} \\
+ HP PaintJet 	& {\tt ppmtopj} \\
+ HP PaintJet XL PCL 		& {\tt ppmtopjxl} \\
+ X11 ``puzzle'' 	& {\tt ppmtopuzz} \\
+ three portable graymaps		& {\tt ppmtorgb3} \\
+ DEC sixel 	& {\tt ppmtosixel} \\
+ TrueVision Targa 	& {\tt ppmtotga} \\
+ \hline
+\end{tabular}
+} 
+ 　&　
+{
+\begin{tabular}{ll}
+ \hline
+ 画像フォーマット & コンバータ名 \\
+ \hline
+ Motif UIL icon 	& {\tt ppmtouil} \\
+ Windows .ico           & {\tt ppmtowinicon} \\
+ XPM format		& {\tt ppmtoxpm} \\
+ Abekas YUV 	& {\tt ppmtoyuv} \\
+ YUV triplets		& {\tt ppmtoyuvsplit} \\
+% & (以下,{\tt pnmto***})\\
+ DDIF			& {\tt pnmtoddif} \\
+ FIASCO compressed      & {\tt pnmtofiasco} \\
+ FITS			& {\tt pnmtofits} \\
+ JBIG                   & {\tt pnmtojbig} \\
+ JFIF ("JPEG") image    & {\tt pnmtojpeg} \\
+ Palm pixmap            & {\tt pnmtopalm} \\
+ plain (ASCII) anymap   & {\tt pnmtoplainpnm} \\
+ Portable Network Graphics  & {\tt pnmtopng} \\
+ PostScript		& {\tt pnmtops} \\ 
+ Sun raster 	& {\tt pnmtorast} \\
+ RLE image              & {\tt pnmtorle} \\
+ sgi image 	& {\tt pnmtosgi} \\
+ Solitaire image recorder  & {\tt pnmtosir} \\
+ TIFF file		& {\tt pnmtotiff} \\
+ CMYK encoded TIFF      & {\tt pnmtotiffcmyk} \\
+ X11 window dump	& {\tt pnmtoxwd} \\
+ \hline
+\end{tabular}
+\vspace{1mm}
+}
+\end{tabular}
+}
+\end{center}
+
+%もちろん，コンバータはすでにインストールされている必要があり，
+%インストールされていない場合は指定できません．
+
+ここに挙げた以外のコンバータも，標準入力からppm形式で入力し，
+標準出力から変換データを出力するものであれば使用する事ができます．
+
+コンバータを通さずに直接ppm形式で保存する場合は{\tt conv}には
+「\verb|CHAR(0)|」と指定してください．
+ただしその場合，非圧縮のバイナリデータが
+保存されるので，ファイルのサイズが大きくなります．
+
+このルーチンではXサーバから画像データを転送し，保存するわけですが，
+ネットワークが遅かったりすると非常に時間がかかります．
+その事を考慮してこのルーチンでは子プロセスを起動して，
+バックグラウンドでXサーバからの画像の転送・ディスクへの書き込みを行うように
+しています．したがってプログラムは{\tt call saveimg(…)}の後
+すぐに他の作業ができるようになります．ただし，この子プロセスが
+終わるまではXサーバでの描画等ができないので，もし{\tt call saveimg(…)}
+のすぐ後にProCALLの描画ルーチン
+などを呼んだ場合は画像の転送・保存が完了するまで待たされる事になります．
+
+なお，{\tt saveimg}を使っている場合は
+\underline{プログラムは必ず{\tt gclose}(\S\ref{f_gclose})
+をcallしてから終了する}
+ようにしてください．
+%{\tt gclose}を呼ばずにプログラム
+%を終了した場合，子プロセスがまだ作業中だった場合に
+%強制終了させられて正常に画像が保存されません．
+
+\shiyorei{　\small\verb|call saveimg(nwin,0, 0.0,0.0, 639.0,399.0, 'img.png'//CHAR(0),i, 'pnmtopng'//CHAR(0),256)|}
+
+png形式に保存する例です．gif形式の場合は {\tt conv} を
+「\verb|'ppmtogif'//CHAR(0)|」にします．
+
+\shiyorei{　{\small\verb|call saveimg(nwin,0, 0.0,0.0, 639.0,399.0, 'fig.eps'//CHAR(0),-1,|\\\verb|                  'pnmtops -noturn -dpi 72 -equalpixels -psfilter -flate -ascii85'//CHAR(0),256)|}}
+
+%\shiyorei{　{\small\verb|call saveimg(nwin,0,0.0,0.0,639.0,399.0,'fig.eps2'//CHAR(0),-1,'convert -compress ZIP'//CHAR(0),256)|}}
+
+PostScript形式に保存する例です．netpbmの{\tt pnmtops}では
+RunLength圧縮やGZIP圧縮(可逆圧縮)をサポートしています．
+上記のように「{\tt -psfilter -flate -ascii85}」
+をつける事で画質を損うことなく，ファイルサイズを小さくする事ができます．
+
+%ImageMagickではRunLengthの他，ZIP，LZWなどのアルゴリズムでより効率良く
+%圧縮したビットマップイメージをPostscript Level 2ファイルに埋め込む事ができます．
+%最後の使用例はZIP圧縮を用いたPostscript Level 2のEPSファイルを生成する例です．
+%ただし，ImageMagickのPostscript Level 2の出力は5.3.3以降で改悪され，
+%一般的なPostscriptインタープリタ(Adobe Postscript 3など)
+%では読めません．ImageMagick-{\bf 5.3.2}の利用をお勧めします．
+%
+%
+\subsubsection{gsetnonblock(iflag)}
+\label{f_gsetnonblock}
+
+\kino{　ggetch，ggetevent，ggetxpressルーチンの動作モードを設定する}
+
+デフォルトでは，
+キーボードやマウスの入力情報を取得するルーチン
+{\tt ggetch}，{\tt ggetevent}，{\tt ggetxpress}
+が呼ばれると，ルーチン内部で入力があるまで待ち続けます(ブロッキングモード)．
+
+{\tt iflag}に{\tt 1}を設定してgsetnonblockルーチンが呼ばれると
+ノンブロッキングモードとなり，
+{\tt ggetch}，{\tt ggetevent}，{\tt ggetxpress}ルーチン
+は入力の有無にかかわらずすぐに戻るようになります．
+
+デフォルトのブロッキングモードに戻すには，{\tt iflag}に{\tt 0}
+を与えてください．
+
+gsetnonblockルーチンの呼び出しは，
+ウィンドゥのオープンの前あるいは後のどのタイミングでも有効です．
+
+\shiyorei{　\verb|call gsetnonblock(1)|}
+%
+\subsubsection{ggetch(key)}
+\label{f_ggetch}
+
+\kino{　キーボードから入力された文字を返す}
+
+ProCALLで開いたすべてのウィンドゥからの
+キーボードの入力情報を返します．
+キーボードから入力された文字のコードが{\tt key}(整数)に代入されます．
+ブロッキングモード(デフォルト)ではキー入力があるまで待ち続けますが，
+ノンブロッキングモードでは入力の有無にかかわらずすぐにこのルーチンから
+戻ります(動作モードについては\S \ref{f_gsetnonblock}のgsetnonblock
+ルーチンを参照してください)．
+ノンブロッキングモードにおいて入力が無かった場合は，
+{\tt key}に負の値が返ります．
+
+%指定したウィンドゥにキー入力があるまで待ち，
+%入力されたらその文字コード {\tt key}(整数) を返します．
+%基本的に端末からの1文字入力{\tt fgetc(stdin)}と同じですが，
+%z'01'〜z'1F'，z'7F'の「特殊キー」と「Ctrl+アルファベットキー」
+%の入力を拾う点が異っています．
+
+以下が16進の文字コード表です．イタリック体の数字が16進
+2桁の上位を表します．
+例えば，「a」は z'61'，「A」は z'41' となります．
+
+\input charcode0
+
+z'01'〜z'1A' の中にはいくつか特殊キーが含まれていますが，
+この区間は「Ctrl+アルファベットキー」のコードと共有となります．
+例えば，「BackSpace」と「Ctrl+H」のコードはどちらも z'08' となります．
+z'01'〜z'1A' で空白になっている個所は，
+「Ctrl+アルファベットキー」にのみコードが割り当てられています．
+
+\shiyorei{　\verb|call ggetch(nwin,key)|}
+%
+\subsubsection{ggetevent(nw,ntype,nbutton,xg,yg)}
+\label{f_ggetevent}
+
+\kino{　マウスやキーボードからの入力の情報を返す}
+
+ProCALLで開いたすべてのウィンドゥからの
+マウスやキーボードの入力情報を返します．
+ブロッキングモード(デフォルト)では入力があるまで待ち続けますが，
+ノンブロッキングモードでは入力の有無にかかわらずすぐにこのルーチンから
+戻ります(動作モードについては\S \ref{f_gsetnonblock}のgsetnonblock
+ルーチンを参照してください)．
+ノンブロッキングモードにおいて入力が無かった場合は，負の値が
+{\tt nw}に返ります．
+
+{\tt nw}には，入力のあったウィンドゥ番号が返るので，
+ユーザ・プログラム側で
+意図したウィンドゥからの入力かどうかをチェックできます．
+
+{\tt ntype}には，
+マウスのモーションの場合は{\tt 6}，
+マウスのボタンが押された場合は{\tt 4}，
+マウスのボタンが離された場合は{\tt 5}，
+キーボードからの入力の場合は{\tt 2}
+が返ります．
+
+マウスの入力の場合，
+{\tt nbutton}にはクリック(on・off)された，または押されている
+ボタンの番号({\tt 1,2,3,}…)が代入され，
+ウィンドゥ上でのマウスポインタの座標(アプリケーション座標系)
+が{\tt xg}，{\tt yg}に代入されます．
+
+キー入力の場合は，キーコードが{\tt nbutton}に返ります．
+このキーコードはggetchルーチン(\S\ref{f_ggetch})
+の{\tt key}と同一です．
+
+\shiyorei{　\verb|call ggetevent(nwin,ntype,nb,x,y)|}
+%
+\subsubsection{ggetxpress(nw,ntype,nbutton,xg,yg)}
+\label{f_ggetxpress}
+
+\kino{　マウスからのボタンクリック，キーボードからの入力の情報を返す}
+
+ProCALLで開いたすべてのウィンドゥからの
+マウスのボタンクリック，キータイプの入力情報を返します．
+ブロッキングモード(デフォルト)では入力があるまで待ち続けますが，
+ノンブロッキングモードでは入力の有無にかかわらずすぐにこのルーチンから
+戻ります(動作モードについては\S \ref{f_gsetnonblock}のgsetnonblock
+ルーチンを参照してください)．
+ノンブロッキングモードにおいて入力が無かった場合は，{\tt nw}に
+負の値が返ります．
+
+{\tt nw}には，入力のあったウィンドゥ番号が返るので，
+ユーザ・プログラム側で
+意図したウィンドゥからの入力かどうかをチェックできます．
+
+マウスのボタンクリックがあった場合，{\tt ntype}には
+{\tt 4}が代入され，キーボードからの入力の場合は{\tt 2}が代入されます．
+
+マウスのボタンクリックの場合，{\tt nbutton}には
+クリックされたボタンの番号({\tt 1,2,3,}…)，
+クリックされた時のウィンドゥ上でのマウスポインタの座標
+(アプリケーション座標系)が{\tt xg}，{\tt yg}に代入されます．
+
+キー入力の場合は，キーコードが{\tt nbutton}に返ります．
+このキーコードはggetchルーチン(\S\ref{f_ggetch})
+の{\tt key}と同一です．
+
+\shiyorei{　\verb|call ggetxpress(nwin,ntype,nb,x,y)|}
+%
+\subsubsection{selwin(nw)}
+\label{f_selwin}
+
+\kino{　描画するウィンドゥを指定する}
+
+カルコンプ互換ルーチンでどのウィンドゥにアクセスするかを指定します．
+{\tt nw}には{\tt gopen}(\S\ref{f_gopen})で得た，ウィンドゥ番号を指定します．
+なお，
+カルコンプ互換ルーチンの{\tt plots}(\S\ref{f_plots})
+で開いたウィンドゥの番号は{\tt 0}となります．
+デフォルトは{\tt 0}です．
+
+\shiyorei{　\verb|call selwin(nwin)|}
+%
+%
+\subsection{カルコンプ互換ルーチンのリファレンス}
+
+Pro-FORTRANとコンパチブルなルーチン群です．
+Pro-FORTRANや他のGKS，カルコンプ互換のFORTRANから移行する
+場合以外は，必要としないと思われます．
+
+\subsubsection{plots}
+\label{f_plots}
+
+\kino{　グラフィックス用ウィンドウを開く}
+
+このルーチンを呼ぶことで，グラフィックス用ウィンドウを開きます．
+グラフィックスエリア(ウィンドゥサイズ)は640×400ピクセルです．
+グラフィックスエリアを任意にとりたい場合や
+複数のウィンドウを開きたい場合は{\tt call gopen}を使用してください．
+
+なお，plotsルーチンで呼び出したProCALLでのウィンドゥ番号は0
+となります(ProCALL標準ルーチンのウィンドウ番号{\tt nw}には{\tt 0}
+を指定します)．
+
+\shiyorei{　\verb|call plots|}
+%
+\subsubsection{window(xs,ys,xe,ye)}
+\label{f_window}
+
+\kino{　座標系の変更}
+
+ウィンドゥ上のウィンドゥ座標系(座標値は整数)は，左下が({\tt 0}, {\tt 0})で，
+右上が({\tt 639}, {\tt 399})であり，デフォルトでは
+アプリケーション座標系(座標値は実数)の座標値は
+ウィンドゥ座標系のそれに一致しています．
+
+windowルーチンを使う事により，
+アプリケーション座標系の左下
+(つまりウィンドゥ座標系での({\tt 0}, {\tt 0}))を({\tt xs}, {\tt ys})，
+右上を({\tt xe}, {\tt ye})に変更できます．
+
+下の使用例では，アプリケーション座標系の左下を(-2.0, -1.0)，
+右上を(5.0, 4.0)に変更します．
+
+\shiyorei{　\verb|call window(-2.0, -1.0, 5.0, 4.0)|}
+%
+\subsubsection{newpen(nc)}
+\label{f_newpen}
+
+\kino{　描画色の変更}
+
+plotなどでの描画色を変更します．ncと色との関係は以下の通りです．
+
+\begin{tabular}{llllllll}
+{\tt 0}:黒 &
+{\tt 1}:白 &
+{\tt 2}:赤 &
+{\tt 3}:緑 &
+{\tt 4}:青 &
+{\tt 5}:シアン &
+{\tt 6}:マゼンタ &
+{\tt 7}:黄\\
+{\tt 8}:DimGray &
+{\tt 9}:Gray &
+{\tt 10}:red4 &
+{\tt 11}:green4 &
+{\tt 12}:blue4 &
+{\tt 13}:cyan4 &
+{\tt 14}:magenta4 &
+{\tt 15}:yellow4\\
+\end{tabular}\\
+%
+red4，green4…の``4''のつく色は，
+暗い赤，暗い緑…となっています．
+
+デフォルトでは，白が指定されています．
+
+\shiyorei{　\verb|call newpen(2)|}
+
+\gokansei{　8〜15の色は本家Pro-FORTRANでは使用できません．}
+%
+\subsubsection{clsc}
+\label{f_clsc}
+
+\kino{　端末のクリア}
+
+端末をクリアし，カーソルの位置をホームポジションに戻します．
+
+\shiyorei{　\verb|call clsc|}
+%
+\subsubsection{clsx}
+\label{f_clsx}
+
+\kino{　グラフィックス画面をクリア}
+
+\shiyorei{　\verb|call clsx|}
+%
+\subsubsection{plot(xg,yg,mode)}
+\label{f_plot}
+
+\kino{　直線，点の描画}
+
+{\tt mode}に{\tt 2}を指定すると以前{\tt plot}が呼ばれた点から，
+({\tt xg}, {\tt yg})へ直線を引きます．
+{\tt mode}に{\tt 3}を指定すると({\tt xg}, {\tt yg})を
+plotルーチンの初期位置に設定します．
+{\tt mode=2}でペンを下ろして描画，
+{\tt mode=3}でペンを上げて移動と考えるとわかりやすいでしょう．
+
+また，{\tt mode}={\tt 1}の場合は ({\tt xg}, {\tt yg}) に点を描き，
+ペンの位置を更新します．
+
+{\tt xg}，{\tt yg}は実数型の引数です．
+
+\shiyorei{　\verb|call plot(x,y,2)|}
+
+\gokansei{　{\tt mode}={\tt 1}は本家Pro-FORTRANでは使用できません．}
+%
+\subsubsection{arc(xcen,ycen,rad,sang,eang,idir)}
+\label{f_arc}
+
+\kino{　円の中心，半径，始点，終点の角度を与えて円弧を描く}
+
+({\tt xcen}, {\tt ycen})を中心に半径{\tt rad}の円弧を描きます．
+{\tt sang}は開始角，{\tt eang}は終了角で，度で与えます．
+{\tt idir}は円弧を描く方向で{\tt 1}で左廻り，{\tt -1}で右廻りとなります．
+
+\shiyorei{　\verb|call arc(50.0,60.0,30.0,-10.0,-170.0,-1)|}
+%
+\subsubsection{circ1(xc,yc,r)}
+\label{f_circ1}
+
+\kino{　中心座標と半径を与えて円を描く}
+
+({\tt xc}, {\tt yc})を中心に半径{\tt r}の円を描きます．
+
+\shiyorei{　\verb|call circ1(50.0,60.0,30.0)|}
+%
+\subsubsection{arohd(xs,ys,xt,yt,s,w,10{\tt *}i+j)}
+\label{f_arohd}
+
+\kino{　種々の型の矢印を描く}
+
+({\tt xs}, {\tt ys})から({\tt xe}, {\tt ye})に向かって矢印を描きます．
+矢印の形状は以下の図の通りで，{\tt s}と{\tt w}は実数で指定します．
+{\tt i}が{\tt 0}〜{\tt 2}の場合には{\tt w},{\tt s}はピクセル数を，
+{\tt i}が{\tt 10}〜{\tt 12}の場合には{\tt w},{\tt s}は矢印の長さに対する
+割合で{\tt 0.0}〜{\tt 1.0}の値を指定します．
+
+\begin{center}
+\includegraphics[scale=0.7]{procall_arohd0.eps}
+\end{center}
+
+\shiyorei{　\verb|call arohd(x0,y0,x1,y1,0.3,0.2,114)|}
+
+\gokansei{　{\tt i}={\tt 10}〜{\tt 12}は本家Pro-FORTRANでは使用できません．
+本家Pro-FORTRANでは{\tt window}の指定
+によって実際に描画される矢印の先端の大きさが変化しますが，
+ProCALLでは変化しません．
+}
+%
+\subsubsection{symbol(xg,yg,size,nstr,theta,len)}
+\label{f_symbol}
+
+\kino{　文字列，センターシンボルの描画}
+
+文字列またはセンターシンボルを座標({\tt xg}, {\tt yg})に描きます．
+{\tt size}は文字列・シンボルの大きさで，ピクセル単位の実数で指定します．
+文字列を描く場合は{\tt len}に文字列の長さ(整数)を，
+{\tt nstr}に文字列を与えます．
+センターシンボルを描く場合は{\tt len}に{\tt -1}を指定し，
+{\tt nstr}にシンボルの番号{\tt 1}〜{\tt 10}の整数を与えます．
+
+文字のサイズ{\tt size}は{\tt 1}〜{\tt 24}の範囲で指定できます．
+{\tt size}と実際のフォントとの関係は以下のようになっています．
+文字は半角英数字ならすべて描画できる上，
+本家Pro-FORTRANより綺麗です．
+
+\setlength{\tabcolsep}{1.5mm}
+\setlength{\arrayrulewidth}{0.1mm}
+
+\begin{center}
+\begin{tabular}{|ccc|ccc|ccc|ccc|ccc|}
+  \hline 
+ {\tt 1}〜{\tt 7}&:& $5 \times 7$ &
+ {\tt 8}&:& $5 \times 8$ &
+ {\tt 9}&:& $6 \times 9$ &
+ {\tt 10}〜{\tt 11}&:& $6 \times 10$ &
+ {\tt 12}&:& $6 \times 12$  \\
+ \hline
+ {\tt 13}&:& $7 \times 13$ &
+ {\tt 14}〜{\tt 15}&:& $7 \times 14$ &
+ {\tt 16}〜{\tt 19}&:& $8 \times 16$ &
+ {\tt 20}〜{\tt 23}&:& $10 \times 20$ &
+ {\tt 24}&:& $12 \times 24$ \\
+  \hline 
+\end{tabular}
+\end{center}
+
+{\tt nstr}とシンボルの関係は，次の図のとおりです．
+
+\begin{center}
+\includegraphics[scale=0.8]{syms.eps}
+\end{center}
+
+なお，このルーチンは4番目の引数に，文字列型と整数型の両方をとります．
+この{\tt symbol}を使って文字列，シンボルの両方を描くように作成された
+ソースでは，コンパイルすると Warning が出てきます．
+このWarningはかなり目障りなので，
+本家Pro-FORTRANでコンパイルしない場合は，ProCALL標準ルーチン
+{\tt drawstr}(文字列を描く), 
+{\tt drawsym}(シンボルを描く)の使用を推奨します．
+
+%\shiyorei{　\verb|call symbol(x,y,16,'Hoge',0.0,4)|\\
+%　　　　　\hspace{2.2mm}\verb|call symbol(x,y,16,2,0.0,-1)|}
+\vspace{-\baselineskip}
+\shiyorei{　
+\begin{tabular}{l}\\
+\verb|call symbol(x,y,16.0,'Hoge',0.0,4)| \\
+\verb|call symbol(x,y,16.0,2,0.0,-1)| \\
+\end{tabular}
+%
+
+\gokansei{　本家Pro-FORTRANでは{\tt window}の指定
+          によって実際に描画されるシンボルの大きさが変化しますが，
+	  ProCALLでは変化しません．
+
+	  24より大きい文字サイズは12×24ドットフォント固定となります．
+          アルファベットの小文字と一部の記号は本家Pro-FORTRANでは出力
+	  できません．
+	  {\tt theta}は文字列の回転を指定する実数の引数ですが，
+	  現バージョンでは機能しません．
+}
+%
+\subsubsection{number(xg,yg,size,v,theta,n)}
+\label{f_number}
+
+\kino{　変数の値を描く}
+
+実数型変数{\tt v}の値を座標({\tt xg}, {\tt yg})から描きます．
+{\tt size}は文字列の大きさで，ピクセル単位の実数で指定します．
+{\tt n}は表示する小数点の桁数で，整数値を与えます．
+
+\shiyorei{　\verb|call number(x,y,16.0,prm,0.0,3)|}
+
+\gokansei{　24より大きい文字サイズは12×24ドットフォント固定となります．
+	  {\tt theta}は文字列の回転を指定する実数の引数ですが，
+	  現バージョンでは機能しません．
+}
+%
+\subsubsection{vport,setal}
+
+\kino{　ダミーのルーチン}
+
+\gokansei{　これらのルーチンは機能しません．
+Pro-FORTRANのソースをそのままコンパイルできるように，これらの
+ルーチンは形だけ残してあります．}
+
+%
+%
+%
+\subsection{補助ルーチンのリファレンス}
+%
+FORTRANの不便さを少しでも解消するように用意したルーチンです．
+%
+\subsubsection{msleep(ms)}
+\label{f_msleep}
+
+\kino{　ミリ秒単位で実行を延期する}
+
+{\tt ms}ミリ秒の間，プログラムの実行をなにもせずに待ちます．
+{\tt ms}には{999}までの整数を指定します．
+アニメーション速度の調整に利用できます．
+
+\shiyorei{　\verb|call msleep(100)|}
+%
+\subsubsection{isnan(v,iflg)}
+\label{f_isnan}
+
+\kino{　実数型変数を非数(Not a Number)かどうか調べる}
+
+実数型変数{\tt v}を非数かどうかを調べ，非数なら{\tt iflg}に0以外の
+整数値を返します．
+
+\shiyorei{　\verb|call isnan(x,nf)|}
+%
+\subsubsection{rtoc(v,n,ns,str,m)}
+\label{f_rtoc}
+
+\kino{　実数型変数を文字列に変換する}
+
+実数型変数{\tt v}を小数点{\tt n}桁まで文字列に変換し，
+区切り文字{\tt '$\backslash$0'}を最後に付け足して
+文字型変数{\tt str}に格納します．
+{\tt ns}は{\tt str}
+で確保されている文字数を指定します．
+{\tt m}には{\tt str}に文字列を格納した時に
+余った文字数(整数値)を返し，
+この値が負の場合は{\tt str}で確保されている文字数が足りなかった事を
+示します．
+
+\shiyorei{　\verb|call rtoc(x,4,10,st,m)|}
+%
+%
+%
+\end{document}
+
