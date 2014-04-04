@@ -1,0 +1,205 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Creator: (ImageMagick)
+%Title: (color053.eps2)
+%%CreationDate: (Tue Dec 10 07:33:13 2002)
+%%BoundingBox: 0 0 512 16
+%%LanguageLevel: 2
+%%%%Pages: 0
+%%EndComments
+
+%%BeginDefaults
+%%PageOrientation: Portrait
+%%EndDefaults
+
+%%BeginProlog
+%
+% Display a color image.  The image is displayed in color on
+% Postscript viewers or printers that support color, otherwise
+% it is displayed as grayscale.
+%
+/DirectClassImage
+{
+  %
+  % Display a DirectClass image.
+  %
+  colorspace 0 eq
+  {
+    /DeviceRGB setcolorspace
+    <<
+      /ImageType 1
+      /Width columns
+      /Height rows
+      /BitsPerComponent 8
+      /Decode [0 1 0 1 0 1]
+      /ImageMatrix [columns 0 0 rows neg 0 rows]
+      compression 0 gt
+      { /DataSource pixel_stream }
+      { /DataSource pixel_stream /FlateDecode filter } ifelse
+    >> image
+  }
+  {
+    /DeviceCMYK setcolorspace
+    <<
+      /ImageType 1
+      /Width columns
+      /Height rows
+      /BitsPerComponent 8
+      /Decode [0 1 0 1 0 1 0 1]
+      /ImageMatrix [columns 0 0 rows neg 0 rows]
+      compression 0 gt
+      { /DataSource pixel_stream }
+      { /DataSource pixel_stream /FlateDecode filter } ifelse
+    >> image
+  } ifelse
+} bind def
+
+/PseudoClassImage
+{
+  %
+  % Display a PseudoClass image.
+  %
+  % Parameters:
+  %   colors: number of colors in the colormap.
+  %
+  currentfile buffer readline pop
+  token pop /colors exch def pop
+  colors 0 eq
+  {
+    %
+    % Image is grayscale.
+    %
+    /DeviceGray setcolorspace
+    <<
+      /ImageType 1
+      /Width columns
+      /Height rows
+      /BitsPerComponent 1
+      /Decode [0 1]
+      /ImageMatrix [columns 0 0 rows neg 0 rows]
+      compression 0 gt
+      { /DataSource pixel_stream }
+      {
+        /DataSource pixel_stream
+        <<
+           /K -1
+           /Columns columns
+           /Rows rows
+        >> /CCITTFaxDecode filter
+      } ifelse
+    >> image
+  }
+  {
+    %
+    % Parameters:
+    %   colormap: red, green, blue color packets.
+    %
+    /colormap colors 3 mul string def
+    currentfile colormap readhexstring pop pop
+    [ /Indexed /DeviceRGB colors 1 sub colormap ] setcolorspace
+    <<
+      /ImageType 1
+      /Width columns
+      /Height rows
+      /BitsPerComponent 8
+      /Decode [0 255]
+      /ImageMatrix [columns 0 0 rows neg 0 rows]
+      compression 0 gt
+      { /DataSource pixel_stream }
+      { /DataSource pixel_stream /FlateDecode filter } ifelse
+    >> image
+  } ifelse
+} bind def
+
+/DisplayImage
+{
+  %
+  % Display a DirectClass or PseudoClass image.
+  %
+  % Parameters:
+  %   x & y translation.
+  %   x & y scale.
+  %   label pointsize.
+  %   image label.
+  %   image columns & rows.
+  %   class: 0-DirectClass or 1-PseudoClass.
+  %   colorspace: 0-RGB or 1-CMYK.
+  %   compression: 0-RunlengthEncodedCompression or 1-NoCompression.
+  %   hex color packets.
+  %
+  gsave
+  /buffer 512 string def
+  /pixel_stream currentfile /ASCII85Decode filter def
+
+  currentfile buffer readline pop
+  token pop /x exch def
+  token pop /y exch def pop
+  x y translate
+  currentfile buffer readline pop
+  token pop /x exch def
+  token pop /y exch def pop
+  currentfile buffer readline pop
+  token pop /pointsize exch def pop
+  /Helvetica findfont pointsize scalefont setfont
+  x y scale
+  currentfile buffer readline pop
+  token pop /columns exch def
+  token pop /rows exch def pop
+  currentfile buffer readline pop
+  token pop /class exch def pop
+  currentfile buffer readline pop
+  token pop /colorspace exch def pop
+  currentfile buffer readline pop
+  token pop /compression exch def pop
+  class 0 gt { PseudoClassImage } { DirectClassImage } ifelse
+  grestore
+} bind def
+%%EndProlog
+%%Page:  1 1
+%%PageBoundingBox: 0 0 512 16
+userdict begin
+%%BeginData:
+DisplayImage
+0 0
+512 16
+12.000000
+512 16
+0
+0
+0
+GhVQ7q+k4M*<>SA)s8+9fc13K\IHQGq_V[di,IRtb[h4F&WUhf`l?pQ&g5*nb[LB_agS'])n
+!d7U5GnG<MD+nOtP!I<7[oRC=B%kAS"gTOT;hsBn+$Lr(<Tri?J^IPl4Bm@/&oYp7u)$)QHJe
+W/6S8N/K9EQ/kF_A49($&Z:i1;\MK/0d5cn_-%r@*0DYq5Hqpn=QC>ri[uX#orE'*Prnb?A)=
+Ue0*T6lH-2n5c<&EKEN7bR$Ek1aD+@hl&8i<$m7*Um&Z:)rEKK0>7!0?Oj/D3Y%>1e%0HD)OB=
+%5j/:u'6jC&l#X@lmn;h"Gh6MhWT@lB9c,mlM#d&U&d/espQ7i-3mKgO9kL+^Wr,mClU6C1p'
+Pn)<nMjfAtZPGD3W+?=D(f6,&[?qim2$WjlK7'"OhI;YK(qGB`lR_TJMu3s@I"[VX0QMe_fjn
+=$k*TLpbhkFJIW..BjL"Kae&j>hbBr%+I@$c4f>U+KnMSX;jL0$o5(CGAZ[,laH5^VV=):(,2
+W)\9^DX([lGW_NZ1-aMi8bghE>YK9#Thk6dHuX&GJc7!&aJc)O]Tpt04P3piqgEPo_p)/qcRC
+[e"i#MPM71V[,+So=[1A_2neHNB&i8pjiq&LgNg3Y$`YdInthMl\^L&:o$YY&,+ZA3?(KSSS(
+"4TC/nk&29P3R;QH9_=0s4f[jC0Z82@edds@aOqBFo(_P2fP_UUrgR_Z]nJ&/Xe2rWdOl,B.O
+F(a9uAmIA#B5HFeC#gt6fr%Lp3teCgcAqIB.e6(:nhq5.LPFT[,O_DKD'ngdN,j\@rQp[Mf@fS
+%(](%IkWQZYB:d`XDpD^<SK80K:BGcj&*,q_o):Dsn#K:D2rWbuaKTTXUV;eSr$[\Fa/A>NB'
+^l+rd)0F\!6I$[&Q&?`C[Y`RaGlpl9*5W5Kk/D/Pl+V_1d@T:B.BInB[9:+%sl9QX0X"il6o!
+pR\"jop'ptbGqt0lLh&4p]":ki)/=jLNQsOVV&C[^\N`Wq+&T0[>("i2S<41h#:74c3LB*S#X
+/GReCYV*W,q&]S=0JnKS]r]S'LK\9/:j)0">Agbsl@-?5Lr\*@q5VWh4=F>Te>h6/m+;&sbYp
+=gP\=rVXSPrgJW[^,mtUAe_`@S:&%]V9SUZt?)3qMTsja151\ZK:g:.bA5HCFSAGa^qpo9AYj
+HhhW_m*`Zk`cX.+*1Pg+L7G/IY13J2-&YClX?F!=TC9(QrasC3L/?Nq`-tgR:1#m9l0cBV^<*
+Fs>)CD/26rCp3Fs8Y..)c&^fRDZs+24Kdce3s:ipObFESOhR:FCL-#Lo)7(U36-ltM#!29:dj
+9LV8[,b0HSdZA-''$ENc9I'Y683+%f-bC)\WDjp+k0?Zp^bWP^=h[Ya!cG0&QS7nX'RLXM#YM
+r99-])4A&9bUU<gj"b7g)>PLF8E1@*BZ'PE<h1Wl!9eW%-4Wr+3VYdM$OlWe.R980tMXKJ[?n
+pJ\U8)7E_rDH^LV-A)U#J\Z5mUfhLmCp"jrTEVZFKQ-th&kp-38F9(nA*M8_.W&lc-_[:USD$
+3btH=6/$3\n40^T=h]9>5VjlJn>s&t=F>uJ_An'n9ips@'p-aDLW]/T&=)GmGNL70e$Wb,X,o
+0:4`FEBALff+#X;hj'#D?f`0^TJ7?O68LK]OSunq5fiS_ipHK)BqHgmfKG-HIRpjJ-_cJW@C@
+,M0uW[4u]%CUp:L]W8<MV6O8E24N-.j+tf2@[\3A+bj%)K?M/b976o#*W:mJI7@6*JtcmahE=
+rkFg\I&OOJ1qrVUJHqdjKrN21#GqV5%Po0kAt.;ZTRV]rbl-MY`'SmmX_Vff']A_3m6<Pt2OL
+f$/tYNW;Cl_0Vf;i3Z!_Xg<I)j8g)j>8+730L7-dMjU?H>6V(/Z"2n>]iYbQB>"[Pa#X^`=C:
+Lc;FD?&\7=<fq'?)52nBtU,7ud,t*h7i@BoXN_f/'9BJafg`j(0_t1F4-'$tWNi3-q.[g8q_l
+s$RAFMh]&-'QIn3?g]s24m+5Pu&l_uK3jr"&hFs6r8N&-'QIn3?g]s24m+5Pu&l_uK3jr"&hF
+s6r8N&-'QIn3?g]s24m+5Pu&l_uK3jr"&hFs6r8N&-'QIn3?g]s24m+5Pu&l_uK3jr"&hFs6r
+8N&-'QIn3?g]s24m+5Pu&l_uK3jr"&hFs6r8N&-'QIn3?g]s24m+s8VclrrC0RGT?~>
+
+%%EndData
+end
+%%PageTrailer
+%%Trailer
+%%BoundingBox: 0 0 512 16
+%%EOF
