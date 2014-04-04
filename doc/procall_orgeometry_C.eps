@@ -1,0 +1,461 @@
+%!
+%%BoundingBox: 34 574 289 757
+%%Title: procall_orgeometry_C
+%%CreationDate: Wed Jun 28 13:31:21 2000
+%%Creator: Tgif-4.1.16 by William Chia-Wei Cheng (william@cs.UCLA.edu)
+
+/tgifdict 86 dict def
+tgifdict begin
+
+/tgifarrowtipdict 8 dict def
+tgifarrowtipdict /mtrx matrix put
+
+/TGAT % tgifarrowtip
+ { tgifarrowtipdict begin
+      /dy exch def
+      /dx exch def
+      /h exch def
+      /w exch def
+      /y exch def
+      /x exch def
+      /savematrix mtrx currentmatrix def
+      x y translate
+      dy dx atan rotate
+      0 0 moveto
+      w neg h lineto
+      w neg h neg lineto
+      savematrix setmatrix
+   end
+ } def
+
+/tgifpatdict 10 dict def
+
+/tgifpatbyte
+ { currentdict /retstr get exch
+   pat i cellsz mod get put
+ } def
+
+/tgifpatproc
+ { 0 1 widthlim {tgifpatbyte} for retstr
+   /i i 1 add def
+ } def
+
+/TGPF % tgifpatfill
+ { tgifpatdict begin
+      /h exch def
+      /w exch def
+      /lty exch def
+      /ltx exch def
+      /cellsz exch def
+      /pat exch def
+
+      /widthlim w cellsz div cvi 1 sub def
+      /retstr widthlim 1 add string def
+      /i 0 def
+
+      tgiforigctm setmatrix
+      ltx lty translate
+      w h true [1 0 0 1 0 0] {tgifpatproc} imagemask
+      ltx neg lty neg translate
+   end
+ } def
+
+/pat3 <8000000008000000> def
+/pat4 <8800000022000000> def
+/pat5 <8800220088002200> def
+/pat6 <8822882288228822> def
+/pat7 <aa55aa55aa55aa55> def
+/pat8 <77dd77dd77dd77dd> def
+/pat9 <77ffddff77ffddff> def
+/pat10 <77ffffff77ffffff> def
+/pat11 <7fffffff7fffffff> def
+/pat12 <8040200002040800> def
+/pat13 <40a00000040a0000> def
+/pat14 <ff888888ff888888> def
+/pat15 <ff808080ff080808> def
+/pat16 <f87422478f172271> def
+/pat17 <038448300c020101> def
+/pat18 <081c22c180010204> def
+/pat19 <8080413e080814e3> def
+/pat20 <8040201008040201> def
+/pat21 <8844221188442211> def
+/pat22 <77bbddee77bbddee> def
+/pat23 <c1e070381c0e0783> def
+/pat24 <7fbfdfeff7fbfdfe> def
+/pat25 <3e1f8fc7e3f1f87c> def
+/pat26 <0102040810204080> def
+/pat27 <1122448811224488> def
+/pat28 <eeddbb77eeddbb77> def
+/pat29 <83070e1c3870e0c1> def
+/pat30 <fefdfbf7efdfbf7f> def
+/pat31 <7cf8f1e3c78f1f3e> def
+
+/TGMAX
+ { exch dup 3 1 roll exch dup 3 1 roll gt { pop } { exch pop } ifelse
+ } def
+/TGMIN
+ { exch dup 3 1 roll exch dup 3 1 roll lt { pop } { exch pop } ifelse
+ } def
+/TGSW { stringwidth pop } def
+
+/bd { bind def } bind def
+
+/GS { gsave } bd
+/GR { grestore } bd
+/NP { newpath } bd
+/CP { closepath } bd
+/CHP { charpath } bd
+/CT { curveto } bd
+/L { lineto } bd
+/RL { rlineto } bd
+/M { moveto } bd
+/RM { rmoveto } bd
+/S { stroke } bd
+/F { fill } bd
+/TR { translate } bd
+/RO { rotate } bd
+/SC { scale } bd
+/MU { mul } bd
+/DI { div } bd
+/DU { dup } bd
+/NE { neg } bd
+/AD { add } bd
+/SU { sub } bd
+/PO { pop } bd
+/EX { exch } bd
+/CO { concat } bd
+/CL { clip } bd
+/EC { eoclip } bd
+/EF { eofill } bd
+/IM { image } bd
+/IMM { imagemask } bd
+/ARY { array } bd
+/SG { setgray } bd
+/RG { setrgbcolor } bd
+/SD { setdash } bd
+/W { setlinewidth } bd
+/SM { setmiterlimit } bd
+/SLC { setlinecap } bd
+/SLJ { setlinejoin } bd
+/SH { show } bd
+/FF { findfont } bd
+/MS { makefont setfont } bd
+/AR { arcto 4 {pop} repeat } bd
+/CURP { currentpoint } bd
+/FLAT { flattenpath strokepath clip newpath } bd
+/TGSM { tgiforigctm setmatrix } def
+/TGRM { savematrix setmatrix } def
+
+end
+
+tgifdict begin
+/tgifsavedpage save def
+
+1 SM
+1 W
+
+0 SG
+
+72 0 MU 72 11 MU TR
+72 128 DI 100.000 MU 100 DI DU NE SC
+
+GS
+
+/tgiforigctm matrix currentmatrix def
+
+% BOX
+0 SG
+GS
+   10 SM
+   GS
+      NP 64 64 M 512 64 L 512 384 L 64 384 L CP
+      S
+   GR
+GR
+
+% BOX
+0 SG
+GS
+   NP 128 144 M 368 144 L 368 304 L 128 304 L CP 1 SG F
+   0 SG
+   NP 128 144 M 368 144 L 368 304 L 128 304 L CP EC NP
+   pat6 8 120 136 256 176 TGPF
+GR
+GS
+   10 SM
+   GS
+      NP 128 144 M 368 144 L 368 304 L 128 304 L CP
+      S
+   GR
+GR
+
+% BOX
+0 SG
+NP 144 160 M 352 160 L 352 288 L 144 288 L CP 1 SG F
+   0 SG
+GS
+   10 SM
+   GS
+      NP 144 160 M 352 160 L 352 288 L 144 288 L CP
+      S
+   GR
+GR
+
+% TEXT
+NP
+0 SG
+   GS
+      1 W
+      404 340 M
+      GS
+        GS
+        0
+            /Ryumin-Light-EUC-H FF dup /WMode known {dup /WMode get 1 eq {[0 1 -1 0 0 0.3] makefont} if} if
+[14 0 0 -14 0 0] MS
+            (\245\353\241\274\245\310\245\246\245\243\245\363\245\311\245\245) TGSW 
+        AD
+        GR
+      2 DI NE 0 RM
+            0 SG
+            /Ryumin-Light-EUC-H FF dup /WMode known {dup /WMode get 1 eq {[0 1 -1 0 0 0.3] makefont} if} if
+[14 0 0 -14 0 0] MS
+            (\245\353\241\274\245\310\245\246\245\243\245\363\245\311\245\245) SH
+      GR
+   GR
+
+% POLY/OPEN-SPLINE
+0 SG
+GS
+   NP
+      128 64 M
+      80 0 atan DU cos 8.000 MU exch sin 8.000 MU RM
+      80 0 atan DU cos 8.000 MU 128 exch SU
+      exch sin 8.000 MU 144 exch SU L
+   TGSM
+   1 W
+   S
+GR
+GS
+   TGSM
+   NP
+      128 64 8.000 3.000 0 -80 TGAT
+   1 SG CP F
+   0 SG
+   NP
+      128 64 8.000 3.000 0 -80 TGAT
+   CP F
+GR
+GS
+   TGSM
+   NP
+      128 144 8.000 3.000 0 80 TGAT
+   1 SG CP F
+   0 SG
+   NP
+      128 144 8.000 3.000 0 80 TGAT
+   CP F
+GR
+
+% POLY/OPEN-SPLINE
+0 SG
+GS
+   NP
+      128 144 M
+      0 -64 atan DU cos 8.000 MU exch sin 8.000 MU RM
+      0 -64 atan DU cos 8.000 MU 64 exch SU
+      exch sin 8.000 MU 144 exch SU L
+   TGSM
+   1 W
+   S
+GR
+GS
+   TGSM
+   NP
+      128 144 8.000 3.000 64 0 TGAT
+   1 SG CP F
+   0 SG
+   NP
+      128 144 8.000 3.000 64 0 TGAT
+   CP F
+GR
+GS
+   TGSM
+   NP
+      64 144 8.000 3.000 -64 0 TGAT
+   1 SG CP F
+   0 SG
+   NP
+      64 144 8.000 3.000 -64 0 TGAT
+   CP F
+GR
+
+% TEXT
+NP
+0 SG
+   GS
+      1 W
+      88 160 M
+      GS
+            0 SG
+            /Courier FF [14 0 0 -14 0 0] MS
+            (x) SH
+      GR
+   GR
+
+% TEXT
+NP
+0 SG
+   GS
+      1 W
+      136 108 M
+      GS
+            0 SG
+            /Courier FF [14 0 0 -14 0 0] MS
+            (y) SH
+      GR
+   GR
+
+% POLY/OPEN-SPLINE
+0 SG
+GS
+   NP
+      372 160 M
+      404 160 L
+   TGSM
+   1 W
+   S
+GR
+
+% POLY/OPEN-SPLINE
+0 SG
+GS
+   NP
+      372 144 M
+      404 144 L
+   TGSM
+   1 W
+   S
+GR
+
+% POLY/OPEN-SPLINE
+0 SG
+GS
+   NP
+      392 160 M
+      392 144 L
+   TGSM
+   1 W
+   S
+GR
+
+% POLY/OPEN-SPLINE
+0 SG
+GS
+   NP
+      392 176 M
+      -16 0 atan DU cos 8.000 MU 392 exch SU
+      exch sin 8.000 MU 160 exch SU L
+   TGSM
+   1 W
+   S
+GR
+GS
+   TGSM
+   NP
+      392 160 8.000 3.000 0 -16 TGAT
+   1 SG CP F
+   0 SG
+   NP
+      392 160 8.000 3.000 0 -16 TGAT
+   CP F
+GR
+
+% POLY/OPEN-SPLINE
+0 SG
+GS
+   NP
+      392 124 M
+      20 0 atan DU cos 8.000 MU 392 exch SU
+      exch sin 8.000 MU 144 exch SU L
+   TGSM
+   1 W
+   S
+GR
+GS
+   TGSM
+   NP
+      392 144 8.000 3.000 0 20 TGAT
+   1 SG CP F
+   0 SG
+   NP
+      392 144 8.000 3.000 0 20 TGAT
+   CP F
+GR
+
+% TEXT
+NP
+0 SG
+   GS
+      1 W
+      408 156 M
+      GS
+            0 SG
+            /Courier FF [14 0 0 -14 0 0] MS
+            (bw) SH
+      GR
+   GR
+
+% TEXT
+NP
+0 SG
+   GS
+      1 W
+      160 224 M
+      GS
+            0 SG
+            /Ryumin-Light-EUC-H FF dup /WMode known {dup /WMode get 1 eq {[0 1 -1 0 0 0.3] makefont} if} if
+[14 0 0 -14 0 0] MS
+            (\245\260\245\351\245\325\245\243\245\303\245\257\245\271\241\246\245\246\245\243\245\363\245\311\245\245) SH
+      GR
+   GR
+
+% TEXT
+NP
+0 SG
+   GS
+      1 W
+      404 360 M
+      GS
+        GS
+        0
+            /Times-Roman FF [14 0 0 -14 0 0] MS
+            (\() TGSW 
+        AD
+            /Ryumin-Light-EUC-H FF dup /WMode known {dup /WMode get 1 eq {[0 1 -1 0 0 0.3] makefont} if} if
+[14 0 0 -14 0 0] MS
+            (\245\307\245\271\245\257\245\310\245\303\245\327) TGSW 
+        AD
+            /Times-Roman FF [14 0 0 -14 0 0] MS
+            (\)) TGSW 
+        AD
+        GR
+      2 DI NE 0 RM
+            0 SG
+            /Times-Roman FF [14 0 0 -14 0 0] MS
+            (\() SH
+            0 SG
+            /Ryumin-Light-EUC-H FF dup /WMode known {dup /WMode get 1 eq {[0 1 -1 0 0 0.3] makefont} if} if
+[14 0 0 -14 0 0] MS
+            (\245\307\245\271\245\257\245\310\245\303\245\327) SH
+            0 SG
+            /Times-Roman FF [14 0 0 -14 0 0] MS
+            (\)) SH
+      GR
+   GR
+
+GR
+tgifsavedpage restore
+end
+showpage
+
+%MatchingCreationDate: Wed Jun 28 13:31:21 2000
