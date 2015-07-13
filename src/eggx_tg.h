@@ -1,5 +1,5 @@
 /* -*- Mode: C ; Coding: euc-japan -*- */
-/* Time-stamp: <2010-02-25 20:35:39 cyamauch> */
+/* Time-stamp: <2015-07-13 17:28:11 cyamauch> */
 
 /*
   EGGX / ProCALL  version 0.93
@@ -11,7 +11,11 @@
 
 #include <eggx_base.h>
 
+#ifdef __cplusplus
+#define __EGGX_TG_SZNL (sizeof(*((char *)0)))
+#else
 #define __EGGX_TG_SZNL (sizeof(*((void *)0)))
+#endif
 
 #define __EGGX_TG_PARGTP(V1,V2)						      \
     __typeof__( (sizeof(*(V1)) != __EGGX_TG_SZNL) ? *(V1) : ((sizeof(*(V2)) != __EGGX_TG_SZNL) ? *(V2) : *(V1)) )
