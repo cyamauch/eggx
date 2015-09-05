@@ -1,5 +1,5 @@
 /* -*- Mode: text ; Coding: euc-japan -*- */
-/* Time-stamp: <2011-06-16 16:52:54 cyamauch> */
+/* Time-stamp: <2015-09-05 20:29:56 cyamauch> */
 
 	-- ChangeLog --
 
@@ -152,7 +152,7 @@
 	drawcirc()，fillcirc()，drawpoly()，drawlines() を追加．
 	drawpts()，drawsyms()，gsetnonflush()，ggetnonflush()，gflush()を追加
 	ggetch()，ggetxpress() の仕様を変更．
-	(0.90)
+	(0.90 2010/1/31)
 
 	割り込みの利用を最小限化．
 	drawarrow() のバグ修正，描画精度の改善．
@@ -175,7 +175,7 @@
 	to 松田様(東京電機大学)
 	群れのシミュレーションコード，楕円や星等を回転させて描画するサンプル
 	を収録．Thanks to 安田様(京都産業大学)
-	(0.91)
+	(0.91 2010/2/19)
 
 	API が float，double 両用になった．
 	親子通信用の「見えない窓」を開き，それで全ての通信をするようにした．
@@ -184,7 +184,7 @@
 	TECHNICAL.ja を収録．
 	ウィンドゥ属性 TOPLEFTORIGIN を BOTTOMLEFTORIGIN に変更．
 	ggetinitialattributes() 関数を追加．
-	(0.92)
+	(0.92 2010/2/23)
 
 	XFree86以外のXサーバでは，ブロッキングモードでうまくモーションイベン
 	トが拾えないので，イベント処理を大幅改造．自前でマウスポインタの位置
@@ -206,7 +206,7 @@
 	Thanks to 松田様(東京電機大学)
 	XCopyArea() の問題の修正(XCreateGC() の後に XSetGraphicsExposures()
         を追加。Thanks to 松田様(東京電機大学)
-	(0.93)
+	(0.93 2010/3/8)
 
 	readimage(), writeimage() 等で convert を使用する時、一時ファイルを
 	作らないように改良。
@@ -218,11 +218,14 @@
 
 	GUI付物理系のシミュレーション・コードのセットを20100328版に更新．
 	Thanks to 松田様(東京電機大学)
-	(0.93r2)
+	(0.93r2 2010/3/30)
 
 	英語ドキュメントの整備
-	(0.93r3)
+	(0.93r3 2010/4/14)
 
 	GUI付物理系のシミュレーション・コードのセットを20110310版に更新．
 	Thanks to 松田様(東京電機大学)
-	(0.93r4)
+	(0.93r4 2011/6/17)
+
+	eggx_tg.h の C++ での問題を修正．
+	(0.93r5 2015/9/5)
