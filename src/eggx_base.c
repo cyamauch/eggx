@@ -730,7 +730,7 @@ static char *get_procname( pid_t pd )
 
     if( name != NULL ) free(name) ;
     ret = _eggx_xstrdup(ptr);
-    free(buf) ;
+    if( buf  != NULL ) free(buf) ;
     return( ret ) ;
  err:
     if( buf  != NULL ) free(buf) ;
@@ -1225,7 +1225,10 @@ int eggx_ggetdisplayinfo( int *rt_depth, int *root_width, int *root_height )
 	visual_info.screen = DefaultScreen(Pc_dis) ;
 	visual_info.class  = TrueColor ;
 
-	if( Pc_vinfo_ptr!=NULL ) XFree((char *)Pc_vinfo_ptr) ;
+	if( Pc_vinfo_ptr!=NULL ) {
+	    XFree((char *)Pc_vinfo_ptr) ;
+	    Pc_vinfo_ptr=NULL ;
+	}
 	Pc_vinfo_ptr = XGetVisualInfo( Pc_dis, 
 				       VisualScreenMask | VisualClassMask,
 				       &visual_info, &num_visual ) ;
@@ -1337,7 +1340,7 @@ static void resize_Pc( int new_n )
 {
     struct pctg * new_pc;
     struct pctg * old_pc;
-    int i, old_n;
+    int i, j, old_n;
 
     if ( N_Pc == new_n ) return;
 
@@ -1352,8 +1355,20 @@ static void resize_Pc( int new_n )
     }
     for ( i=old_n ; i < new_n ; i++ ) {
 	new_pc[i].flg = 0;
+	new_pc[i].pwin = None;
+	new_pc[i].clipwin = None;
+	new_pc[i].hsbarwin = None;
+	new_pc[i].vsbarwin = None;
+	new_pc[i].win = None;
+	new_pc[i].iconwin = None;
+	for ( j=0 ; j < MAX_NLAYER ; j++ ) new_pc[i].pix[j] = None;
+	new_pc[i].pxgc = None;
+	new_pc[i].bggc = None;
 	new_pc[i].fsz = -1;
 	new_pc[i].fontstruct = NULL;
+	new_pc[i].fontset = NULL;
+	new_pc[i].gc = None;
+	new_pc[i].tmppix = None;
     }
     /* */
     Pc = new_pc ;
@@ -1479,6 +1494,8 @@ void gopen_( integer *xsize, integer *ysize, integer *rtnum )
 #if 0
     int f ;
 #endif
+    /* */
+    const char *pname_to_disp = NULL ;
     /* スクロールバー用のピクセル値 */
     unsigned long wd_background_pixel = 0 ;
     unsigned long wd_shadow_pixel = 0 ;
@@ -1657,10 +1674,11 @@ void gopen_( integer *xsize, integer *ysize, integer *rtnum )
 				 CWOverrideRedirect, &att );
     }
 
-    if( Pc_storename != NULL )
-	XStoreName( Pc_dis, Pc[num].pwin, Pc_storename ) ;
-    else
-	XStoreName( Pc_dis, Pc[num].pwin, Pname ) ;
+    if( Pc_storename != NULL ) pname_to_disp = Pc_storename ;
+    else pname_to_disp = Pname ;
+
+    XStoreName( Pc_dis, Pc[num].pwin, pname_to_disp ) ;
+    
     if( Pc_iconname != NULL )
 	XSetIconName( Pc_dis, Pc[num].pwin, Pc_iconname ) ;
     else
@@ -1679,10 +1697,7 @@ void gopen_( integer *xsize, integer *ysize, integer *rtnum )
     }
 
     if( Pc[num].iconwin != None ){
-	if( Pc_storename != NULL )
-	    XStoreName( Pc_dis, Pc[num].iconwin, Pc_storename ) ;
-	else
-	    XStoreName( Pc_dis, Pc[num].iconwin, Pname ) ;
+	XStoreName( Pc_dis, Pc[num].iconwin, pname_to_disp ) ;
 	if( Pc_iconname != NULL )
 	    XSetIconName( Pc_dis, Pc[num].iconwin, Pc_iconname ) ;
 	else
@@ -1730,6 +1745,7 @@ void gopen_( integer *xsize, integer *ysize, integer *rtnum )
 
     XSetForeground( Pc_dis, Pc[num].gc, get_color_pixel("#ffffff") ) ;
 
+    Pc[num].fontstruct = NULL ;
     /* フォントセット */
     Pc[num].fontset = NULL ;
     
@@ -1816,6 +1832,7 @@ void gopen_( integer *xsize, integer *ysize, integer *rtnum )
     if ( 1 /* Pc[num].attributes & AUTOREDRAW */ ) {
 
 	send_command_to_child(num, MCODE_PWIN_ID, Pc[num].pwin, False);
+	//fprintf(stderr,"eggx: [DEBUG] pwin=%ld\n", (long)Pc[num].pwin);
 	send_command_to_child(num, MCODE_CLIPWIN_ID, Pc[num].clipwin, False);
 	send_command_to_child(num, MCODE_HSBARWIN_ID, Pc[num].hsbarwin, False);
 	send_command_to_child(num, MCODE_VSBARWIN_ID, Pc[num].vsbarwin, False);
@@ -1823,9 +1840,46 @@ void gopen_( integer *xsize, integer *ysize, integer *rtnum )
 	send_command_to_child(num, MCODE_ICONWIN_ID, Pc[num].iconwin, False);
 	send_command_to_child(num, MCODE_BL_ORIGIN, 
 			(Pc[num].attributes & BOTTOM_LEFT_ORIGIN) != 0, False);
-	send_command_to_child(num, MCODE_PIXMAP_ID, Pc[num].pix[0], False);
+	send_command_to_child(num, MCODE_PIXMAP_ID, Pc[num].pix[0], True);
+
+	XSync( Pc_dis, 0 );
+
+	{
+	    /* eggx_msleep(100) ; */
+	    /*
+	      HACK to CYGWIN problem [2020.9.15]
+	      Ad hoc bug fix for Xwin crash
+	    */
+	    char *pname1 = NULL;
+	    /* change window name --- force to update this window */
+	    pname1 = _eggx_asprintf("%s ",pname_to_disp) ;
+	    XStoreName( Pc_dis, Pc[num].pwin, pname1 ) ;
+	    XFlush( Pc_dis ) ;
+	    XSync( Pc_dis, 0 ) ;
+	    /* */
+	    XStoreName( Pc_dis, Pc[num].pwin, pname_to_disp ) ;
+	    XFlush( Pc_dis ) ;
+	    if ( pname1 != NULL ) free(pname1);
+	}
+
+	/*
+	{
+	    Status st;
+	    XWindowAttributes junk;
+	    st = XGetWindowAttributes( Pc_dis, Pc[num].pwin, &junk );
+	    fprintf(stderr,"EGGX: [DEBUG] st=%d\n", (int)st);
+	    st = XGetWindowAttributes( Pc_dis, Pc[num].clipwin, &junk );
+	    fprintf(stderr,"EGGX: [DEBUG]  st=%d\n", (int)st);
+	    st = XGetWindowAttributes( Pc_dis, Pc[num].win, &junk );
+	    fprintf(stderr,"EGGX: [DEBUG]   st=%d\n", (int)st);
+	}
+	*/
+	
+	XSync( Pc_dis, 0 );
+
 	send_command_to_child(num, MCODE_ENABLE, None, False);
 	
+	/* */
 	XSelectInput( Pc_dis, Pc_zwin, ExposureMask );
 
 	send_command_to_child(0, MCODE_NEEDS_REPLY, None, True);
@@ -1847,6 +1901,9 @@ void gopen_( integer *xsize, integer *ysize, integer *rtnum )
 	Pc[num].sbarkeymask = SCROLLBAR_DEFAULT_KEYMASK;
 	/* キーマスク情報を子に送信 */
 	send_command_to_child(num, MCODE_KEYMASK, Pc[num].sbarkeymask, True);
+
+	
+	XSync( Pc_dis, 0 );
     }
 
     restore_xinput_selection( num );
@@ -1892,27 +1949,45 @@ void eggx_gclose( int wn )
     }
     /* */
     XFreeGC( Pc_dis, Pc[wn].pxgc ) ;
+    Pc[wn].pxgc = None;
     XFreeGC( Pc_dis, Pc[wn].bggc ) ;
+    Pc[wn].bggc = None;
     XFreeGC( Pc_dis, Pc[wn].gc ) ;
+    Pc[wn].gc = None;
     /* */
     for ( i=0 ; i < MAX_NLAYER ; i++ ) {
-	if ( Pc[wn].pix[i] != None ) XFreePixmap( Pc_dis, Pc[wn].pix[i] ) ;
+	if ( Pc[wn].pix[i] != None ) {
+	    XFreePixmap( Pc_dis, Pc[wn].pix[i] ) ;
+	    Pc[wn].pix[i] = None;
+	}
     }
-    if ( Pc[wn].tmppix != None ) XFreePixmap( Pc_dis, Pc[wn].tmppix ) ;
-    /* */
-    if (Pc[wn].win != Pc[wn].clipwin) XDestroyWindow(Pc_dis, Pc[wn].win);
-    if (Pc[wn].clipwin != Pc[wn].pwin) XDestroyWindow(Pc_dis, Pc[wn].clipwin);
-    if (Pc[wn].hsbarwin != None) XDestroyWindow(Pc_dis, Pc[wn].hsbarwin);
-    if (Pc[wn].vsbarwin != None) XDestroyWindow(Pc_dis, Pc[wn].vsbarwin);
-    XDestroyWindow(Pc_dis, Pc[wn].pwin);
-    if ( Pc[wn].iconwin != None )
-	XDestroyWindow( Pc_dis, Pc[wn].iconwin ) ;
+    if ( Pc[wn].tmppix != None ) {
+	XFreePixmap( Pc_dis, Pc[wn].tmppix ) ;
+	Pc[wn].tmppix = None;
+    }
     /* */
     Pc[wn].fontset = NULL;
     if ( Pc[wn].fontstruct != NULL ) {
 	XFreeFont(Pc_dis,Pc[wn].fontstruct) ;
 	Pc[wn].fontstruct = NULL ;
     }
+    /* */
+    //if (Pc[wn].win != Pc[wn].clipwin) XDestroyWindow(Pc_dis, Pc[wn].win);
+    //if (Pc[wn].clipwin != Pc[wn].pwin) XDestroyWindow(Pc_dis, Pc[wn].clipwin);
+    //if (Pc[wn].hsbarwin != None) XDestroyWindow(Pc_dis, Pc[wn].hsbarwin);
+    //if (Pc[wn].vsbarwin != None) XDestroyWindow(Pc_dis, Pc[wn].vsbarwin);
+    XDestroySubwindows(Pc_dis, Pc[wn].pwin);
+    XDestroyWindow(Pc_dis, Pc[wn].pwin);
+    Pc[wn].pwin = None;
+    Pc[wn].clipwin = None;
+    Pc[wn].hsbarwin = None;
+    Pc[wn].vsbarwin = None;
+    Pc[wn].win = None;
+    if ( Pc[wn].iconwin != None ) {
+	XDestroyWindow( Pc_dis, Pc[wn].iconwin ) ;
+	Pc[wn].iconwin = None;
+    }
+    /* */
     Pc[wn].fsz=-1;
     Ihflg=0 ;	/* 割り込み禁止解除 */
     chkexit() ;
@@ -1978,6 +2053,7 @@ void eggx_gcloseall( void )
     }
     if ( 0 < Pix_mask_width ) {
 	XFreeGC( Pc_dis, Gc_pix_mask );
+	Gc_pix_mask = None;
 	XFreePixmap( Pc_dis, Pix_mask );
 	Pix_mask = None;
 	Pix_mask_width = 0;
@@ -1990,6 +2066,7 @@ void eggx_gcloseall( void )
     }
     if ( Pc_cmap != DefaultColormap(Pc_dis,DefaultScreen(Pc_dis)) ) {
 	XFreeColormap(Pc_dis,Pc_cmap);
+	Pc_cmap = None;
     }
     if ( Pc_vinfo_ptr != NULL ) {
 	XFree((char *)Pc_vinfo_ptr);
@@ -4091,6 +4168,8 @@ int eggx_putimg24( int wn, double x, double y,
 	image.bitmap_unit      = 32;
 	image.bitmap_pad       = 32;
 	image.depth            = 24;
+	/* fprintf(stderr, "[DEBUG] Red_sft = %d, Green_sft = %d, Blue_sft = %d\n",
+		   Red_sft, Green_sft, Blue_sft); */
 	if ( Red_sft == 16 && Green_sft == 8 && Blue_sft == 0 ) {
 	    image.data             = (char *)buf;
 	}
@@ -4229,6 +4308,7 @@ int eggx_putimg24m( int wn, double x, double y,
 	XGCValues tmp_gv;
 	if ( 0 < Pix_mask_width ) {
 	    XFreeGC( Pc_dis, Gc_pix_mask );
+	    Gc_pix_mask = None;
 	    XFreePixmap( Pc_dis, Pix_mask );
 	    Pix_mask = None;
 	    Pix_mask_width = 0;
