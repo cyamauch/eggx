@@ -69,27 +69,59 @@ fi
 
 s_match () { case $1 in $2) return 0; ;; *) return 1; ;; esac ; }
 
+get_bin_name() {
+  echo $1 | sed -e 's/\(.*\)\(\.\)\([^\.]*\)/\1/'
+}
+
 COMPILER=""
+FIRST_CX=""
+ARG_OC=0
 for i in $@ ; do
   if s_match "$i" "*.c" ; then
     COMPILER="C"
+    if [ "$FIRST_CX" = "" ]; then
+      FIRST_CX=$i
+    fi
   elif s_match "$i" "*.cc" ; then
     COMPILER="C++"
-  elif s_match "$i" "*.f" ; then
+    if [ "$FIRST_CX" = "" ]; then
+      FIRST_CX=$i
+    fi
+  elif s_match "$i" "*.cpp" ; then
+    COMPILER="C++"
+    if [ "$FIRST_CX" = "" ]; then
+      FIRST_CX=$i
+    fi
+  elif s_match "$i" "*.cc" ; then
     COMPILER="FORTRAN"
+    if [ "$FIRST_CX" = "" ]; then
+      FIRST_CX=$i
+    fi
+  elif [ "$i" = "-o" ]; then
+    ARG_OC=1
+  elif [ "$i" = "-c" ]; then
+    ARG_OC=1
   fi
 done
 
+if [ $ARG_OC = 0 -a "$FIRST_CX" != "" ]; then
+  BIN_NAME="`get_bin_name $FIRST_CX`"
+  ARGS="$@ -o $BIN_NAME"
+else
+  ARGS="$@"
+fi
+
+
 if [ "$COMPILER" = "C" ] ; then
-  CMD="$USERCC $USERCCFLAGS $@ $LOCALINC $LOCALLIB $IINC $LLIB $LLINKS"
+  CMD="$USERCC $USERCCFLAGS $ARGS $LOCALINC $LOCALLIB $IINC $LLIB $LLINKS"
   echo "$CMD"
   $CMD
 elif [ "$COMPILER" = "C++" ] ; then
-  CMD="$USERCPPC $USERCPPCFLAGS $@ $LOCALINC $LOCALLIB $IINC $LLIB $LLINKS"
+  CMD="$USERCPPC $USERCPPCFLAGS $ARGS $LOCALINC $LOCALLIB $IINC $LLIB $LLINKS"
   echo "$CMD"
   $CMD
 elif [ "$COMPILER" = "FORTRAN" ] ; then
-  CMD="$USERFC $USERFCFLAGS $@ $LOCALLIB $LLIB $LLINKS"
+  CMD="$USERFC $USERFCFLAGS $ARGS $LOCALLIB $LLIB $LLINKS"
   echo "$CMD"
   $CMD
 else
