@@ -1205,7 +1205,7 @@ void gflush_( void )
 /* ============= X サーバとのやりとりを扱う関数 ============= */
 
 /* displayをopenし，depthなどを調べる */
-int eggx_ggetdisplayinfo( int *rt_depth, int *root_width, int *root_height )
+int eggx_ggetdisplayinfo( int *rt_depth, int *rt_root_width, int *rt_root_height )
 {
     if ( Pc_dis == NULL ) {
 	XVisualInfo visual_info;
@@ -1218,8 +1218,8 @@ int eggx_ggetdisplayinfo( int *rt_depth, int *root_width, int *root_height )
 	Pc_dis=XOpenDisplay(NULL) ;
 	if( Pc_dis==NULL ){
 	    if( rt_depth != NULL ) *rt_depth=-1 ;
-	    if( root_width != NULL ) *root_width=-1 ;
-	    if( root_height != NULL ) *root_height=-1 ;
+	    if( rt_root_width != NULL ) *rt_root_width=-1 ;
+	    if( rt_root_height != NULL ) *rt_root_height=-1 ;
 	    return(-1) ;
 	}
 	/* Visualの決定 */
@@ -1323,8 +1323,8 @@ int eggx_ggetdisplayinfo( int *rt_depth, int *root_width, int *root_height )
 	}
     }
     if( rt_depth != NULL ) *rt_depth = Pc_depth ;
-    if( root_width != NULL ) *root_width  = Pc_root_width ;
-    if( root_height != NULL ) *root_height = Pc_root_height ;
+    if( rt_root_width != NULL ) *rt_root_width  = Pc_root_width ;
+    if( rt_root_height != NULL ) *rt_root_height = Pc_root_height ;
     return( 0 ) ;
 }
 

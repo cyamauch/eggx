@@ -114,11 +114,10 @@ typedef struct _eggx_color_prms {
 #define EGGX_COLOR_NUM		(DS9_NUM+IDL1_NUM+IDL2_NUM)
 
 
-extern int eggx_generatecolor( eggx_color_prms *,
-			       double, double, double ,
-			       int *, int *, int * ) ;
-extern int eggx_makecolor( int , double , double , double ,
-			   int *, int *, int * ) ;
+extern int eggx_generatecolor( eggx_color_prms *p, double dmin, double dmax,
+			    double in_data, int *rt_r, int *rt_g, int *rt_b ) ;
+extern int eggx_makecolor( int cmode, double d_min, double d_max, double data,
+			   int *rt_r, int *rt_g, int *rt_b ) ;
 
 #ifdef __cplusplus
 }
