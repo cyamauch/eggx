@@ -117,6 +117,7 @@ struct pctg {
     double scaley ;
     int prevx ;			/* moveto(), lineto() で記憶している座標 */
     int prevy ;
+    char *winname ;		/* Windowのtitle winname()関数で指定 */
 } ;
 
 /* フォントセットのキャッシュ用 */
@@ -1369,6 +1370,7 @@ static void resize_Pc( int new_n )
 	new_pc[i].fontset = NULL;
 	new_pc[i].gc = None;
 	new_pc[i].tmppix = None;
+	new_pc[i].winname = NULL;
     }
     /* */
     Pc = new_pc ;
@@ -1850,16 +1852,20 @@ void gopen_( integer *xsize, integer *ysize, integer *rtnum )
 	      HACK to CYGWIN problem [2020.9.15]
 	      Ad hoc bug fix for Xwin crash
 	    */
-	    char *pname1 = NULL;
-	    /* change window name --- force to update this window */
+	    char *pname1 = NULL ;
+	    /* change window name --- force to update internal info */
 	    pname1 = _eggx_asprintf("%s ",pname_to_disp) ;
 	    XStoreName( Pc_dis, Pc[num].pwin, pname1 ) ;
+	    if ( Pc[num].iconwin != None ) 
+		XStoreName( Pc_dis, Pc[num].iconwin, pname1 ) ;
 	    XFlush( Pc_dis ) ;
 	    XSync( Pc_dis, 0 ) ;
 	    /* */
 	    XStoreName( Pc_dis, Pc[num].pwin, pname_to_disp ) ;
+	    if ( Pc[num].iconwin != None ) 
+		XStoreName( Pc_dis, Pc[num].iconwin, pname_to_disp ) ;
 	    XFlush( Pc_dis ) ;
-	    if ( pname1 != NULL ) free(pname1);
+	    if ( pname1 != NULL ) free(pname1) ;
 	}
 
 	/*
@@ -1908,6 +1914,8 @@ void gopen_( integer *xsize, integer *ysize, integer *rtnum )
 
     restore_xinput_selection( num );
 
+    Pc[num].winname = _eggx_xstrdup(pname_to_disp) ;	/* register */
+    
     return;
 }
 
@@ -1986,6 +1994,11 @@ void eggx_gclose( int wn )
     if ( Pc[wn].iconwin != None ) {
 	XDestroyWindow( Pc_dis, Pc[wn].iconwin ) ;
 	Pc[wn].iconwin = None;
+    }
+    /* */
+    if ( Pc[wn].winname != NULL ) {
+	free(Pc[wn].winname) ;
+	Pc[wn].winname = NULL ;
     }
     /* */
     Pc[wn].fsz=-1;
@@ -2195,8 +2208,34 @@ void eggx_gresize( int wn, int xsize, int ysize )
     XFillRectangle( Pc_dis, Pc[wn].win, Pc[wn].pxgc,
 		    0,0, Pc[wn].wszx,Pc[wn].wszy );
 
-    do_auto_flush() ;
+    XFlush( Pc_dis );
 
+    {
+	/*
+	  HACK to CYGWIN problem [2020.9.15]
+	  Ad hoc bug fix that child process cannot catch resizing event
+	*/
+	const char *pname_to_disp = " " ;
+	char *pname1 = NULL ;
+	if ( Pc[wn].winname != NULL ) {
+	    pname_to_disp = Pc[wn].winname ;
+	}
+
+	/* change window name --- force to update internal info */
+	pname1 = _eggx_asprintf("%s ",pname_to_disp) ;
+	XStoreName( Pc_dis, Pc[wn].pwin, pname1 ) ;
+	if ( Pc[wn].iconwin != None ) 
+	    XStoreName( Pc_dis, Pc[wn].iconwin, pname1 ) ;
+	XFlush( Pc_dis ) ;
+	XSync( Pc_dis, 0 ) ;
+	/* */
+	XStoreName( Pc_dis, Pc[wn].pwin, pname_to_disp ) ;
+	if ( Pc[wn].iconwin != None ) 
+	    XStoreName( Pc_dis, Pc[wn].iconwin, pname_to_disp ) ;
+	XFlush( Pc_dis ) ;
+	if ( pname1 != NULL ) free(pname1) ;
+    }
+    
     Ihflg = 0;		/* 割り込み禁止解除 */
     chkexit();
 
@@ -2570,6 +2609,12 @@ int eggx_winname( int wn, const char *argsformat, ... )
 
     nn = strlen(name);
 
+    if ( Pc[wn].winname != NULL ) {
+	free(Pc[wn].winname) ;
+	Pc[wn].winname = NULL ;
+    }
+    Pc[wn].winname = _eggx_xstrdup(name) ;	/* register */
+    
     XStoreName( Pc_dis, Pc[wn].pwin, name ) ;
     XSetIconName( Pc_dis, Pc[wn].pwin, name ) ;
     if( Pc[wn].iconwin != None ){
@@ -2586,6 +2631,12 @@ int eggx_winname( int wn, const char *argsformat, ... )
 /* ウィンドゥの名前を決める */
 void winname_( integer *wn, char *name )
 {
+    if ( Pc[*wn].winname != NULL ) {
+	free(Pc[*wn].winname) ;
+	Pc[*wn].winname = NULL ;
+    }
+    Pc[*wn].winname = _eggx_xstrdup(name) ;	/* register */
+
     XStoreName( Pc_dis, Pc[*wn].pwin, name ) ;
     XSetIconName( Pc_dis, Pc[*wn].pwin, name ) ;
     if( Pc[*wn].iconwin != None ){
