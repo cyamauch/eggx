@@ -1,8 +1,8 @@
 /* -*- Mode: C ; Coding: euc-japan -*- */
-/* Time-stamp: <2010-03-07 22:57:16 cyamauch> */
+/* Time-stamp: <2020-09-19 12:00:00 cyamauch> */
 
 /*
-  EGGX / ProCALL  version 0.93
+  EGGX / ProCALL  version 0.94
                   eggx_color.h
 */
 

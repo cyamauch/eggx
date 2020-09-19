@@ -1,8 +1,8 @@
 /* -*- Mode: C ; Coding: euc-japan -*- */
-/* Time-stamp: <2010-03-16 01:56:56 cyamauch> */
+/* Time-stamp: <2020-09-19 12:00:00 cyamauch> */
 
 /*
-  EGGX / ProCALL  version 0.93
+  EGGX / ProCALL  version 0.94
                    eggx_base.c
   究極の簡単さを目指して作成した，C ，FORTRAN 両用の
   X11グラフィックスライブラリ．

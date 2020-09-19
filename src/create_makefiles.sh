@@ -62,11 +62,11 @@ cat Makefile.default | \
       -e 's|\(^IINC[ ]*=\)\(.*\)|#\1\2|' \
       -e 's|\(^#\)\(IINC[ ]*=[ ]* [-]I/usr/openwin/include$\)|\2|' \
       -e 's|\(^LLIB[ ]*=\)\(.*\)|#\1\2|' \
-      -e 's|\(^#\)\(LLIB[ ]*=[ ]* [-]L/usr/openwin/lib$\)|\2/sparcv9|' \
+      -e 's|\(^#\)\(LLIB[ ]*=[ ]* [-]L/usr/openwin/lib$\)|\2/64|' \
       -e 's|\(^USERFC[ ]*=\)\(.*\)|#\1\2|' \
       -e 's|\(^#\)\(USERFC[ ]*=[ ]*\)\(f77$\)|\2\3|' \
       -e 's|\(^USERFCFLAGS[ ]*=\)\(.*\)|\1 -m64 -O2|' \
-      -e 's|\(^LIBDIR[ ]*=\)\(.*\)|\1 $(PREFIX)/lib/sparcv9|' \
+      -e 's|\(^LIBDIR[ ]*=\)\(.*\)|\1 $(PREFIX)/lib/64|' \
       -e 's|\(^LLINKS[ ]*=\)\(.*\)|\1\2 -lsocket|' \
       -e 's|\(^#[ ]*\)\(VDEFS[ ]*=.*\)|\2|' > Makefile.sun64
 
