@@ -26,14 +26,14 @@ IINC  = -I/usr/openwin/include
 #libX11.a libX11.so のあるディレクトリ
 #LLIB  = -L/usr/X11R7/lib -L/usr/X11R6/lib
 #LLIB  = -L/usr/X11R7/lib64 -L/usr/X11R6/lib64
-LLIB  = -L/usr/openwin/lib/sparcv9
+LLIB  = -L/usr/openwin/lib/64
 #LLIB  = -L/usr/local/X11R6/lib
 #LLIB  = -L/usr/lib
 
 PREFIX = /usr/local
 
 INCDIR = $(PREFIX)/include
-LIBDIR = $(PREFIX)/lib/sparcv9
+LIBDIR = $(PREFIX)/lib/64
 #LIBDIR = $(PREFIX)/lib64
 BINDIR = $(PREFIX)/bin
 
