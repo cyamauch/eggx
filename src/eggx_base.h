@@ -18,6 +18,7 @@ extern "C" {
 
 /* サポートするウィンドゥ属性 (1<<0は使わない) */
 #define SCROLLBAR_INTERFACE (1<<1)
+#define MAX_WINDOW_SIZE (1<<2)
 #define DOCK_APPLICATION (1<<3)
 #define OVERRIDE_REDIRECT (1<<4)
 #define BOTTOM_LEFT_ORIGIN (1<<7)
