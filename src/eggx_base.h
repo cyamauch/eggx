@@ -33,6 +33,13 @@ extern "C" {
 #define PENUP   3
 #define PSET    1
 
+/* XFTでのフォント属性 */
+#define NORMAL		0 //通常
+#define BOLD		1 //ボールド
+#define ITALIC		2 //イタリック
+#define BOLD_ITALIC	3
+#define MONO_SPACE	4 //モノスペース
+
 /* 互換用 */
 #define DOCKAPP DOCK_APPLICATION
 #define OVERRIDE OVERRIDE_REDIRECT
@@ -135,6 +142,11 @@ extern void eggx_gsetinitialparsegeometry( const char *argsformat, ... ) ;
 extern void eggx_gsetinitialwinname( const char *storename, const char *iconname,
 				  const char *resname, const char *classname ) ;
 extern void eggx_msleep( unsigned long msec ) ;
+
+/* xft を利用した文字列の表示 */
+extern void eggx_ttnewfontset( int wn, const char *font, int modification) ;
+extern int eggx_ttdrawstr( int wn, double x, double y, int size, double theta,
+			 const char *argsformat, ... ) ;
 
 #ifdef __cplusplus
 }
