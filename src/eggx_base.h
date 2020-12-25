@@ -145,7 +145,7 @@ extern void eggx_msleep( unsigned long msec ) ;
 
 /* xft を利用した文字列の表示 */
 extern void eggx_ttnewfontset( int wn, const char *font, int modification) ;
-extern int eggx_ttdrawstr( int wn, double x, double y, int size, double theta,
+extern int eggx_ttdrawstr( int wn, double x, double y, int size, char *code,
 			 const char *argsformat, ... ) ;
 
 #ifdef __cplusplus

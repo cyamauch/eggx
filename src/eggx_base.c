@@ -33,6 +33,7 @@
 #include <sys/wait.h>
 #include <locale.h>
 #include <X11/Xft/Xft.h>
+#include <iconv.h>
 
 #include "_eggx_internal_defs.h"
 #include "eggx_base.h"
@@ -3173,10 +3174,10 @@ quit:
 
  int wn,     ウィンドウ番号
  char *font, フォント名
- 　　　　指定は "Sans Serif" "Serif" "Sans" "Monospace" fc-listで取得可能
+ 　　　　指定は "Sans Serif" "Serif" "Sans" "Monospace" など fc-list で取得可能
  int modeification フォントの修飾　
 　　　　　#define NORMAL		0 //通常
-　　　　　#define BOLD		1 //ボールド
+　　　　　#define BOLD			1 //ボールド
 　　　　　#define ITALIC		2 //イタリック
 　　　　　#define BOLD_ITALIC	3
 　　　　　#define MONO_SPACE	4 //モノスペース
@@ -3198,20 +3199,20 @@ void eggx_ttnewfontset( int wn, const char *font, int modification)
 int wn, 
 　　　ウィンドウ番号
 double x, 
-　　　描画するY座標
-double y, 
 　　　描画するX座標
+double y, 
+　　　描画するY座標
 int size, 
 　　　フォントサイズ
-double theta,
-　　　文字の角度　--未実装--
+char *code,
+　　　文字コード　"UTF-8", "Shift_JIS"　,"EUC-JP" etc
 const char *argsformat, ...
 　　　描画する文字
 
 戻り値
 　　　描画した文字数
 */
-int eggx_ttdrawstr( int wn, double x, double y, int size, double theta,
+int eggx_ttdrawstr( int wn, double x, double y, int size, char *code,
 			 const char *argsformat, ... )
 {
     va_list ap;
@@ -3225,6 +3226,13 @@ int eggx_ttdrawstr( int wn, double x, double y, int size, double theta,
     unsigned short font_height;
     int i, f = 0, lf = 0, dlen, line = 0;
     char *ptr, *ptr1, *nptr, *last0_ptr;
+    char *inptr;
+    char *outptr;
+	char *outbuf = NULL;
+	iconv_t cd;     
+   	size_t in; 
+   	size_t out;
+   	int ret;     
 
     if ( argsformat == NULL ) goto quit;
 
@@ -3232,7 +3240,24 @@ int eggx_ttdrawstr( int wn, double x, double y, int size, double theta,
     str = _eggx_vasprintf(argsformat,ap);
     va_end(ap);
     len = strlen(str) ;
-
+	/* 文字コードの変換 */
+	cd = iconv_open("UTF-8",code);
+	if(cd == (iconv_t) -1) {
+		fprintf(stderr,"eggx_ttdrawstr: Cannot open converter from %s to UTF-8\n",code);
+		exit(EXIT_FAILURE);
+	}
+	in = len;
+	outbuf = (char *) _eggx_xmalloc( in*2 );/*変換後の文字数*/
+	out = in*2;
+	inptr = str;
+	outptr = outbuf;
+	ret = iconv(cd, &inptr, &in, &outptr, &out);
+	if (ret == -1) {
+      fprintf(stderr, "eggx_ttdrawstr: Error in converting characters\n");
+      exit(EXIT_FAILURE);
+	}
+	iconv_close(cd);
+	len = strlen(outbuf);
 	xyconv(wn,x,y,&xg,&yg) ;
 
 	/* フォントの設定 */
@@ -3283,7 +3308,7 @@ int eggx_ttdrawstr( int wn, double x, double y, int size, double theta,
 	font_height = size;
 	buf = (char *)_eggx_xmalloc(sizeof(char) * (len + 1));
     for (i = 0; i < len; i++)
-        buf[i] = str[i];
+        buf[i] = outbuf[i];
     /* strncpy(buf,str,len) ; */
     buf[len] = '\0';
     nptr = buf;
@@ -3325,10 +3350,10 @@ int eggx_ttdrawstr( int wn, double x, double y, int size, double theta,
         do_auto_flush();
 
  quit:
- 	//if (draw != NULL) XftDrawDestroy(draw);
 	if (xftFont != NULL) XftFontClose(Pc_dis, xftFont);
     if ( str != NULL ) free(str);
 	if ( buf != NULL ) free(buf);
+	if ( outbuf != NULL ) free(outbuf);
     return len;
 }
 

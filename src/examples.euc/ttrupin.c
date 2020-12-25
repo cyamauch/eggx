@@ -5,7 +5,7 @@
 
 int main()
 {
-	char *rupin = "ãƒ«ãƒ‘ãƒ³ã®æ•µã¯ãƒ«ãƒ‘ãƒ³";
+	char *rupin = "¥ë¥Ñ¥ó¤ÎÅ¨¤Ï¥ë¥Ñ¥ó";
 	char one[4] = {'\0', '\0', '\0', '\0'};
 	int win, i, len, fsize, ff;
 
@@ -13,11 +13,11 @@ int main()
 	win = gopen(800, 600);
 	layer(win, 0, 1);
 	ttnewfontset(win, "Sans Serif",BOLD);
-	for (i = 0; i < len / 3; i++)
+	for( i=0 ; i < len/2 ; i++ )
 	{
-		strncpy(one, rupin + i * 3, 3);
+		strncpy(one,rupin+i*2,2);
 		gclr(win);
-		ttdrawstr(win, 100 + 20, 600 / 2 - 560 / 2 + 560 / 6, 600, "UTF-8", one);
+		ttdrawstr(win, 100 + 20, 600 / 2 - 560 / 2 + 560 / 6, 600, "EUC-JP", one);
 		copylayer(win, 1, 0);
 		msleep(220);
 	}
@@ -25,7 +25,7 @@ int main()
 	{
 		gclr(win);
 		fsize = 1000 - i * 134;
-		ttdrawstr(win, 800 / 2 - (len / 3) * fsize / 2, 600 / 2 - fsize / 2 + fsize / 6, fsize, "UTF-8", rupin);
+		ttdrawstr(win,800/2-(len/2)*fsize/2,600/2-fsize/2+fsize/6, fsize, "EUC-JP", rupin);
 		copylayer(win, 1, 0);
 		msleep(20);
 	}

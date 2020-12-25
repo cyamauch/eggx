@@ -12,7 +12,7 @@ int main()
     x=0 ;
     y=120-32 ;
 
-    ttdrawstr(win,x,y, 16,0,
+    ttdrawstr(win,x,y, 16,"UTF-8",
 	    "　　 ∧＿∧　　／‾‾‾‾‾\n"
 	    "　　（　´∀｀）＜　オマエモナー\n"
 	    "　　（　　　　） 　＼＿＿＿＿＿\n"
@@ -21,7 +21,7 @@ int main()
     
     x=210 ;
     y=120-32 ;
-    ttdrawstr(win,x,y, 16,0,
+    ttdrawstr(win,x,y, 16,"UTF-8",
 	    "　　　　　　　　　　　　　　　　　　∧∧\n"
 	    "　　　　　　　　　　　　∧∧　　　(,,゜Д゜)　　　　∧∧\n"
 	    "　　　　　　∧∧　　　(,,゜Д゜)　 ⊂　　つ　　　 (　　,,)\n"
