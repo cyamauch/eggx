@@ -8,7 +8,7 @@ int main()
     int x,y ;
     win = gopen(560,120) ;
 
-    ttnewfontset(win,"IPA P¥´¥·¥Ã¥¯",NORMAL) ;
+    ttnewfontset(win,"IPAX0208Mincho",NORMAL) ;
     x=0 ;
     y=120-32 ;
 

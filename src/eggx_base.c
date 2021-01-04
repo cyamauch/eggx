@@ -3256,6 +3256,7 @@ int eggx_ttdrawstr( int wn, double x, double y, int size, char *code,
       fprintf(stderr, "eggx_ttdrawstr: Error in converting characters\n");
       exit(EXIT_FAILURE);
 	}
+	*outptr = '\0';
 	iconv_close(cd);
 	len = strlen(outbuf);
 	xyconv(wn,x,y,&xg,&yg) ;
