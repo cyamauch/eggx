@@ -3247,14 +3247,14 @@ int eggx_ttdrawstr( int wn, double x, double y, int size, char *code,
 		exit(EXIT_FAILURE);
 	}
 	in = len;
-	outbuf = (char *) _eggx_xmalloc( in*2 );/*変換後の文字数*/
+	outbuf = (char *) _eggx_xmalloc( in*2 + 1 );/*変換後の文字数 サイズは適当*/
 	out = in*2;
 	inptr = str;
 	outptr = outbuf;
 	ret = iconv(cd, &inptr, &in, &outptr, &out);
 	if (ret == -1) {
-      fprintf(stderr, "eggx_ttdrawstr: Error in converting characters\n");
-      exit(EXIT_FAILURE);
+    	fprintf(stderr, "eggx_ttdrawstr: Error in converting characters\n");
+    	exit(EXIT_FAILURE);
 	}
 	*outptr = '\0';
 	iconv_close(cd);
