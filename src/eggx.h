@@ -87,4 +87,8 @@
 
 #define inkeydollar eggx_ggetch
 
+/* xft を利用した文字列の表示 */
+#define ttnewfontset eggx_ttnewfontset
+#define ttdrawstr eggx_ttdrawstr
+
 #endif	/* _EGGX_H */

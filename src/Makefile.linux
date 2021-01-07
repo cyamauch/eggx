@@ -18,7 +18,7 @@ USERFCFLAGS = -O2 -Wall
 #USERFC   = ifc
 
 #X11/Xlib.h のあるディレクトリ
-IINC  = -I/usr/X11R7/include -I/usr/X11R6/include
+IINC  = -I/usr/X11R7/include -I/usr/X11R6/include -I/usr/include/freetype2
 #IINC  = -I/usr/openwin/include
 #IINC  = -I/usr/local/X11R6/include
 #IINC  = -I/usr/include
@@ -51,7 +51,7 @@ LOCALLIB = -L$(LIBDIR)
 #LOCALINC = -I${HOME}/include
 #LOCALLIB = -L${HOME}/lib
 
-LLINKS = -leggx -lX11 -lm
+LLINKS = -leggx -lX11 -lm -lXft
 #LLINKS = -leggx -lX11 -lXinerama -lm
 
 #for Xinerama extension (Native Xserver)

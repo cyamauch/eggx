@@ -1,4 +1,4 @@
-OBJS = 2ch nihongo rupin
+OBJS = 2ch nihongo rupin tt2ch ttnihongo ttrupin
 
 all:: $(OBJS)
 
@@ -16,4 +16,13 @@ nihongo: nihongo.c
 
 rupin: rupin.c
 	$(CMD) -o rupin rupin.c
+
+tt2ch: tt2ch.c
+	$(CMD) -o tt2ch tt2ch.c
+
+ttnihongo: ttnihongo.c
+	$(CMD) -o ttnihongo ttnihongo.c
+
+ttrupin: ttrupin.c
+	$(CMD) -o ttrupin ttrupin.c
 
