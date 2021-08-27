@@ -25,7 +25,7 @@
 \begingroup}{\endgroup\par}
 
 \begin{document}
-%\title{\vspace*{-5mm}{\large Easy and Gratifying Graphics library for X11}\\EGGX / ProCALL version 0.94}
+%\title{\vspace*{-5mm}{\large Easy and Gratifying Graphics library for X11}\\EGGX / ProCALL version 0.95}
 %\author{Chisato Yamauchi{\tiny ~}%
 %\footnote{$^)$~http://www.ir.isas.jaxa.jp/$^\sim$cyamauch/}%
 %}
@@ -44,7 +44,7 @@
 \vspace*{-0.3cm}
 
 \begin{center}
-{\bf \huge EGGX / ProCALL version 0.94}
+{\bf \huge EGGX / ProCALL version 0.95}
 \end{center}
 
 \begin{center}
@@ -55,7 +55,7 @@
 \vspace*{0.1cm}
 
 \begin{center}
-{\Large Chisato Yamauchi~~Sep. 19, 2020}
+{\Large Chisato Yamauchi~~Aug. 28, 2021}
 \end{center}
 
 \vspace*{3mm}
@@ -2482,7 +2482,12 @@ gopen()関数で開かれる新規ウィンドゥの
 
       この属性を無効に設定すると，
       ウィンドゥがリサイズされてもスクロールバーはつきません．
- \item
+\item
+      \verb|MAX_WINDOW_SIZE|
+
+      グラフィックス領域の大きさを越えたウィンドゥサイズへのリサイズを禁止します。
+      デフォルトではこの属性は無効になっています．
+\item
       \verb|OVERRIDE_REDIRECT|
 
       XにおけるOverrideRedirect属性を指定します．

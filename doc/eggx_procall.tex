@@ -25,11 +25,11 @@
 \begingroup}{\endgroup\par}
 
 \begin{document}
-%\title{\vspace*{-5mm}{\large Easy and Gratifying Graphics library for X11}\\EGGX/ProCALL version 0.94}
+%\title{\vspace*{-5mm}{\large Easy and Gratifying Graphics library for X11}\\EGGX/ProCALL version 0.95}
 %\author{Chisato Yamauchi{\tiny ~}%
 %\footnote{$^)$~http://www.ir.isas.jaxa.jp/$^\sim$cyamauch/}%
 %}
-%\date{Sep.19,2020}
+%\date{Aug.28,2021}
 %\maketitle
 
 \thispagestyle{empty}
@@ -43,7 +43,7 @@
 \vspace*{-0.3cm}
 
 \begin{center}
-{\bf \huge EGGX/ProCALL version 0.94}
+{\bf \huge EGGX/ProCALL version 0.95}
 \end{center}
 
 \begin{center}
@@ -3142,6 +3142,13 @@ The window attribute is expressed with four-bit flags shown below,
       %この属性を無効に設定すると，
       %ウィンドゥがリサイズされてもスクロールバーはつきません．
       If this attribute is disabled, the scrollbar does not appear even if a window is resized.
+\item
+      \verb|MAX_WINDOW_SIZE|
+
+      A maximum size for resizing the window is set.
+      This attribute is disabled by default.
+      %グラフィックス領域の大きさを越えたウィンドゥサイズへのリサイズを禁止します。
+      %デフォルトではこの属性は無効になっています．
  \item
       \verb|OVERRIDE_REDIRECT|
 
