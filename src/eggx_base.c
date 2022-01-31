@@ -32,6 +32,8 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <locale.h>
+#include <X11/Xft/Xft.h>
+#include <iconv.h>
 
 #include "_eggx_internal_defs.h"
 #include "eggx_base.h"
@@ -126,6 +128,15 @@ struct fontsettg {
     XFontSet fontset;		/* フォントセット構造体 */
     char **missing_list;
 } ;
+
+/* xft を使用したフォントのキャッシュ用 */
+#define DEFAULTTTFONTSET "Sans"
+struct fontsettttg {
+	char *fontname;
+	int modification;
+	int size;
+};
+struct fontsettttg Pc_ttfscache = { NULL, 0, 0} ;	/* xft フォントデータ */
 
 /* 
  * プライベートな定数
@@ -3133,6 +3144,220 @@ int eggx_gsetfontset( int wn, const char *argsformat, ... )
     return rtv;
 }
 
+/* xft を利用した文字列の表示 
+   描画部分
+*/
+static int X_ftDrawStringUtf8(int wn,XftColor color,XftFont *xftFont,int xg,int yg,char *str,int len)
+{
+	//int len;
+	XftDraw *draw = NULL;
+
+	draw = XftDrawCreate(Pc_dis, Pc[wn].pix[Pc[wn].wly], Pc_visual, Pc_cmap);
+	XftDrawStringUtf8(draw, &color, xftFont,xg, yg, (FcChar8*)str, len );
+	XftDrawDestroy(draw);
+    if( Pc[wn].wly!=Pc[wn].sly ) goto quit ;
+	draw = XftDrawCreate(Pc_dis, Pc[wn].win, Pc_visual, Pc_cmap);
+	XftDrawStringUtf8(draw, &color, xftFont,xg, yg, (FcChar8*)str, len );
+	XftDrawDestroy(draw);
+    //XDrawString( dis, Pc[wn].win, Pc[wn].gc, x, y, str, len ) ;
+    if( Pc[wn].iconwin != None ){
+		draw = XftDrawCreate(Pc_dis, Pc[wn].iconwin, Pc_visual, Pc_cmap);
+		XftDrawStringUtf8(draw, &color, xftFont,xg, yg, (FcChar8*)str, len );
+		XftDrawDestroy(draw);
+    }
+quit:
+	return len;
+}
+
+/* xft を利用した文字列の表示 
+ フォントの指定
+
+ int wn,     ウィンドウ番号
+ char *font, フォント名
+ 　　　　指定は "Sans Serif" "Serif" "Sans" "Monospace" など fc-list で取得可能
+ int modeification フォントの修飾　
+　　　　　#define NORMAL		0 //通常
+　　　　　#define BOLD			1 //ボールド
+　　　　　#define ITALIC		2 //イタリック
+　　　　　#define BOLD_ITALIC	3
+　　　　　#define MONO_SPACE	4 //モノスペース
+*/
+void eggx_ttnewfontset( int wn, const char *font, int modification)
+{
+	int len=strlen(font);
+
+	if(Pc_ttfscache.fontname != NULL) free(Pc_ttfscache.fontname);
+
+	Pc_ttfscache.fontname = (char *)_eggx_xmalloc( len+1 );
+	strncpy(Pc_ttfscache.fontname, font, len+1);
+	Pc_ttfscache.modification = modification;
+}
+
+/* xft を利用した文字列の表示
+文字列の描画
+
+int wn, 
+　　　ウィンドウ番号
+double x, 
+　　　描画するX座標
+double y, 
+　　　描画するY座標
+int size, 
+　　　フォントサイズ
+char *code,
+　　　文字コード　"UTF-8", "Shift_JIS"　,"EUC-JP" etc
+const char *argsformat, ...
+　　　描画する文字
+
+戻り値
+　　　描画した文字数
+*/
+int eggx_ttdrawstr( int wn, double x, double y, int size, char *code,
+			 const char *argsformat, ... )
+{
+    va_list ap;
+    char *str = NULL,*buf=NULL;
+    int len = -1,xg,yg;
+	XftFont *xftFont = NULL;
+	XftColor color;
+    XColor col;
+    XRenderColor xrc;
+	XGCValues values_return;
+    unsigned short font_height;
+    int i, f = 0, lf = 0, dlen, line = 0;
+    char *ptr, *ptr1, *nptr, *last0_ptr;
+    char *inptr;
+    char *outptr;
+	char *outbuf = NULL;
+	iconv_t cd;     
+   	size_t in; 
+   	size_t out;
+   	int ret;     
+
+    if ( argsformat == NULL ) goto quit;
+
+    va_start(ap, argsformat);
+    str = _eggx_vasprintf(argsformat,ap);
+    va_end(ap);
+    len = strlen(str) ;
+	/* 文字コードの変換 */
+	cd = iconv_open("UTF-8",code);
+	if(cd == (iconv_t) -1) {
+		fprintf(stderr,"eggx_ttdrawstr: Cannot open converter from %s to UTF-8\n",code);
+		exit(EXIT_FAILURE);
+	}
+	in = len;
+	outbuf = (char *) _eggx_xmalloc( in*2 + 1 );/*変換後の文字数 サイズは適当*/
+	out = in*2;
+	inptr = str;
+	outptr = outbuf;
+	ret = iconv(cd, &inptr, &in, &outptr, &out);
+	if (ret == -1) {
+    	fprintf(stderr, "eggx_ttdrawstr: Error in converting characters\n");
+    	exit(EXIT_FAILURE);
+	}
+	*outptr = '\0';
+	iconv_close(cd);
+	len = strlen(outbuf);
+	xyconv(wn,x,y,&xg,&yg) ;
+
+	/* フォントの設定 */
+	if(Pc_ttfscache.fontname==NULL) eggx_ttnewfontset(wn,DEFAULTTTFONTSET,NORMAL);
+	switch(Pc_ttfscache.modification) {
+		case BOLD:
+			xftFont = XftFontOpen(
+		        Pc_dis, DefaultScreen(Pc_dis) ,
+		        XFT_FAMILY, XftTypeString, Pc_ttfscache.fontname, 
+		        XFT_PIXEL_SIZE, XftTypeInteger, size,XFT_WEIGHT, XftTypeInteger, FC_WEIGHT_BOLD, NULL); 
+			break;
+		case ITALIC:
+			xftFont = XftFontOpen(
+		        Pc_dis, DefaultScreen(Pc_dis) ,
+		        XFT_FAMILY, XftTypeString, Pc_ttfscache.fontname, 
+		        XFT_PIXEL_SIZE, XftTypeInteger, size,XFT_SLANT,XftTypeInteger,XFT_SLANT_ITALIC, NULL); 
+			break;
+		case BOLD_ITALIC:
+			xftFont = XftFontOpen(
+		        Pc_dis, DefaultScreen(Pc_dis) ,
+		        XFT_FAMILY, XftTypeString, Pc_ttfscache.fontname, 
+		        XFT_PIXEL_SIZE, XftTypeInteger, size,XFT_WEIGHT, XftTypeInteger, FC_WEIGHT_BOLD,XFT_SLANT,XftTypeInteger,XFT_SLANT_ITALIC, NULL); 
+			break;
+		case MONO_SPACE:
+			xftFont = XftFontOpen(
+		        Pc_dis, DefaultScreen(Pc_dis) ,
+		        XFT_FAMILY, XftTypeString, Pc_ttfscache.fontname, 
+		        XFT_PIXEL_SIZE, XftTypeInteger, size,XFT_SPACING, XftTypeInteger,XFT_MONO,NULL 	); 
+			break;
+		case NORMAL:
+		default:
+			xftFont = XftFontOpen(
+		        Pc_dis, DefaultScreen(Pc_dis) ,
+		        XFT_FAMILY, XftTypeString, Pc_ttfscache.fontname,
+		        XFT_PIXEL_SIZE, XftTypeInteger, size,NULL); 
+			break;
+	}
+	/* フォアグランドカラーの取得とxftへの色の設定 */
+	XGetGCValues(Pc_dis, Pc[wn].gc, GCForeground, &values_return);
+    col.pixel=values_return.foreground;
+    XQueryColor(Pc_dis,Pc_cmap,&col);        
+    xrc.red  =col.red;
+    xrc.green=col.green;
+    xrc.blue =col.blue;
+    xrc.alpha=65535;
+    XftColorAllocValue(Pc_dis, Pc_visual, Pc_cmap, &xrc,&color);
+	/* 文字の描画 */
+	font_height = size;
+	buf = (char *)_eggx_xmalloc(sizeof(char) * (len + 1));
+    for (i = 0; i < len; i++)
+        buf[i] = outbuf[i];
+    /* strncpy(buf,str,len) ; */
+    buf[len] = '\0';
+    nptr = buf;
+    last0_ptr = buf + len;
+    do {
+        ptr = strchr(nptr, '\n');
+        ptr1 = strchr(nptr, '\r');
+        if (ptr != NULL || ptr1 != NULL) {
+            if (ptr != NULL && ptr1 != NULL) {
+                if (ptr1 - ptr < 0) {
+                    ptr = ptr1;
+                    lf = 1;
+                } else
+                    lf = 2;
+            } else {
+                if (ptr1 != NULL) {
+                    ptr = ptr1;
+                    lf = 1;
+                } else
+                    lf = 2;
+            }
+            dlen = ptr - nptr;
+        } else {
+            dlen = last0_ptr - nptr;
+            lf = 0;
+        }
+        if (0 < dlen) {
+            f = X_ftDrawStringUtf8(wn,color,xftFont,xg,yg + font_height * line,nptr,dlen);
+        }
+        if (lf == 2) {
+            nptr = ptr + 1;
+            line++;
+        }
+        else if (lf == 1) {
+            nptr = ptr + 1;
+        }
+    } while (lf);
+    if (f)
+        do_auto_flush();
+
+ quit:
+	if (xftFont != NULL) XftFontClose(Pc_dis, xftFont);
+    if ( str != NULL ) free(str);
+	if ( buf != NULL ) free(buf);
+	if ( outbuf != NULL ) free(outbuf);
+    return len;
+}
+
 void newfontset_( integer *wn, char *fset, integer *status )
 {
     *status = (integer)eggx_newfontset( *wn, "%s", fset ) ;
@@ -4577,7 +4802,7 @@ unsigned char *eggx_readimage( const char *filter, const char *filename,
     FILE *fp = NULL;
     int width = 0, height = 0, maxv = 0, nchnl = 0, nbytes = 0, msk = 0;
     size_t ii, sz_line = 0;
-    int i, pnm_format;				/* fmt: '4'〜'7' のいずれか */
+    int i, pnm_format;				/* fmt: '4'~'7' のいずれか */
     int found_alpha = 0;
 
     if ( filename == NULL ) goto quit;
@@ -5026,10 +5251,10 @@ int eggx_writeimage( const unsigned char *buf, int width, int height, int msk,
 	fp = fdopen( pfds[1], "wb" );	/* 送信用 */
     }
     else if ( filter != NULL && *filter != '\0' ) {	/* netpbm */
-	int nargs;
+	/* int nargs; */
 	int fd, pfds[2];
 	/* 引数 */
-	nargs = create_args(filter, &tmp1, &args);
+	/* nargs = */create_args(filter, &tmp1, &args);
 	/* fileのcreate */
 	fd = open( out_fname, O_WRONLY|O_CREAT|O_TRUNC,
 		   S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH );
@@ -5580,7 +5805,7 @@ static int handle_xpress_event( const XEvent *ev, int wn,
 	XLookupString(&xkev,string,sizeof(string),&key,NULL) ;
 	/* printf("[%X]",key) ;  fflush(stdout) ; */
 	switch ( key ) {
-	case XK_Right:		/* カーソルキーを 1c〜1fに割り当てる */
+	case XK_Right:		/* カーソルキーを 1c~1fに割り当てる */
 	    if ( is_scroll_bar ) break;
 	    code = 0x01c ;
 	    break ;
